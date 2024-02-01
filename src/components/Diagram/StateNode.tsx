@@ -1,15 +1,4 @@
-import {
-  Badge,
-  Box,
-  Card,
-  CardHeader,
-  Code,
-  Flex,
-  Heading,
-  Spacer,
-  Text,
-} from "@chakra-ui/react";
-import { useCallback } from "react";
+import { Badge, Box, Flex, Spacer, Text } from "@chakra-ui/react";
 import { Handle, Position } from "reactflow";
 
 export default function StateNode({

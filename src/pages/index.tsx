@@ -17,6 +17,13 @@ import {
   Flex,
   Stack,
   Spacer,
+  Alert,
+  AlertTitle,
+  AlertDescription,
+  AlertIcon,
+  ListItem,
+  ListIcon,
+  List,
 } from "@chakra-ui/react";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
@@ -31,7 +38,7 @@ export default function Home() {
   const searchParams = useSearchParams();
 
   const [definition, setDefinition] = useState<string | undefined>();
-  const [isValid, setValidity] = useState<boolean>(true);
+  const [invalidMarkers, setValidity] = useState<any[]>([]);
 
   const d = searchParams.get("d");
 
@@ -49,7 +56,7 @@ export default function Home() {
   }
 
   function handleEditorValidate(markers: any[]) {
-    setValidity(markers.length === 0);
+    setValidity(markers);
   }
 
   return (
@@ -70,11 +77,11 @@ export default function Home() {
         <Container maxW="2560px">
           <Grid
             h="90vh"
-            templateRows="repeat(2, 1fr)"
+            templateRows="repeat(3, 1fr)"
             templateColumns="repeat(2, 1fr)"
             gap={1}
           >
-            <GridItem rowSpan={2} colSpan={1}>
+            <GridItem rowSpan={3} colSpan={1}>
               <Editor
                 // @ts-ignore
                 defaultValue={
@@ -84,12 +91,29 @@ export default function Home() {
                 onValidate={handleEditorValidate}
               />
             </GridItem>
-            <GridItem colSpan={1}>
-              {isValid ? null : "Address errors for updated diagram."}
+            <GridItem colSpan={1} rowSpan={2}>
+              {invalidMarkers.length > 0 && (
+                <Alert status="error" position={"absolute"} zIndex={1}>
+                  <AlertIcon />
+                  <AlertTitle>Invalid JSON</AlertTitle>
+                  <Box>
+                    <AlertDescription>
+                      Diagram updating is disabled until the JSON is valid.
+                      <List>
+                        {invalidMarkers.map((marker, i) => (
+                          <ListItem key={i}>
+                            {marker.message} at line {marker.startLineNumber}.
+                          </ListItem>
+                        ))}
+                      </List>
+                    </AlertDescription>
+                  </Box>
+                </Alert>
+              )}
               <Diagram definition={definition} />
             </GridItem>
             <GridItem colSpan={1}>
-              <Flex h="100%" direction={"column"}>
+              {/* <Flex h="100%" direction={"column"}>
                 <Card my={2}>
                   <CardBody>
                     <Input placeholder="find an action provider" size="md" />
@@ -97,14 +121,9 @@ export default function Home() {
                 </Card>
                 <Spacer />
                 <Stack>
-                  <Link
-                    href="https://docs.globus.org/api/flows/#creating_flows"
-                    target="_blank"
-                  >
-                    Learn more about Creating Flows
-                  </Link>
+                  
                 </Stack>
-              </Flex>
+              </Flex> */}
             </GridItem>
           </Grid>
         </Container>
