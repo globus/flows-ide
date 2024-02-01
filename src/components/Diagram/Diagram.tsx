@@ -2,7 +2,7 @@
 import { useMemo } from "react";
 import { Box } from "@chakra-ui/react";
 import ReactFlow, { MiniMap, Controls, Background } from "reactflow";
-import ActionNode from "./ActionNode";
+import StateNode from "./StateNode";
 
 import "reactflow/dist/style.css";
 
@@ -13,7 +13,7 @@ function toNodesAndEdges(
 ) {
   if (!definition) return { nodes: [], edges: [] };
 
-  const { States, StartAt, Comment } = definition;
+  const { States, StartAt } = definition;
 
   if (!StartAt || !States) {
     return { nodes: [], edges: [] };
@@ -22,11 +22,13 @@ function toNodesAndEdges(
   const nodes = Object.entries(States).map(([id, state], i) => {
     return {
       id,
-      type: state.Type === "Action" ? "action" : undefined,
+      type: "StateNode",
       position: { x: 5, y: 0 + i * 100 },
       data: { id, state, definition },
     };
   });
+
+  console.log(nodes);
 
   const edges = Object.entries(States).map(([id, state]) => {
     return {
@@ -40,7 +42,7 @@ function toNodesAndEdges(
 }
 
 export default function Diagram({ definition }: { definition: any }) {
-  const nodeTypes = useMemo(() => ({ action: ActionNode }), []);
+  const nodeTypes = useMemo(() => ({ StateNode: StateNode }), []);
 
   const def = toNodesAndEdges(definition);
 
@@ -52,7 +54,7 @@ export default function Diagram({ definition }: { definition: any }) {
         edges={def.edges}
         fitView
       >
-        <MiniMap />
+        {/* <MiniMap /> */}
         <Controls />
         <Background />
       </ReactFlow>

@@ -12,7 +12,7 @@ import {
 import { useCallback } from "react";
 import { Handle, Position } from "reactflow";
 
-export default function ActionNode({
+export default function StateNode({
   data: { state, definition, id },
 }: {
   data: any;
@@ -20,12 +20,14 @@ export default function ActionNode({
   const isStart = id === definition.StartAt;
   const isEnd = state.End === true;
 
+  console.log(id);
+
   return (
     <>
       <Flex>
         {!isStart && <Handle type="target" position={Position.Top} />}
         <Box border="1px" borderColor="gray.200" p={2} borderRadius="sm">
-          <Text fontWeight="bold" fontSize="sm">
+          <Text fontWeight="bold" fontSize="xs">
             <Flex>
               <Box>
                 {isStart && (
@@ -42,8 +44,8 @@ export default function ActionNode({
               </Box>
               <Spacer />
               <Box>
-                <Badge mr="1" variant="outline">
-                  {state.Type}
+                <Badge ml="1" variant="outline">
+                  {state?.Type ?? "Unspecified Type"}
                 </Badge>
               </Box>
             </Flex>

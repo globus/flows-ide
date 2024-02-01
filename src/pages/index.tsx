@@ -89,24 +89,22 @@ export default function Home() {
               <Diagram definition={definition} />
             </GridItem>
             <GridItem colSpan={1}>
-              <Card my={2}>
-                <CardHeader>
-                  <Heading as="h2" size="md">
-                    Documentation + Examples
-                  </Heading>
-                </CardHeader>
-                <CardBody>
-                  <Input placeholder="find an action provider" size="md" />
-                </CardBody>
-                <CardFooter>
+              <Flex h="100%" direction={"column"}>
+                <Card my={2}>
+                  <CardBody>
+                    <Input placeholder="find an action provider" size="md" />
+                  </CardBody>
+                </Card>
+                <Spacer />
+                <Stack>
                   <Link
                     href="https://docs.globus.org/api/flows/#creating_flows"
                     target="_blank"
                   >
                     Learn more about Creating Flows
                   </Link>
-                </CardFooter>
-              </Card>
+                </Stack>
+              </Flex>
             </GridItem>
           </Grid>
         </Container>
