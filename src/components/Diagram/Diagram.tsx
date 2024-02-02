@@ -1,17 +1,48 @@
 "use client";
+
 import { useMemo } from "react";
 import { Box } from "@chakra-ui/react";
+import Dagre from "@dagrejs/dagre";
 import ReactFlow, {
   MiniMap,
   Controls,
   Background,
   MarkerType,
+  Node,
+  Edge,
 } from "reactflow";
 import StateNode from "./StateNode";
 
 import type { FlowDefinition } from "@/pages/index";
 
 import "reactflow/dist/style.css";
+
+const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
+
+const getLayoutedElements = (
+  nodes: { id: string; [key: string]: any }[],
+  edges: Record<string, any>[],
+  options: {
+    direction: "TB" | "LR";
+  },
+) => {
+  g.setGraph({ rankdir: options.direction });
+
+  edges.forEach((edge) => g.setEdge(edge.source, edge.target));
+  nodes.forEach((node) =>
+    g.setNode(node.id, { ...node, width: 150, height: 50 }),
+  );
+
+  Dagre.layout(g);
+
+  return {
+    nodes: nodes.map((node) => {
+      const { x, y } = g.node(node.id);
+      return { ...node, position: { x, y } };
+    }),
+    edges,
+  };
+};
 
 function toNodesAndEdges(definition: FlowDefinition | undefined) {
   const result: {
@@ -34,44 +65,11 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
   if (!StartAt || !States) {
     return result;
   }
-  /**
-   * @todo This works well for keeping the proper order, but does not account
-   * for unlinked states.
-   */
-  // let id = StartAt;
-  // let offset = 0;
-  // do {
-  //   const state = States[id];
-  //   result.nodes.push({
-  //     id,
-  //     type: "StateNode",
-  //     position: { x: 5, y: 0 + offset * 100 },
-  //     data: { id, state, definition },
-  //     markerStart: "arrow",
-  //   });
-  //   if (state?.Next) {
-  //     result.edges.push({
-  //       id: `${id}-${state.Next}`,
-  //       type: "smoothstep",
-  //       source: id,
-  //       target: state.Next,
-  //       markerEnd: {
-  //         type: MarkerType.Arrow,
-  //       },
-  //       style: {
-  //         strokeWidth: 2,
-  //       },
-  //     });
-  //   }
-  //   id = state?.Next;
-  //   offset++;
-  // } while (id);
 
-  const nodes = Object.entries(States).map(([id, state], i) => {
+  const nodes = Object.entries(States).map(([id, state]) => {
     return {
       id,
       type: "StateNode",
-      position: { x: 5, y: 0 + i * 100 },
       data: { id, state, definition },
       markerStart: "arrow",
     };
@@ -92,7 +90,7 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
     };
   });
 
-  return { nodes, edges };
+  return getLayoutedElements(nodes, edges, { direction: "TB" });
 }
 
 export default function Diagram({ definition }: { definition: any }) {
