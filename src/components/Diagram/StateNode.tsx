@@ -1,52 +1,52 @@
-import { Badge, Box, Flex, Spacer, Text } from "@chakra-ui/react";
+import { Badge, Box, Flex, Text } from "@chakra-ui/react";
 import { Handle, Position } from "reactflow";
+
+import type { FlowDefinition } from "@/pages";
 
 export default function StateNode({
   data: { state, definition, id },
 }: {
-  data: any;
+  data: {
+    id: string;
+    definition: FlowDefinition;
+    state: undefined | FlowDefinition["States"][string];
+  };
 }) {
   const isStart = id === definition.StartAt;
-  const isEnd = state.End === true;
-
-  console.log(id);
-
+  const isEnd = state?.End === true;
   return (
     <>
       <Flex>
         {!isStart && <Handle type="target" position={Position.Top} />}
-        <Box border="1px" borderColor="gray.200" p={2} borderRadius="sm">
-          <Text fontWeight="bold" fontSize="xs">
-            <Flex>
-              <Box>
-                {isStart && (
-                  <Badge mr="1" colorScheme="green">
-                    Start
-                  </Badge>
-                )}
-                {isEnd && (
-                  <Badge mr="1" colorScheme="red">
-                    End
-                  </Badge>
-                )}
-                {id}
-              </Box>
-              <Spacer />
-              <Box>
-                <Badge ml="1" variant="outline">
-                  {state?.Type ?? "Unspecified Type"}
+        <Box
+          border="1px"
+          borderColor="gray.200"
+          backgroundColor={"white"}
+          p={2}
+          borderRadius="sm"
+        >
+          <Text fontWeight="bold">
+            <Box>
+              {isStart && (
+                <Badge mr="1" colorScheme="green">
+                  Start
                 </Badge>
-              </Box>
-            </Flex>
+              )}
+              {isEnd && (
+                <Badge mr="1" colorScheme="red">
+                  End
+                </Badge>
+              )}
+              {id}
+            </Box>
           </Text>
-
           <Box>
-            {state.Comment ? (
-              <Text fontSize={"sm"}>{state.Comment}</Text>
+            {state?.Comment ? (
+              <Text fontSize={"xs"}>{state?.Comment}</Text>
             ) : null}
           </Box>
         </Box>
-        {!isEnd && <Handle type="source" position={Position.Bottom} />}
+        {!isEnd && <Handle type="source" position={Position.Right} />}
       </Flex>
     </>
   );

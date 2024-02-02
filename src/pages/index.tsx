@@ -1,28 +1,18 @@
 import Head from "next/head";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  Container,
   Grid,
   GridItem,
   Heading,
-  Card,
-  CardBody,
-  CardHeader,
-  Input,
-  SkeletonText,
-  CardFooter,
-  Link,
   Text,
   Box,
   Flex,
-  Stack,
   Spacer,
   Alert,
   AlertTitle,
   AlertDescription,
   AlertIcon,
   ListItem,
-  ListIcon,
   List,
 } from "@chakra-ui/react";
 import Editor from "../components/Editor";
@@ -32,6 +22,19 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
+
+export type FlowDefinition = {
+  States: {
+    [key: string]: {
+      Next?: string;
+      End?: boolean;
+      Comment?: string;
+      [key: string]: any;
+    };
+  };
+  StartAt: string;
+  Comment?: string;
+};
 
 export default function Home() {
   const router = useRouter();
@@ -67,66 +70,66 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main>
-        <Flex bgColor={"purple.800"} px={2} align={"center"}>
-          <Heading as="h1" color={"plum"}>
-            <Text>plum</Text>
-          </Heading>
-          <Spacer />
-          <Text color="white">visualize and create flows</Text>
-        </Flex>
-        <Container maxW="2560px">
-          <Grid
-            h="90vh"
-            templateRows="repeat(3, 1fr)"
-            templateColumns="repeat(2, 1fr)"
-            gap={1}
-          >
-            <GridItem rowSpan={3} colSpan={1}>
-              <Editor
-                // @ts-ignore
-                defaultValue={
-                  definition ? JSON.stringify(definition, null, 2) : ""
-                }
-                onChange={handleEditorChange}
-                onValidate={handleEditorValidate}
-              />
-            </GridItem>
-            <GridItem colSpan={1} rowSpan={2}>
-              {invalidMarkers.length > 0 && (
-                <Alert status="error" position={"absolute"} zIndex={1}>
+        <Grid
+          h="100vh"
+          templateAreas={`"header header"
+            "editor diagram"`}
+          gridTemplateRows={"auto 1fr"}
+          gridTemplateColumns={"1fr 1fr"}
+          gap={0}
+        >
+          <GridItem area="header">
+            <Flex bgColor={"purple.800"} px={2} align={"center"}>
+              <Heading as="h1" color={"plum"}>
+                <Text>plum</Text>
+              </Heading>
+              <Spacer />
+              <Text color="white">visualize and create flows</Text>
+            </Flex>
+          </GridItem>
+          <GridItem area={"editor"}>
+            {" "}
+            <Editor
+              // @ts-ignore
+              defaultValue={
+                definition ? JSON.stringify(definition, null, 2) : ""
+              }
+              onChange={handleEditorChange}
+              onValidate={handleEditorValidate}
+              theme="vs-dark"
+            />
+          </GridItem>
+          <GridItem area={"diagram"}>
+            {invalidMarkers.length > 0 && (
+              <Box position={"fixed"} zIndex={1} w="100%">
+                <Alert status="error">
                   <AlertIcon />
                   <AlertTitle>Invalid JSON</AlertTitle>
                   <Box>
                     <AlertDescription>
-                      Diagram updating is disabled until the JSON is valid.
-                      <List>
-                        {invalidMarkers.map((marker, i) => (
-                          <ListItem key={i}>
-                            {marker.message} at line {marker.startLineNumber}.
-                          </ListItem>
-                        ))}
-                      </List>
+                      Diagram will be disabled until errors are addressed
                     </AlertDescription>
                   </Box>
                 </Alert>
-              )}
-              <Diagram definition={definition} />
-            </GridItem>
-            <GridItem colSpan={1}>
-              {/* <Flex h="100%" direction={"column"}>
-                <Card my={2}>
-                  <CardBody>
-                    <Input placeholder="find an action provider" size="md" />
-                  </CardBody>
-                </Card>
-                <Spacer />
-                <Stack>
-                  
-                </Stack>
-              </Flex> */}
-            </GridItem>
-          </Grid>
-        </Container>
+                <Box>
+                  <List>
+                    {invalidMarkers.map((marker, i) => (
+                      <ListItem key={i}>
+                        <Alert status="error">
+                          <AlertIcon />
+                          <AlertTitle>
+                            {marker.message} at line {marker.startLineNumber}
+                          </AlertTitle>
+                        </Alert>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Box>
+              </Box>
+            )}
+            <Diagram definition={definition} />
+          </GridItem>
+        </Grid>
       </main>
     </>
   );
