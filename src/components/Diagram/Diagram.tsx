@@ -8,8 +8,6 @@ import ReactFlow, {
   Controls,
   Background,
   MarkerType,
-  Node,
-  Edge,
 } from "reactflow";
 import StateNode from "./StateNode";
 
@@ -26,11 +24,16 @@ const getLayoutedElements = (
     direction: "TB" | "LR";
   },
 ) => {
-  g.setGraph({ rankdir: options.direction });
+  g.setGraph({
+    rankdir: options.direction,
+    nodesep: 200,
+    ranksep: 100,
+    align: "UL",
+  });
 
   edges.forEach((edge) => g.setEdge(edge.source, edge.target));
   nodes.forEach((node) =>
-    g.setNode(node.id, { ...node, width: 150, height: 50 }),
+    g.setNode(node.id, { ...node, width: 150, height: 25 }),
   );
 
   Dagre.layout(g);
@@ -72,23 +75,74 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
       type: "StateNode",
       data: { id, state, definition },
       markerStart: "arrow",
+      draggable: false,
     };
   });
 
-  const edges = Object.entries(States).map(([id, state]) => {
-    return {
-      id: `${id}-${state.Next}`,
-      source: id,
-      target: state.Next,
-      type: "smoothstep",
-      markerEnd: {
-        type: MarkerType.Arrow,
-      },
-      style: {
-        strokeWidth: 2,
-      },
-    };
-  });
+  const edges = [];
+
+  for (const [id, state] of Object.entries(States)) {
+    if (state.Next) {
+      edges.push({
+        id: `${id}-${state.Next}`,
+        source: id,
+        target: state.Next,
+        type: "smoothstep",
+        markerEnd: {
+          type: MarkerType.Arrow,
+        },
+        style: {
+          strokeWidth: 2,
+        },
+      });
+    }
+    if (state.Default) {
+      edges.push({
+        id: `${id}-${state.Default}`,
+        source: id,
+        target: state.Default,
+        animated: true,
+        type: "straight",
+        style: {
+          strokeWidth: 2,
+        },
+      });
+    }
+    if (state.Catch) {
+      for (const [catchId, catchState] of Object.entries(state.Catch)) {
+        edges.push({
+          id: `${id}-${catchId}`,
+          source: id,
+          target: catchState?.Next,
+          type: "straight",
+          animated: true,
+          style: {
+            strokeWidth: 2,
+            stroke: "red",
+          },
+        });
+      }
+    }
+
+    if (state.Type === "Choice" && state.Choices) {
+      for (const [choiceId, choice] of Object.entries(state.Choices)) {
+        edges.push({
+          id: `${id}-${choiceId}`,
+          source: id,
+          target: choice.Next,
+          type: "straight",
+          animated: true,
+          style: {
+            strokeWidth: 2,
+            stroke:
+              choice.Next && States[choice.Next]?.Type === "Fail"
+                ? "red"
+                : "black",
+          },
+        });
+      }
+    }
+  }
 
   return getLayoutedElements(nodes, edges, { direction: "TB" });
 }
