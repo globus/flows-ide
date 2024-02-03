@@ -113,7 +113,7 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
         edges.push({
           id: `${id}-${catchId}`,
           source: id,
-          target: catchState?.Next,
+          target: catchState.Next,
           type: "straight",
           animated: true,
           style: {

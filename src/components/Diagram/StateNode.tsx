@@ -71,13 +71,11 @@ export default function StateNode({
             </Box>
           </Text>
         </Box>
-        {!isEnd && state?.Next && (
-          <Handle
-            type="source"
-            isConnectable={false}
-            position={Position.Bottom}
-          />
-        )}
+        <Handle
+          type="source"
+          isConnectable={false}
+          position={Position.Bottom}
+        />
       </Flex>
     </>
   );
