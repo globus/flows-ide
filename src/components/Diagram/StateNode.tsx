@@ -2,6 +2,7 @@ import { Badge, Box, Flex, Text } from "@chakra-ui/react";
 import { Handle, Position } from "reactflow";
 
 import type { FlowDefinition } from "@/pages";
+import { useMonaco } from "@monaco-editor/react";
 type State = FlowDefinition["States"][string];
 
 function TypeBadge({ type, ...rest }: { type: string }) {
@@ -47,11 +48,34 @@ export default function StateNode({
     state: undefined | State;
   };
 }) {
+  const monaco = useMonaco();
+  function goToState() {
+    if (monaco) {
+      const models = monaco.editor.getModels();
+      const matches = models[0].findMatches(
+        `"${id}":`,
+        true,
+        true,
+        true,
+        null,
+        true,
+      );
+      if (!matches.length) return;
+      monaco.editor
+        .getEditors()[0]
+        .revealLineInCenter(matches[0].range.startLineNumber);
+      monaco.editor.getEditors()[0].focus();
+      monaco.editor
+        .getEditors()[0]
+        .setPosition(matches[0].range.getStartPosition());
+    }
+  }
+
   const isStart = id === definition.StartAt;
   const isEnd = state?.End === true;
   return (
     <>
-      <Flex>
+      <Flex onClick={goToState}>
         {!isStart && (
           <Handle type="target" isConnectable={false} position={Position.Top} />
         )}
