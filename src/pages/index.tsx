@@ -14,6 +14,8 @@ import {
   AlertIcon,
   ListItem,
   List,
+  Button,
+  Kbd,
 } from "@chakra-ui/react";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
@@ -22,6 +24,8 @@ import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
+import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
+import { ViewIcon } from "@chakra-ui/icons";
 
 export type FlowDefinition = {
   States: {
@@ -49,6 +53,8 @@ export default function Home() {
 
   const [definition, setDefinition] = useState<string | undefined>();
   const [invalidMarkers, setValidity] = useState<any[]>([]);
+  const [isSplitRight, setIsSplitRight] = useState(true);
+  const [showDocumentation, setShowDocumentation] = useState(false);
 
   const d = searchParams.get("d");
 
@@ -69,6 +75,29 @@ export default function Home() {
     setValidity(markers);
   }
 
+  let templateAreas = `
+    "header header"
+    "editor diagram"
+  `;
+  let gridTemplateColumns = "1fr 1fr";
+  let gridTemplateRows = "auto 1fr";
+
+  if (showDocumentation) {
+    gridTemplateColumns = "1fr 1fr 1fr";
+    gridTemplateRows = "auto 1fr 1fr";
+    templateAreas = isSplitRight
+      ? `
+    "header header header"
+    "editor diagram documentation"
+    "editor diagram documentation"
+  `
+      : `
+    "header header header"
+    "editor documentation documentation"
+    "editor diagram diagram"
+  `;
+  }
+
   return (
     <>
       <Head>
@@ -79,10 +108,9 @@ export default function Home() {
       <main>
         <Grid
           h="100vh"
-          templateAreas={`"header header"
-            "editor diagram"`}
-          gridTemplateRows={"auto 1fr"}
-          gridTemplateColumns={"1fr 1fr"}
+          templateAreas={templateAreas}
+          gridTemplateRows={gridTemplateRows}
+          gridTemplateColumns={gridTemplateColumns}
           gap={0}
         >
           <GridItem area="header">
@@ -90,12 +118,23 @@ export default function Home() {
               <Heading as="h1" color={"plum"}>
                 <Text>plum</Text>
               </Heading>
+              <Text color="white" ml="2">
+                visualize and create flows
+              </Text>
               <Spacer />
-              <Text color="white">visualize and create flows</Text>
+              <Box></Box>
+              <Button
+                size="xs"
+                colorScheme="purple"
+                onClick={() => {
+                  setShowDocumentation(!showDocumentation);
+                }}
+              >
+                {showDocumentation ? "Hide" : "Show"} Documentation
+              </Button>
             </Flex>
           </GridItem>
           <GridItem area={"editor"}>
-            {" "}
             <Editor
               // @ts-ignore
               defaultValue={
@@ -136,6 +175,25 @@ export default function Home() {
             )}
             <Diagram definition={definition} />
           </GridItem>
+          {showDocumentation && (
+            <GridItem area={"documentation"} bg={"gray.100"}>
+              <Flex justify={"right"} p={2} align={"center"}>
+                <Heading as="h1" size="xs">
+                  Documentation
+                </Heading>
+                <hr />
+                <Spacer />
+                <Button
+                  onClick={() => setIsSplitRight(!isSplitRight)}
+                  size="xs"
+                  variant={"outline"}
+                >
+                  Split View {isSplitRight ? "Down" : "Right"}
+                </Button>
+              </Flex>
+              <DocumentationBrowser />
+            </GridItem>
+          )}
         </Grid>
       </main>
     </>
