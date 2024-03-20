@@ -15,7 +15,8 @@ import {
   ListItem,
   List,
   Button,
-  Kbd,
+  Code,
+  Image,
 } from "@chakra-ui/react";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
@@ -25,7 +26,6 @@ import {
   decompressFromEncodedURIComponent,
 } from "lz-string";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
-import { ViewIcon } from "@chakra-ui/icons";
 
 export type FlowDefinition = {
   States: {
@@ -114,18 +114,30 @@ export default function Home() {
           gap={0}
         >
           <GridItem area="header">
-            <Flex bgColor={"purple.800"} px={2} align={"center"}>
-              <Heading as="h1" color={"plum"}>
-                <Text>plum</Text>
+            <Flex bgColor={"brand.800"} px={2} align={"center"}>
+              <Heading as="h1" color={"white"}>
+                <Flex align={"center"}>
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_BASE_PATH}/globus-logo.svg`}
+                    alt="Globus Flows IDE"
+                    boxSize="50px"
+                    objectFit="contain"
+                    p={1}
+                    mx={2}
+                  />
+                </Flex>
               </Heading>
-              <Text color="white" ml="2">
+              <Text color="white">
+                <Code colorScheme={"red"} variant={"solid"}>
+                  BETA
+                </Code>{" "}
                 visualize and create flows
               </Text>
               <Spacer />
               <Box></Box>
               <Button
                 size="xs"
-                colorScheme="purple"
+                colorScheme="brand"
                 onClick={() => {
                   setShowDocumentation(!showDocumentation);
                 }}

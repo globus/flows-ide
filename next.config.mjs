@@ -2,7 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   output: "export",
-  basePath: "/plum",
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH,
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;
