@@ -1,0 +1,19 @@
+name: ci
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  test:
+    name: "lint"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/hydrogen
+          cache: "npm"
+      - run: npm install
+      - run: npm run lint
