@@ -101,7 +101,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>plum</title>
+        <title>Globus : Flows IDE</title>
         <meta name="description" content="visualize and create flows" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
