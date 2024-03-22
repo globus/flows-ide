@@ -33,6 +33,10 @@ export const ACTION_PROVIDERS: ActionProviderEntry[] = [
     url: "https://actions.globus.org/hello_world",
     documentation:
       "https://docs.globus.org/api/flows/hosted-action-providers/ap-hello-world/",
+    /**
+     * @todo Once the CORs errors are addressed, the "Hello World" definition can be removed.
+     * We're just using the full definition here FPO.
+     */
     definition: {
       admin_contact: "support@globus.org",
       administered_by: [],
@@ -67,6 +71,55 @@ export const ACTION_PROVIDERS: ActionProviderEntry[] = [
       types: ["ACTION"],
       visible_to: ["public"],
     },
+  },
+  {
+    url: "https://transfer.actions.globus.org/collection_info",
+    documentation:
+      "https://docs.globus.org/api/transfer/action-providers/collection-info/",
+  },
+  {
+    url: "https://transfer.actions.globus.org/gcp/create_guest_collection",
+    documentation:
+      "https://docs.globus.org/api/transfer/action-providers/create-guest-collection-gcp/",
+  },
+  {
+    url: "https://transfer.actions.globus.org/gcsv5/create_guest_collection",
+    documentation:
+      "https://docs.globus.org/api/transfer/action-providers/create-guest-collection-gcsv5/",
+  },
+  {
+    url: "https://transfer.actions.globus.org/delete",
+    documentation:
+      "https://docs.globus.org/api/transfer/action-providers/delete/",
+  },
+  {
+    url: "https://transfer.actions.globus.org/ls",
+    documentation: "https://docs.globus.org/api/transfer/action-providers/ls/",
+  },
+  {
+    url: "https://transfer.actions.globus.org/mkdir",
+    documentation:
+      "https://docs.globus.org/api/transfer/action-providers/mkdir/",
+  },
+  {
+    url: "https://transfer.actions.globus.org/manage_permission",
+    documentation:
+      "https://docs.globus.org/api/transfer/action-providers/manage-permission/",
+  },
+  {
+    url: "https://transfer.actions.globus.org/stat",
+    documentation:
+      "https://docs.globus.org/api/transfer/action-providers/stat/",
+  },
+  {
+    url: "https://transfer.actions.globus.org/transfer",
+    documentation:
+      "https://docs.globus.org/api/transfer/action-providers/transfer/",
+  },
+  {
+    url: "https://compute.actions.globus.org",
+    documentation:
+      "https://globus-compute.readthedocs.io/en/latest/actionprovider.html",
   },
   {
     url: "https://actions.globus.org/search/ingest",
