@@ -29,10 +29,66 @@ import {
 } from "./library";
 import { useEffect, useRef, useState } from "react";
 
+const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
+  return (
+    <AccordionItem>
+      <h3>
+        <AccordionButton>
+          <Box as="span" flex="1" textAlign="left">
+            {ap.definition?.title ?? ap.url}
+          </Box>
+          <AccordionIcon />
+        </AccordionButton>
+      </h3>
+      <AccordionPanel pb={4}>
+        {ap.definition?.subtitle ? (
+          <Box>
+            <Text>{ap.definition?.subtitle ?? ""}</Text>
+            <Code variant="outline" colorScheme="pink" my={2}>
+              {ap.definition?.globus_auth_scope}
+            </Code>
+          </Box>
+        ) : null}
+        <Flex>
+          <ButtonGroup>
+            <Button
+              as={Link}
+              href={ap.url}
+              isExternal
+              size={"xs"}
+              variant={"outline"}
+            >
+              Definition
+              <ExternalLinkIcon mx="2px" />
+            </Button>
+            <Button
+              as={Link}
+              href={ap.documentation}
+              isExternal
+              size={"xs"}
+              variant={"outline"}
+            >
+              Documenation
+              <ExternalLinkIcon mx="2px" />
+            </Button>
+          </ButtonGroup>
+          <Spacer />
+          <Text fontSize="xs">{ap.definition?.admin_contact}</Text>
+        </Flex>
+      </AccordionPanel>
+    </AccordionItem>
+  );
+};
+
 export function DocumentationBrowser() {
   const [actionProviders, setActionProviders] = useState<ActionProviderEntry[]>(
     [],
   );
+
+  const [actionProviderMenu, setActionProvidersMenu] = useState<{
+    main: ActionProviderEntry[];
+    transfer: ActionProviderEntry[];
+  }>({ main: [], transfer: [] });
 
   const boostraped = useRef(BOOTSTRAPPED);
 
@@ -43,6 +99,18 @@ export function DocumentationBrowser() {
     }
     execute();
   }, [boostraped]);
+
+  useEffect(() => {
+    const transfer = actionProviders.filter((ap) =>
+      ap.url.includes("transfer"),
+    );
+    const main = actionProviders.filter((ap) => !ap.url.includes("transfer"));
+
+    setActionProvidersMenu({
+      main,
+      transfer,
+    });
+  }, [actionProviders]);
 
   return (
     <Stack p={2}>
@@ -81,56 +149,26 @@ export function DocumentationBrowser() {
         </CardHeader>
         <CardBody>
           <Accordion allowMultiple>
-            {actionProviders.map((ap) => {
-              return (
-                <AccordionItem key={ap.url}>
-                  <h3>
-                    <AccordionButton>
-                      <Box as="span" flex="1" textAlign="left">
-                        {ap.definition?.title ?? ap.url}
-                      </Box>
-                      <AccordionIcon />
-                    </AccordionButton>
-                  </h3>
-                  <AccordionPanel pb={4}>
-                    {ap.definition?.subtitle ? (
-                      <Box>
-                        <Text>{ap.definition?.subtitle ?? ""}</Text>
-                        <Code variant="outline" colorScheme="pink" my={2}>
-                          {ap.definition?.globus_auth_scope}
-                        </Code>
-                      </Box>
-                    ) : null}
-                    <Flex>
-                      <ButtonGroup>
-                        <Button
-                          as={Link}
-                          href={ap.url}
-                          isExternal
-                          size={"xs"}
-                          variant={"outline"}
-                        >
-                          Definition
-                          <ExternalLinkIcon mx="2px" />
-                        </Button>
-                        <Button
-                          as={Link}
-                          href={ap.documentation}
-                          isExternal
-                          size={"xs"}
-                          variant={"outline"}
-                        >
-                          Documenation
-                          <ExternalLinkIcon mx="2px" />
-                        </Button>
-                      </ButtonGroup>
-                      <Spacer />
-                      <Text fontSize="xs">{ap.definition?.admin_contact}</Text>
-                    </Flex>
-                  </AccordionPanel>
-                </AccordionItem>
-              );
-            })}
+            {actionProviderMenu.main.map((ap) => (
+              <ActionProviderItem ap={ap} key={ap.url} />
+            ))}
+            <AccordionItem>
+              <h3>
+                <AccordionButton>
+                  <Box as="span" flex="1" textAlign="left">
+                    Globus Transfer
+                  </Box>
+                  <AccordionIcon />
+                </AccordionButton>
+              </h3>
+              <AccordionPanel pb={4}>
+                <Accordion allowMultiple>
+                  {actionProviderMenu.transfer.map((ap) => (
+                    <ActionProviderItem ap={ap} key={ap.url} />
+                  ))}
+                </Accordion>
+              </AccordionPanel>
+            </AccordionItem>
           </Accordion>
         </CardBody>
       </Card>
