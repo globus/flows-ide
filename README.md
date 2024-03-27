@@ -2,7 +2,7 @@
 
 **⚠️ Until this notice is removed, usage of this repository is NOT recommended and is provided as-is.**
 
-**We're looking forward to sharing more details about this repostiory and more at [GlobusWorld 2024](https://www.globusworld.org/)!**
+**We're looking forward to sharing more details about this repository and more at [GlobusWorld 2024](https://www.globusworld.org/)!**
 
 ----
 
