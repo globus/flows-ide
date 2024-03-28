@@ -22,6 +22,13 @@ export type ActionProviderEntry = {
   };
 };
 
+const ACTION_PROVIDERS_HOSTS = {
+  SANDBOX: "https://sandbox.actions.automate.globus.org/",
+  PRODUCTION: "https://actions.globus.org/",
+};
+
+const ACTION_PROVIDERS_HOST = ACTION_PROVIDERS_HOSTS.PRODUCTION;
+
 export let BOOTSTRAPPED = false;
 
 /**
@@ -30,7 +37,7 @@ export let BOOTSTRAPPED = false;
  */
 export const ACTION_PROVIDERS: ActionProviderEntry[] = [
   {
-    url: "https://actions.globus.org/hello_world",
+    url: ACTION_PROVIDERS_HOST + "hello_world",
     documentation:
       "https://docs.globus.org/api/flows/hosted-action-providers/ap-hello-world/",
     /**
@@ -122,32 +129,32 @@ export const ACTION_PROVIDERS: ActionProviderEntry[] = [
       "https://globus-compute.readthedocs.io/en/latest/actionprovider.html",
   },
   {
-    url: "https://actions.globus.org/search/ingest",
+    url: ACTION_PROVIDERS_HOST + "search/ingest",
     documentation:
       "https://docs.globus.org/api/flows/hosted-action-providers/ap-search-ingest/",
   },
   {
-    url: "https://actions.globus.org/search/delete",
+    url: ACTION_PROVIDERS_HOST + "search/delete",
     documentation:
       "https://docs.globus.org/api/flows/hosted-action-providers/ap-search-delete/",
   },
   {
-    url: "https://actions.globus.org/notification/notify",
+    url: ACTION_PROVIDERS_HOST + "notification/notify",
     documentation:
       "https://docs.globus.org/api/flows/hosted-action-providers/ap-notification-notify/",
   },
   {
-    url: "https://actions.globus.org/weboption/wait_for_option",
+    url: ACTION_PROVIDERS_HOST + "weboption/wait_for_option",
     documentation:
       "https://docs.globus.org/api/flows/hosted-action-providers/ap-weboption-wait-for-option/",
   },
   {
-    url: "https://actions.globus.org/expression_eval",
+    url: ACTION_PROVIDERS_HOST + "expression_eval",
     documentation:
       "https://docs.globus.org/api/flows/hosted-action-providers/ap-expression-eval/",
   },
   {
-    url: "https://actions.globus.org/datacite/mint/basic_auth",
+    url: ACTION_PROVIDERS_HOST + "datacite/mint/basic_auth",
     documentation:
       "https://docs.globus.org/api/flows/hosted-action-providers/ap-datacite-mint/",
   },
