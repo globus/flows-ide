@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Box } from "@chakra-ui/react";
 import Dagre from "@dagrejs/dagre";
 import ReactFlow, {
@@ -8,6 +8,8 @@ import ReactFlow, {
   Controls,
   Background,
   MarkerType,
+  useEdgesState,
+  useNodesState,
 } from "reactflow";
 import StateNode from "./StateNode";
 
@@ -75,7 +77,7 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
       type: "StateNode",
       data: { id, state, definition },
       markerStart: "arrow",
-      draggable: false,
+      draggable: true,
     };
   });
 
@@ -149,10 +151,28 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
 
 export default function Diagram({ definition }: { definition: any }) {
   const nodeTypes = useMemo(() => ({ StateNode: StateNode }), []);
-  const { nodes, edges } = toNodesAndEdges(definition);
+  const { nodes: initialNodes, edges: initialEdges } = useMemo(
+    () => toNodesAndEdges(definition),
+    [definition],
+  );
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  useEffect(() => {
+    setNodes(initialNodes);
+    setEdges(initialEdges);
+  }, [initialEdges, initialNodes, setEdges, setNodes]);
+
   return (
     <Box h={"100%"} w={"100%"}>
-      <ReactFlow nodeTypes={nodeTypes} nodes={nodes} edges={edges} fitView>
+      <ReactFlow
+        nodeTypes={nodeTypes}
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        fitView
+      >
         <MiniMap />
         <Controls />
         <Background />
