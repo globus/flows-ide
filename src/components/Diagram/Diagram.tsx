@@ -77,7 +77,6 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
       type: "StateNode",
       data: { id, state, definition },
       markerStart: "arrow",
-      draggable: true,
     };
   });
 
