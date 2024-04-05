@@ -150,17 +150,14 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
 
 export default function Diagram({ definition }: { definition: any }) {
   const nodeTypes = useMemo(() => ({ StateNode: StateNode }), []);
-  const { nodes: initialNodes, edges: initialEdges } = useMemo(
-    () => toNodesAndEdges(definition),
-    [definition],
-  );
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
   useEffect(() => {
-    setNodes(initialNodes);
-    setEdges(initialEdges);
-  }, [initialEdges, initialNodes, setEdges, setNodes]);
+    const { nodes, edges } = toNodesAndEdges(definition);
+    setNodes(nodes);
+    setEdges(edges);
+  }, [definition, setEdges, setNodes]);
 
   return (
     <Box h={"100%"} w={"100%"}>
