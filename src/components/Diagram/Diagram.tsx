@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Box } from "@chakra-ui/react";
 import Dagre from "@dagrejs/dagre";
 import ReactFlow, {
@@ -8,6 +8,8 @@ import ReactFlow, {
   Controls,
   Background,
   MarkerType,
+  useEdgesState,
+  useNodesState,
 } from "reactflow";
 import StateNode from "./StateNode";
 
@@ -75,7 +77,6 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
       type: "StateNode",
       data: { id, state, definition },
       markerStart: "arrow",
-      draggable: false,
     };
   });
 
@@ -149,10 +150,39 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
 
 export default function Diagram({ definition }: { definition: any }) {
   const nodeTypes = useMemo(() => ({ StateNode: StateNode }), []);
-  const { nodes, edges } = toNodesAndEdges(definition);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const previousNodes = useRef(nodes);
+  useEffect(() => {
+    previousNodes.current = nodes;
+  }, [nodes]);
+
+  useEffect(() => {
+    const { nodes: updatedNodes, edges: updatedEdges } =
+      toNodesAndEdges(definition);
+      updatedNodes.forEach((updatedNode) => {
+        const match = previousNodes.current.find(
+          (existingNode) => existingNode.id === updatedNode.id,
+        );
+        if (match) {
+          // Retain position data associated with this node id
+          updatedNode.position = match.position;
+        }
+      });
+    setNodes(updatedNodes);
+    setEdges(updatedEdges);
+  }, [definition, previousNodes, setEdges, setNodes]);
+
   return (
     <Box h={"100%"} w={"100%"}>
-      <ReactFlow nodeTypes={nodeTypes} nodes={nodes} edges={edges} fitView>
+      <ReactFlow
+        nodeTypes={nodeTypes}
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        fitView
+      >
         <MiniMap />
         <Controls />
         <Background />
