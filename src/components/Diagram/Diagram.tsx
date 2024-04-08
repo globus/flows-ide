@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Box } from "@chakra-ui/react";
 import Dagre from "@dagrejs/dagre";
 import ReactFlow, {
@@ -152,12 +152,26 @@ export default function Diagram({ definition }: { definition: any }) {
   const nodeTypes = useMemo(() => ({ StateNode: StateNode }), []);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const previousNodes = useRef(nodes);
+  useEffect(() => {
+    previousNodes.current = nodes;
+  }, [nodes]);
 
   useEffect(() => {
-    const { nodes, edges } = toNodesAndEdges(definition);
-    setNodes(nodes);
-    setEdges(edges);
-  }, [definition, setEdges, setNodes]);
+    const { nodes: updatedNodes, edges: updatedEdges } =
+      toNodesAndEdges(definition);
+      updatedNodes.forEach((updatedNode) => {
+        const match = previousNodes.current.find(
+          (existingNode) => existingNode.id === updatedNode.id,
+        );
+        if (match) {
+          // Retain position data associated with this node id
+          updatedNode.position = match.position;
+        }
+      });
+    setNodes(updatedNodes);
+    setEdges(updatedEdges);
+  }, [definition, previousNodes, setEdges, setNodes]);
 
   return (
     <Box h={"100%"} w={"100%"}>
