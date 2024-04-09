@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/globus/flows-ide/compare/flows-ide-v1.0.1...flows-ide-v1.0.2) (2024-04-09)
+
+
+### Bug Fixes
+
+* **DevOps:** ensure auto-deployment on version tags ([e1c4134](https://github.com/globus/flows-ide/commit/e1c41342e729bd66195b9a1c8da84ce1a2e9fbbb))
+
 ## [1.0.1](https://github.com/globus/flows-ide/compare/flows-ide-v1.0.0...flows-ide-v1.0.1) (2024-04-09)
 
 
