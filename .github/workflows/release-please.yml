@@ -18,5 +18,7 @@ jobs:
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-      - uses: './.github/actions/nextjs.yml'
+      - uses: actions/checkout@v4
+        if: ${{ steps.release.outputs.releases_created == 'true' }}
+      - uses: ./.github/actions/nextjs
         if: ${{ steps.release.outputs.releases_created == 'true' }}
