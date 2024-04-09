@@ -1,5 +1,4 @@
 {
-  "changelog-type": "github",
   "release-type": "node",
   "packages": {
     ".": {
