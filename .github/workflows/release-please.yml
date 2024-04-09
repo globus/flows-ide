@@ -20,5 +20,5 @@ jobs:
           manifest-file: .release-please-manifest.json
       - uses: actions/checkout@v4
         if: ${{ steps.release.outputs.releases_created == 'true' }}
-      - uses: ./.github/actions/nextjs
+      - uses: ./.github/workflows/nextjs.yml
         if: ${{ steps.release.outputs.releases_created == 'true' }}
