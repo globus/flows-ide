@@ -27,6 +27,8 @@ import {
 } from "lz-string";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
 
+import package from "../../package.json" assert { type: "json" };
+
 export type FlowDefinition = {
   States: {
     [key: string]: {
@@ -128,13 +130,12 @@ export default function Home() {
                 </Flex>
               </Heading>
               <Text color="white">
-                <Code colorScheme={"red"} variant={"solid"}>
-                  BETA
-                </Code>{" "}
+                <Code mr={1} colorScheme={"red"} variant={"solid"}>
+                  v{package.version}-beta
+                </Code>
                 visualize and create flows
               </Text>
               <Spacer />
-              <Box></Box>
               <Button
                 size="xs"
                 colorScheme="brand"
