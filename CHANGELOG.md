@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/globus/flows-ide/compare/flows-ide-v1.0.0...flows-ide-v1.0.1) (2024-04-09)
+
+
+### Bug Fixes
+
+* address issue preventing version from being displayed in header ([0d5a0e5](https://github.com/globus/flows-ide/commit/0d5a0e5263d5f60a8882ab19f35a78beb81ef1f2))
+
 ## 1.0.0 (2024-04-09)
 
 
