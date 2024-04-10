@@ -4,7 +4,7 @@ import MonacoEditor, { type Monaco } from "@monaco-editor/react";
 function configureEditor(monaco: Monaco) {
   monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
     enableSchemaRequest: true,
-    validate: true,
+    validate: false,
     schemas: [
       {
         uri: `${window.location.origin}${process.env.NEXT_PUBLIC_BASE_PATH}/schemas/flow_definition_schema.json`,
