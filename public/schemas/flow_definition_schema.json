@@ -1,0 +1,926 @@
+{
+    "title": "FlowDefinition",
+    "type": "object",
+    "properties": {
+      "StartAt": {
+        "title": "Startat",
+        "type": "string"
+      },
+      "States": {
+        "title": "States",
+        "type": "object",
+        "additionalProperties": {
+          "discriminator": {
+            "propertyName": "Type",
+            "mapping": {
+              "Action": "#/definitions/ActionState",
+              "Choice": "#/definitions/ChoiceState",
+              "ExpressionEval": "#/definitions/ExpressionEvalState",
+              "Fail": "#/definitions/FailState",
+              "Pass": "#/definitions/PassState",
+              "Wait": "#/definitions/WaitState"
+            }
+          },
+          "oneOf": [
+            {
+              "$ref": "#/definitions/ActionState"
+            },
+            {
+              "$ref": "#/definitions/ChoiceState"
+            },
+            {
+              "$ref": "#/definitions/ExpressionEvalState"
+            },
+            {
+              "$ref": "#/definitions/FailState"
+            },
+            {
+              "$ref": "#/definitions/PassState"
+            },
+            {
+              "$ref": "#/definitions/WaitState"
+            }
+          ]
+        }
+      },
+      "Comment": {
+        "title": "Comment",
+        "type": "string"
+      }
+    },
+    "required": [
+      "StartAt",
+      "States"
+    ],
+    "additionalProperties": false,
+    "definitions": {
+      "Catcher": {
+        "title": "Catcher",
+        "type": "object",
+        "properties": {
+          "ErrorEquals": {
+            "title": "Errorequals",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "Next": {
+            "title": "Next",
+            "type": "string"
+          },
+          "ResultPath": {
+            "title": "Resultpath",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ErrorEquals",
+          "Next"
+        ],
+        "additionalProperties": false
+      },
+      "ActionState": {
+        "title": "ActionState",
+        "type": "object",
+        "properties": {
+          "Parameters": {
+            "title": "Parameters",
+            "type": "object"
+          },
+          "Type": {
+            "title": "Type",
+            "enum": [
+              "Action"
+            ],
+            "type": "string"
+          },
+          "Comment": {
+            "title": "Comment",
+            "type": "string"
+          },
+          "Next": {
+            "title": "Next",
+            "type": "string"
+          },
+          "End": {
+            "title": "End",
+            "type": "boolean"
+          },
+          "ActionUrl": {
+            "title": "Actionurl",
+            "type": "string"
+          },
+          "ActionScope": {
+            "title": "Actionscope",
+            "type": "string"
+          },
+          "InputPath": {
+            "title": "Inputpath",
+            "type": "string"
+          },
+          "ResultPath": {
+            "title": "Resultpath",
+            "type": "string"
+          },
+          "WaitTime": {
+            "title": "Waittime",
+            "type": "integer"
+          },
+          "ExceptionOnActionFailure": {
+            "title": "Exceptiononactionfailure",
+            "type": "boolean"
+          },
+          "Catch": {
+            "title": "Catch",
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/Catcher"
+            }
+          },
+          "RunAs": {
+            "title": "Runas",
+            "type": "string"
+          }
+        },
+        "required": [
+          "Type",
+          "ActionUrl"
+        ],
+        "additionalProperties": false
+      },
+      "AndChoiceRule": {
+        "title": "AndChoiceRule",
+        "type": "object",
+        "properties": {
+          "And": {
+            "title": "And",
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ChoiceRule"
+            }
+          }
+        },
+        "required": [
+          "And"
+        ],
+        "additionalProperties": false
+      },
+      "OrChoiceRule": {
+        "title": "OrChoiceRule",
+        "type": "object",
+        "properties": {
+          "Or": {
+            "title": "Or",
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ChoiceRule"
+            }
+          }
+        },
+        "required": [
+          "Or"
+        ],
+        "additionalProperties": false
+      },
+      "NotChoiceRule": {
+        "title": "NotChoiceRule",
+        "type": "object",
+        "properties": {
+          "Not": {
+            "$ref": "#/definitions/ChoiceRule"
+          }
+        },
+        "required": [
+          "Not"
+        ],
+        "additionalProperties": false
+      },
+      "VariableChoiceRule": {
+        "title": "VariableChoiceRule",
+        "type": "object",
+        "properties": {
+          "Variable": {
+            "title": "Variable",
+            "type": "string"
+          },
+          "BooleanEquals": {
+            "title": "Booleanequals",
+            "type": "boolean"
+          },
+          "BooleanEqualsPath": {
+            "title": "Booleanequalspath",
+            "type": "string"
+          },
+          "IsBoolean": {
+            "title": "Isboolean",
+            "type": "boolean"
+          },
+          "IsNull": {
+            "title": "Isnull",
+            "type": "boolean"
+          },
+          "IsNumeric": {
+            "title": "Isnumeric",
+            "type": "boolean"
+          },
+          "IsPresent": {
+            "title": "Ispresent",
+            "type": "boolean"
+          },
+          "IsString": {
+            "title": "Isstring",
+            "type": "boolean"
+          },
+          "IsTimestamp": {
+            "title": "Istimestamp",
+            "type": "boolean"
+          },
+          "NumericEquals": {
+            "title": "Numericequals",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "NumericEqualsPath": {
+            "title": "Numericequalspath",
+            "type": "string"
+          },
+          "NumericGreaterThan": {
+            "title": "Numericgreaterthan",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "NumericGreaterThanPath": {
+            "title": "Numericgreaterthanpath",
+            "type": "string"
+          },
+          "NumericGreaterThanEquals": {
+            "title": "Numericgreaterthanequals",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "NumericGreaterThanEqualsPath": {
+            "title": "Numericgreaterthanequalspath",
+            "type": "string"
+          },
+          "NumericLessThan": {
+            "title": "Numericlessthan",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "NumericLessThanPath": {
+            "title": "Numericlessthanpath",
+            "type": "string"
+          },
+          "NumericLessThanEquals": {
+            "title": "Numericlessthanequals",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "NumericLessThanEqualsPath": {
+            "title": "Numericlessthanequalspath",
+            "type": "string"
+          },
+          "StringEquals": {
+            "title": "Stringequals",
+            "type": "string"
+          },
+          "StringEqualsPath": {
+            "title": "Stringequalspath",
+            "type": "string"
+          },
+          "StringGreaterThan": {
+            "title": "Stringgreaterthan",
+            "type": "string"
+          },
+          "StringGreaterThanPath": {
+            "title": "Stringgreaterthanpath",
+            "type": "string"
+          },
+          "StringGreaterThanEquals": {
+            "title": "Stringgreaterthanequals",
+            "type": "string"
+          },
+          "StringGreaterThanEqualsPath": {
+            "title": "Stringgreaterthanequalspath",
+            "type": "string"
+          },
+          "StringLessThan": {
+            "title": "Stringlessthan",
+            "type": "string"
+          },
+          "StringLessThanPath": {
+            "title": "Stringlessthanpath",
+            "type": "string"
+          },
+          "StringLessThanEquals": {
+            "title": "Stringlessthanequals",
+            "type": "string"
+          },
+          "StringLessThanEqualsPath": {
+            "title": "Stringlessthanequalspath",
+            "type": "string"
+          },
+          "StringMatches": {
+            "title": "Stringmatches",
+            "type": "string"
+          },
+          "TimestampEquals": {
+            "title": "Timestampequals",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampEqualsPath": {
+            "title": "Timestampequalspath",
+            "type": "string"
+          },
+          "TimestampGreaterThan": {
+            "title": "Timestampgreaterthan",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampGreaterThanPath": {
+            "title": "Timestampgreaterthanpath",
+            "type": "string"
+          },
+          "TimestampGreaterThanEquals": {
+            "title": "Timestampgreaterthanequals",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampGreaterThanEqualsPath": {
+            "title": "Timestampgreaterthanequalspath",
+            "type": "string"
+          },
+          "TimestampLessThan": {
+            "title": "Timestamplessthan",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampLessThanPath": {
+            "title": "Timestamplessthanpath",
+            "type": "string"
+          },
+          "TimestampLessThanEquals": {
+            "title": "Timestamplessthanequals",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampLessThanEqualsPath": {
+            "title": "Timestamplessthanequalspath",
+            "type": "string"
+          }
+        },
+        "required": [
+          "Variable"
+        ],
+        "additionalProperties": false,
+        "minProperties": 2,
+        "maxProperties": 2
+      },
+      "ChoiceRule": {
+        "title": "ChoiceRule",
+        "anyOf": [
+          {
+            "$ref": "#/definitions/AndChoiceRule"
+          },
+          {
+            "$ref": "#/definitions/OrChoiceRule"
+          },
+          {
+            "$ref": "#/definitions/NotChoiceRule"
+          },
+          {
+            "$ref": "#/definitions/VariableChoiceRule"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "AndChoiceRuleRoot": {
+        "title": "AndChoiceRuleRoot",
+        "type": "object",
+        "properties": {
+          "And": {
+            "title": "And",
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ChoiceRule"
+            }
+          },
+          "Next": {
+            "title": "Next",
+            "type": "string"
+          }
+        },
+        "required": [
+          "And",
+          "Next"
+        ],
+        "additionalProperties": false
+      },
+      "OrChoiceRuleRoot": {
+        "title": "OrChoiceRuleRoot",
+        "type": "object",
+        "properties": {
+          "Or": {
+            "title": "Or",
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ChoiceRule"
+            }
+          },
+          "Next": {
+            "title": "Next",
+            "type": "string"
+          }
+        },
+        "required": [
+          "Or",
+          "Next"
+        ],
+        "additionalProperties": false
+      },
+      "NotChoiceRuleRoot": {
+        "title": "NotChoiceRuleRoot",
+        "type": "object",
+        "properties": {
+          "Not": {
+            "$ref": "#/definitions/ChoiceRule"
+          },
+          "Next": {
+            "title": "Next",
+            "type": "string"
+          }
+        },
+        "required": [
+          "Not",
+          "Next"
+        ],
+        "additionalProperties": false
+      },
+      "VariableChoiceRuleRoot": {
+        "title": "VariableChoiceRuleRoot",
+        "type": "object",
+        "properties": {
+          "Next": {
+            "title": "Next",
+            "type": "string"
+          },
+          "Variable": {
+            "title": "Variable",
+            "type": "string"
+          },
+          "BooleanEquals": {
+            "title": "Booleanequals",
+            "type": "boolean"
+          },
+          "BooleanEqualsPath": {
+            "title": "Booleanequalspath",
+            "type": "string"
+          },
+          "IsBoolean": {
+            "title": "Isboolean",
+            "type": "boolean"
+          },
+          "IsNull": {
+            "title": "Isnull",
+            "type": "boolean"
+          },
+          "IsNumeric": {
+            "title": "Isnumeric",
+            "type": "boolean"
+          },
+          "IsPresent": {
+            "title": "Ispresent",
+            "type": "boolean"
+          },
+          "IsString": {
+            "title": "Isstring",
+            "type": "boolean"
+          },
+          "IsTimestamp": {
+            "title": "Istimestamp",
+            "type": "boolean"
+          },
+          "NumericEquals": {
+            "title": "Numericequals",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "NumericEqualsPath": {
+            "title": "Numericequalspath",
+            "type": "string"
+          },
+          "NumericGreaterThan": {
+            "title": "Numericgreaterthan",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "NumericGreaterThanPath": {
+            "title": "Numericgreaterthanpath",
+            "type": "string"
+          },
+          "NumericGreaterThanEquals": {
+            "title": "Numericgreaterthanequals",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "NumericGreaterThanEqualsPath": {
+            "title": "Numericgreaterthanequalspath",
+            "type": "string"
+          },
+          "NumericLessThan": {
+            "title": "Numericlessthan",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "NumericLessThanPath": {
+            "title": "Numericlessthanpath",
+            "type": "string"
+          },
+          "NumericLessThanEquals": {
+            "title": "Numericlessthanequals",
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "NumericLessThanEqualsPath": {
+            "title": "Numericlessthanequalspath",
+            "type": "string"
+          },
+          "StringEquals": {
+            "title": "Stringequals",
+            "type": "string"
+          },
+          "StringEqualsPath": {
+            "title": "Stringequalspath",
+            "type": "string"
+          },
+          "StringGreaterThan": {
+            "title": "Stringgreaterthan",
+            "type": "string"
+          },
+          "StringGreaterThanPath": {
+            "title": "Stringgreaterthanpath",
+            "type": "string"
+          },
+          "StringGreaterThanEquals": {
+            "title": "Stringgreaterthanequals",
+            "type": "string"
+          },
+          "StringGreaterThanEqualsPath": {
+            "title": "Stringgreaterthanequalspath",
+            "type": "string"
+          },
+          "StringLessThan": {
+            "title": "Stringlessthan",
+            "type": "string"
+          },
+          "StringLessThanPath": {
+            "title": "Stringlessthanpath",
+            "type": "string"
+          },
+          "StringLessThanEquals": {
+            "title": "Stringlessthanequals",
+            "type": "string"
+          },
+          "StringLessThanEqualsPath": {
+            "title": "Stringlessthanequalspath",
+            "type": "string"
+          },
+          "StringMatches": {
+            "title": "Stringmatches",
+            "type": "string"
+          },
+          "TimestampEquals": {
+            "title": "Timestampequals",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampEqualsPath": {
+            "title": "Timestampequalspath",
+            "type": "string"
+          },
+          "TimestampGreaterThan": {
+            "title": "Timestampgreaterthan",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampGreaterThanPath": {
+            "title": "Timestampgreaterthanpath",
+            "type": "string"
+          },
+          "TimestampGreaterThanEquals": {
+            "title": "Timestampgreaterthanequals",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampGreaterThanEqualsPath": {
+            "title": "Timestampgreaterthanequalspath",
+            "type": "string"
+          },
+          "TimestampLessThan": {
+            "title": "Timestamplessthan",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampLessThanPath": {
+            "title": "Timestamplessthanpath",
+            "type": "string"
+          },
+          "TimestampLessThanEquals": {
+            "title": "Timestamplessthanequals",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampLessThanEqualsPath": {
+            "title": "Timestamplessthanequalspath",
+            "type": "string"
+          }
+        },
+        "required": [
+          "Next",
+          "Variable"
+        ],
+        "additionalProperties": false,
+        "minProperties": 3,
+        "maxProperties": 3
+      },
+      "ChoiceRuleRoot": {
+        "title": "ChoiceRuleRoot",
+        "anyOf": [
+          {
+            "$ref": "#/definitions/AndChoiceRuleRoot"
+          },
+          {
+            "$ref": "#/definitions/OrChoiceRuleRoot"
+          },
+          {
+            "$ref": "#/definitions/NotChoiceRuleRoot"
+          },
+          {
+            "$ref": "#/definitions/VariableChoiceRuleRoot"
+          }
+        ],
+        "additionalProperties": false
+      },
+      "ChoiceState": {
+        "title": "ChoiceState",
+        "type": "object",
+        "properties": {
+          "Type": {
+            "title": "Type",
+            "enum": [
+              "Choice"
+            ],
+            "type": "string"
+          },
+          "Comment": {
+            "title": "Comment",
+            "type": "string"
+          },
+          "Choices": {
+            "title": "Choices",
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ChoiceRuleRoot"
+            }
+          },
+          "Default": {
+            "title": "Default",
+            "type": "string"
+          }
+        },
+        "required": [
+          "Type",
+          "Choices"
+        ],
+        "additionalProperties": false
+      },
+      "ExpressionEvalState": {
+        "title": "ExpressionEvalState",
+        "type": "object",
+        "properties": {
+          "Parameters": {
+            "title": "Parameters",
+            "type": "object"
+          },
+          "Type": {
+            "title": "Type",
+            "enum": [
+              "ExpressionEval"
+            ],
+            "type": "string"
+          },
+          "Comment": {
+            "title": "Comment",
+            "type": "string"
+          },
+          "Next": {
+            "title": "Next",
+            "type": "string"
+          },
+          "End": {
+            "title": "End",
+            "type": "boolean"
+          },
+          "ResultPath": {
+            "title": "Resultpath",
+            "type": "string"
+          }
+        },
+        "required": [
+          "Parameters",
+          "Type",
+          "ResultPath"
+        ],
+        "additionalProperties": false
+      },
+      "FailState": {
+        "title": "FailState",
+        "type": "object",
+        "properties": {
+          "Type": {
+            "title": "Type",
+            "enum": [
+              "Fail"
+            ],
+            "type": "string"
+          },
+          "Comment": {
+            "title": "Comment",
+            "type": "string"
+          },
+          "Cause": {
+            "title": "Cause",
+            "type": "string"
+          },
+          "Error": {
+            "title": "Error",
+            "type": "string"
+          }
+        },
+        "required": [
+          "Type"
+        ],
+        "additionalProperties": false
+      },
+      "PassState": {
+        "title": "PassState",
+        "type": "object",
+        "properties": {
+          "Parameters": {
+            "title": "Parameters",
+            "type": "object"
+          },
+          "Type": {
+            "title": "Type",
+            "enum": [
+              "Pass"
+            ],
+            "type": "string"
+          },
+          "Comment": {
+            "title": "Comment",
+            "type": "string"
+          },
+          "Next": {
+            "title": "Next",
+            "type": "string"
+          },
+          "End": {
+            "title": "End",
+            "type": "boolean"
+          },
+          "InputPath": {
+            "title": "Inputpath",
+            "type": "string"
+          },
+          "ResultPath": {
+            "title": "Resultpath",
+            "type": "string"
+          },
+          "Result": {
+            "title": "Result",
+            "type": "object"
+          }
+        },
+        "required": [
+          "Type"
+        ],
+        "additionalProperties": false
+      },
+      "WaitState": {
+        "title": "WaitState",
+        "type": "object",
+        "properties": {
+          "Type": {
+            "title": "Type",
+            "enum": [
+              "Wait"
+            ],
+            "type": "string"
+          },
+          "Comment": {
+            "title": "Comment",
+            "type": "string"
+          },
+          "Next": {
+            "title": "Next",
+            "type": "string"
+          },
+          "End": {
+            "title": "End",
+            "type": "boolean"
+          },
+          "Timestamp": {
+            "title": "Timestamp",
+            "type": "string",
+            "format": "date-time"
+          },
+          "TimestampPath": {
+            "title": "Timestamppath",
+            "type": "string"
+          },
+          "Seconds": {
+            "title": "Seconds",
+            "type": "integer"
+          },
+          "SecondsPath": {
+            "title": "Secondspath",
+            "type": "string"
+          }
+        },
+        "required": [
+          "Type"
+        ],
+        "additionalProperties": false,
+        "minProperties": 2,
+        "maxProperties": 2
+      }
+    }
+  }
