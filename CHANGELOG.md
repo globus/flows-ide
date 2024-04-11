@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.1.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.0.2...flows-ide-v1.1.0) (2024-04-11)
+
+
+### Features
+
+* add edge labels to catch, choice and default ([7cfff33](https://github.com/globus/flows-ide/commit/7cfff332fcccbf23466b5c86617041ecfb88ca4e))
+* enable schema validation ([4876077](https://github.com/globus/flows-ide/commit/4876077d96ae904fd0b805b4a717503984067f1b))
+* filter non-errors from markers presented in the diagram; warnings no longer block rendering. ([#32](https://github.com/globus/flows-ide/issues/32)) ([4876077](https://github.com/globus/flows-ide/commit/4876077d96ae904fd0b805b4a717503984067f1b))
+* load and use Flow definition schema for autocomplete ([#30](https://github.com/globus/flows-ide/issues/30)) ([cea01ec](https://github.com/globus/flows-ide/commit/cea01ecd239d982d656d4637de9c193c1c9d1e4d))
+
+
+### Bug Fixes
+
+* DOM nesting issue in StateNode ([#33](https://github.com/globus/flows-ide/issues/33)) ([7cfff33](https://github.com/globus/flows-ide/commit/7cfff332fcccbf23466b5c86617041ecfb88ca4e))
+
 ## [1.0.2](https://github.com/globus/flows-ide/compare/flows-ide-v1.0.1...flows-ide-v1.0.2) (2024-04-09)
 
 
