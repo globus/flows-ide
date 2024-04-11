@@ -74,7 +74,8 @@ export default function Home() {
   }
 
   function handleEditorValidate(markers: any[]) {
-    setValidity(markers);
+    const errors = markers.filter((marker) => marker.severity === 8);
+    setValidity(errors);
   }
 
   let templateAreas = `
@@ -149,13 +150,13 @@ export default function Home() {
           </GridItem>
           <GridItem area={"editor"}>
             <Editor
-              // @ts-ignore
               defaultValue={
                 definition ? JSON.stringify(definition, null, 2) : ""
               }
               onChange={handleEditorChange}
               onValidate={handleEditorValidate}
               theme="vs-dark"
+              settings={{ enableExperimentalValidation: true }}
             />
           </GridItem>
           <GridItem area={"diagram"}>
