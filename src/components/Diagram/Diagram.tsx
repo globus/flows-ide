@@ -104,6 +104,10 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
         target: state.Default,
         animated: true,
         type: "straight",
+        label: "Default",
+        labelStyle: {
+          fontFamily: "monospace",
+        },
         style: {
           strokeWidth: 2,
         },
@@ -117,6 +121,10 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
           target: catchState.Next,
           type: "straight",
           animated: true,
+          label: "Catch",
+          labelStyle: {
+            fontFamily: "monospace",
+          },
           style: {
             strokeWidth: 2,
             stroke: "red",
@@ -133,6 +141,10 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
           target: choice.Next,
           type: "straight",
           animated: true,
+          label: "Choice",
+          labelStyle: {
+            fontFamily: "monospace",
+          },
           style: {
             strokeWidth: 2,
             stroke:
@@ -160,15 +172,15 @@ export default function Diagram({ definition }: { definition: any }) {
   useEffect(() => {
     const { nodes: updatedNodes, edges: updatedEdges } =
       toNodesAndEdges(definition);
-      updatedNodes.forEach((updatedNode) => {
-        const match = previousNodes.current.find(
-          (existingNode) => existingNode.id === updatedNode.id,
-        );
-        if (match) {
-          // Retain position data associated with this node id
-          updatedNode.position = match.position;
-        }
-      });
+    updatedNodes.forEach((updatedNode) => {
+      const match = previousNodes.current.find(
+        (existingNode) => existingNode.id === updatedNode.id,
+      );
+      if (match) {
+        // Retain position data associated with this node id
+        updatedNode.position = match.position;
+      }
+    });
     setNodes(updatedNodes);
     setEdges(updatedEdges);
   }, [definition, previousNodes, setEdges, setNodes]);
