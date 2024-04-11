@@ -1,3 +1,4 @@
+"use client";
 import { Badge, Box, Flex, Text } from "@chakra-ui/react";
 import { Handle, Position } from "reactflow";
 
@@ -86,14 +87,12 @@ export default function StateNode({
           borderRadius="sm"
           {...getStypePropsForState({ isStart, isEnd, state })}
         >
-          <Text fontWeight="bold">
+          <Box fontWeight={"bold"}>
+            {id}
             <Box>
-              {id}
-              <Box>
-                <TypeBadge type={state?.Type || ""} />
-              </Box>
+              <TypeBadge type={state?.Type || ""} />
             </Box>
-          </Text>
+          </Box>
         </Box>
         <Handle
           type="source"
