@@ -1,11 +1,25 @@
 "use client";
-import MonacoEditor, { type Monaco } from "@monaco-editor/react";
+import MonacoEditor, {
+  type Monaco,
+  type EditorProps,
+} from "@monaco-editor/react";
 
-function configureEditor(monaco: Monaco) {
+type InteralSettings = {
+  enableExperimentalValidation: boolean;
+};
+
+function configureEditor(
+  monaco: Monaco,
+  settings: InteralSettings = {
+    enableExperimentalValidation: true,
+  },
+) {
   monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
     enableSchemaRequest: true,
     validate: true,
-    schemaValidation: "ignore",
+    schemaValidation: settings.enableExperimentalValidation
+      ? "warning"
+      : "ignore",
     schemas: [
       {
         uri: `${window.location.origin}${process.env.NEXT_PUBLIC_BASE_PATH}/schemas/flow_definition_schema.json`,
@@ -15,12 +29,16 @@ function configureEditor(monaco: Monaco) {
   });
 }
 
-export default function Editor(props: any[]) {
+export default function Editor(
+  props: { settings?: InteralSettings } & EditorProps,
+) {
   return (
     <MonacoEditor
       defaultLanguage="json"
       language="json"
-      beforeMount={configureEditor}
+      beforeMount={(monaco) => {
+        configureEditor(monaco, props.settings);
+      }}
       {...props}
     />
   );
