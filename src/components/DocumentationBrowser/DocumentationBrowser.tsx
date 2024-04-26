@@ -26,10 +26,33 @@ import {
   fetchActionProviders,
   type ActionProviderEntry,
   BOOTSTRAPPED,
+  type ActionProviderState,
 } from "./library";
 import { useEffect, useRef, useState } from "react";
 
-const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
+const transformActionProvider = (
+  ap: ActionProviderEntry,
+): ActionProviderState => {
+  const transformed: ActionProviderState = {
+    Type: "Action",
+    ActionUrl: ap.url,
+    Parameters: {},
+  };
+
+  if (ap.definition?.subtitle) {
+    transformed.Comment = ap.definition.subtitle;
+  }
+
+  return transformed;
+};
+
+const ActionProviderItem = ({
+  ap,
+  addToState,
+}: {
+  ap: ActionProviderEntry;
+  addToState: (aps: ActionProviderState) => void;
+}) => {
   return (
     <AccordionItem>
       <h3>
@@ -51,6 +74,13 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
         ) : null}
         <Flex>
           <ButtonGroup>
+            <Button
+              variant={"solid"}
+              onClick={() => addToState(transformActionProvider(ap))}
+              size={"xs"}
+            >
+              Add to Flow
+            </Button>
             <Button
               as={Link}
               href={ap.url}
@@ -80,7 +110,11 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
   );
 };
 
-export function DocumentationBrowser() {
+export function DocumentationBrowser({
+  addToState,
+}: {
+  addToState: (apName: string, aps: ActionProviderState) => void;
+}) {
   const [actionProviders, setActionProviders] = useState<ActionProviderEntry[]>(
     [],
   );
@@ -90,7 +124,7 @@ export function DocumentationBrowser() {
     transfer: ActionProviderEntry[];
   }>({ main: [], transfer: [] });
 
-  const boostraped = useRef(BOOTSTRAPPED);
+  const bootstrapped = useRef(BOOTSTRAPPED);
 
   useEffect(() => {
     async function execute() {
@@ -98,7 +132,7 @@ export function DocumentationBrowser() {
       setActionProviders(aps);
     }
     execute();
-  }, [boostraped]);
+  }, [bootstrapped]);
 
   useEffect(() => {
     const transfer = actionProviders.filter((ap) =>
@@ -150,7 +184,13 @@ export function DocumentationBrowser() {
         <CardBody>
           <Accordion allowMultiple>
             {actionProviderMenu.main.map((ap) => (
-              <ActionProviderItem ap={ap} key={ap.url} />
+              <ActionProviderItem
+                ap={ap}
+                key={ap.url}
+                addToState={(apState) => {
+                  addToState(ap?.definition?.title || ap.url, apState);
+                }}
+              />
             ))}
             <AccordionItem>
               <h3>
@@ -164,7 +204,13 @@ export function DocumentationBrowser() {
               <AccordionPanel pb={4}>
                 <Accordion allowMultiple>
                   {actionProviderMenu.transfer.map((ap) => (
-                    <ActionProviderItem ap={ap} key={ap.url} />
+                    <ActionProviderItem
+                      ap={ap}
+                      key={ap.url}
+                      addToState={(apState) => {
+                        addToState(ap?.definition?.title || ap.url, apState);
+                      }}
+                    />
                   ))}
                 </Accordion>
               </AccordionPanel>

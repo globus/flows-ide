@@ -26,6 +26,10 @@ import {
   decompressFromEncodedURIComponent,
 } from "lz-string";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
+import {
+  toPascalCase,
+  type ActionProviderState,
+} from "@/components/DocumentationBrowser/library";
 
 import packageJson from "../../package.json" assert { type: "json" };
 
@@ -49,11 +53,18 @@ export type FlowDefinition = {
   Comment?: string;
 };
 
+function typedJSONParse<T>(value: string | null): T | undefined {
+  if (value) {
+    return JSON.parse(value);
+  }
+  return undefined;
+}
+
 export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [definition, setDefinition] = useState<string | undefined>();
+  const [definition, setDefinition] = useState<FlowDefinition | undefined>();
   const [invalidMarkers, setValidity] = useState<any[]>([]);
   const [isSplitRight, setIsSplitRight] = useState(true);
   const [showDocumentation, setShowDocumentation] = useState(false);
@@ -62,12 +73,14 @@ export default function Home() {
 
   useEffect(() => {
     setDefinition(
-      d ? JSON.parse(decompressFromEncodedURIComponent(d)) : undefined,
+      d
+        ? typedJSONParse<FlowDefinition>(decompressFromEncodedURIComponent(d))
+        : undefined,
     );
   }, [d]);
 
   function handleEditorChange(value: string | undefined) {
-    setDefinition(value ? JSON.parse(value) : undefined);
+    setDefinition(value ? typedJSONParse<FlowDefinition>(value) : undefined);
     if (value) {
       router.push(`/?d=${compressToEncodedURIComponent(value)}`);
     }
@@ -76,6 +89,27 @@ export default function Home() {
   function handleEditorValidate(markers: any[]) {
     const errors = markers.filter((marker) => marker.severity === 8);
     setValidity(errors);
+  }
+
+  function addToState(apName: string, aps: ActionProviderState) {
+    const v = d ? JSON.parse(decompressFromEncodedURIComponent(d)) : null;
+    const newDefinition: Record<string, any> = v ? v : { States: {} };
+    const pascalCaseApName = toPascalCase(apName);
+
+    if (!("States" in newDefinition)) {
+      newDefinition.States = {};
+    }
+
+    if (pascalCaseApName in newDefinition.States) {
+      let i = 1;
+      while (`${pascalCaseApName}${i}` in newDefinition.States) {
+        i++;
+      }
+      newDefinition.States[`${pascalCaseApName}${i}`] = aps;
+    } else {
+      newDefinition.States[pascalCaseApName] = aps;
+    }
+    handleEditorChange(JSON.stringify(newDefinition, null, 2));
   }
 
   let templateAreas = `
@@ -153,6 +187,7 @@ export default function Home() {
               defaultValue={
                 definition ? JSON.stringify(definition, null, 2) : ""
               }
+              value={definition ? JSON.stringify(definition, null, 2) : ""}
               onChange={handleEditorChange}
               onValidate={handleEditorValidate}
               theme="vs-dark"
@@ -205,7 +240,7 @@ export default function Home() {
                   Split View {isSplitRight ? "Down" : "Right"}
                 </Button>
               </Flex>
-              <DocumentationBrowser />
+              <DocumentationBrowser addToState={addToState} />
             </GridItem>
           )}
         </Grid>
