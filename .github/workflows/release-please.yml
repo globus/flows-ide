@@ -26,7 +26,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         if: ${{ needs.release-please.outputs.releases_created == 'true' }}
-      # Temporary debug step...
-      - run: ls -la
       - uses: ./.github/workflows/nextjs.yml
         if: ${{ needs.release-please.outputs.releases_created == 'true' }}
