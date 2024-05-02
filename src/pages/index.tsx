@@ -26,12 +26,11 @@ import {
   decompressFromEncodedURIComponent,
 } from "lz-string";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
-import {
-  toPascalCase,
-  type ActionProviderState,
-} from "@/components/DocumentationBrowser/library";
-
 import packageJson from "../../package.json" assert { type: "json" };
+import {
+  useFlowDefinition,
+  useFlowDefinitionDispatch,
+} from "@/components/FlowDefinitionProvider/FlowDefinitionProvider";
 
 export type FlowDefinition = {
   States: {
@@ -53,18 +52,12 @@ export type FlowDefinition = {
   Comment?: string;
 };
 
-function typedJSONParse<T>(value: string | null): T | undefined {
-  if (value) {
-    return JSON.parse(value);
-  }
-  return undefined;
-}
-
 export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const dispatch = useFlowDefinitionDispatch();
+  const definition = useFlowDefinition();
 
-  const [definition, setDefinition] = useState<FlowDefinition | undefined>();
   const [invalidMarkers, setValidity] = useState<any[]>([]);
   const [isSplitRight, setIsSplitRight] = useState(true);
   const [showDocumentation, setShowDocumentation] = useState(false);
@@ -72,44 +65,43 @@ export default function Home() {
   const d = searchParams.get("d");
 
   useEffect(() => {
-    setDefinition(
-      d
-        ? typedJSONParse<FlowDefinition>(decompressFromEncodedURIComponent(d))
-        : undefined,
-    );
-  }, [d]);
+    if (d) {
+      try {
+        const v = JSON.parse(decompressFromEncodedURIComponent(d));
+        dispatch?.({
+          type: "replace",
+          payload: v,
+        });
+      } catch {
+        // ignore JSON parsing exceptions
+      }
+    }
+  }, [d, dispatch]);
+
+  useEffect(() => {
+    if (definition) {
+      const v = compressToEncodedURIComponent(JSON.stringify(definition));
+      router.push(`/?d=${v}`);
+    }
+  }, [definition, router]);
 
   function handleEditorChange(value: string | undefined) {
-    setDefinition(value ? typedJSONParse<FlowDefinition>(value) : undefined);
-    if (value) {
-      router.push(`/?d=${compressToEncodedURIComponent(value)}`);
+    try {
+      const v = value
+        ? JSON.parse(value)
+        : undefined;
+      dispatch?.({
+        type: "replace",
+        payload: v,
+      });
+    } catch {
+      // ignore JSON parsing exceptions
     }
   }
 
   function handleEditorValidate(markers: any[]) {
     const errors = markers.filter((marker) => marker.severity === 8);
     setValidity(errors);
-  }
-
-  function addToState(apName: string, aps: ActionProviderState) {
-    const v = d ? JSON.parse(decompressFromEncodedURIComponent(d)) : null;
-    const newDefinition: Record<string, any> = v ? v : { States: {} };
-    const pascalCaseApName = toPascalCase(apName);
-
-    if (!("States" in newDefinition)) {
-      newDefinition.States = {};
-    }
-
-    if (pascalCaseApName in newDefinition.States) {
-      let i = 1;
-      while (`${pascalCaseApName}${i}` in newDefinition.States) {
-        i++;
-      }
-      newDefinition.States[`${pascalCaseApName}${i}`] = aps;
-    } else {
-      newDefinition.States[pascalCaseApName] = aps;
-    }
-    handleEditorChange(JSON.stringify(newDefinition, null, 2));
   }
 
   let templateAreas = `
@@ -222,7 +214,7 @@ export default function Home() {
                 </Box>
               </Box>
             )}
-            <Diagram definition={definition} />
+            <Diagram />
           </GridItem>
           {showDocumentation && (
             <GridItem area={"documentation"} bg={"gray.100"}>
@@ -240,7 +232,7 @@ export default function Home() {
                   Split View {isSplitRight ? "Down" : "Right"}
                 </Button>
               </Flex>
-              <DocumentationBrowser addToState={addToState} />
+              <DocumentationBrowser />
             </GridItem>
           )}
         </Grid>

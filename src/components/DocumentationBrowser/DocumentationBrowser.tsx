@@ -26,33 +26,14 @@ import {
   fetchActionProviders,
   type ActionProviderEntry,
   BOOTSTRAPPED,
-  type ActionProviderState,
 } from "./library";
 import { useEffect, useRef, useState } from "react";
+import { useFlowDefinition, useFlowDefinitionDispatch } from "../FlowDefinitionProvider/FlowDefinitionProvider";
 
-const transformActionProvider = (
-  ap: ActionProviderEntry,
-): ActionProviderState => {
-  const transformed: ActionProviderState = {
-    Type: "Action",
-    ActionUrl: ap.url,
-    Parameters: {},
-  };
 
-  if (ap.definition?.subtitle) {
-    transformed.Comment = ap.definition.subtitle;
-  }
+const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
+  const flowDefinitionDispatch = useFlowDefinitionDispatch();
 
-  return transformed;
-};
-
-const ActionProviderItem = ({
-  ap,
-  addToState,
-}: {
-  ap: ActionProviderEntry;
-  addToState: (aps: ActionProviderState) => void;
-}) => {
   return (
     <AccordionItem>
       <h3>
@@ -74,13 +55,21 @@ const ActionProviderItem = ({
         ) : null}
         <Flex>
           <ButtonGroup>
-            <Button
-              variant={"solid"}
-              onClick={() => addToState(transformActionProvider(ap))}
-              size={"xs"}
-            >
-              Add to Flow
-            </Button>
+            {ap?.definition?.title ? (
+              <Button
+                variant={"solid"}
+                onClick={() => {
+                    flowDefinitionDispatch?.({
+                      type: "add_ap",
+                      payload: ap,
+                    });
+                  }
+                }
+                size={"xs"}
+              >
+                Add to Flow
+              </Button>
+            ) : null}
             <Button
               as={Link}
               href={ap.url}
@@ -110,11 +99,7 @@ const ActionProviderItem = ({
   );
 };
 
-export function DocumentationBrowser({
-  addToState,
-}: {
-  addToState: (apName: string, aps: ActionProviderState) => void;
-}) {
+export function DocumentationBrowser() {
   const [actionProviders, setActionProviders] = useState<ActionProviderEntry[]>(
     [],
   );
@@ -187,9 +172,6 @@ export function DocumentationBrowser({
               <ActionProviderItem
                 ap={ap}
                 key={ap.url}
-                addToState={(apState) => {
-                  addToState(ap?.definition?.title || ap.url, apState);
-                }}
               />
             ))}
             <AccordionItem>
@@ -207,9 +189,6 @@ export function DocumentationBrowser({
                     <ActionProviderItem
                       ap={ap}
                       key={ap.url}
-                      addToState={(apState) => {
-                        addToState(ap?.definition?.title || ap.url, apState);
-                      }}
                     />
                   ))}
                 </Accordion>

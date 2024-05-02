@@ -16,6 +16,7 @@ import StateNode from "./StateNode";
 import type { FlowDefinition } from "@/pages/index";
 
 import "reactflow/dist/style.css";
+import { useFlowDefinition } from "../FlowDefinitionProvider/FlowDefinitionProvider";
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
@@ -160,7 +161,9 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
   return getLayoutedElements(nodes, edges, { direction: "TB" });
 }
 
-export default function Diagram({ definition }: { definition: any }) {
+export default function Diagram() {
+  const definition = useFlowDefinition();
+
   const nodeTypes = useMemo(() => ({ StateNode: StateNode }), []);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);

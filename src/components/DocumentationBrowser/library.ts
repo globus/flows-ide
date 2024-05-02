@@ -22,13 +22,6 @@ export type ActionProviderEntry = {
   };
 };
 
-export type ActionProviderState = {
-  Type: "Action";
-  ActionUrl: ActionProviderEntry["url"];
-  Comment?: string; // ActionProviderEntry["definition"]["subtitle"];
-  Parameters: Record<string, unknown>;
-};
-
 const ACTION_PROVIDERS_HOSTS = {
   SANDBOX: "https://sandbox.actions.automate.globus.org/",
   PRODUCTION: "https://actions.globus.org/",
