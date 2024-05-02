@@ -31,7 +31,7 @@ function flowDefinitionReducer(
     case "add_ap":
       let title = toPascalCase(action.payload?.definition?.title || "");
 
-      if (definition?.States && title in definition.States) {
+      if (title && definition?.States && title in definition.States) {
         let i = 1;
         while (`${title}${i}` in definition.States) {
           i++;
@@ -50,7 +50,6 @@ function flowDefinitionReducer(
             ...(action.payload.definition?.subtitle
               ? { Comment: action.payload.definition?.subtitle }
               : {}),
-            Next: "",
           },
         },
       };

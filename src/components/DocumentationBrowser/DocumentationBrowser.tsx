@@ -28,7 +28,7 @@ import {
   BOOTSTRAPPED,
 } from "./library";
 import { useEffect, useRef, useState } from "react";
-import { useFlowDefinition, useFlowDefinitionDispatch } from "../FlowDefinitionProvider/FlowDefinitionProvider";
+import { useFlowDefinitionDispatch } from "../FlowDefinitionProvider/FlowDefinitionProvider";
 
 
 const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
