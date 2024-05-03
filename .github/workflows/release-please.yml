@@ -21,10 +21,6 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
   deploy:
-    runs-on: ubuntu-latest
+    if: ${{ needs.release-please.outputs.releases_created == 'true' }}
     needs: release-please
-    steps:
-      - uses: actions/checkout@v4
-        if: ${{ needs.release-please.outputs.releases_created == 'true' }}
-      - uses: ./.github/workflows/nextjs.yml
-        if: ${{ needs.release-please.outputs.releases_created == 'true' }}
+    uses: ./.github/workflows/nextjs.yml
