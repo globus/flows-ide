@@ -68,7 +68,7 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
               size={"xs"}
               variant={"outline"}
             >
-              Documenation
+              Documentation
               <ExternalLinkIcon mx="2px" />
             </Button>
           </ButtonGroup>
