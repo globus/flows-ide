@@ -1,3 +1,5 @@
+import { camelCase, startCase } from "lodash";
+
 export type ActionProviderEntry = {
   url: string;
   documentation: string;
@@ -184,15 +186,6 @@ export async function fetchActionProviders() {
   return providers;
 }
 
-/**
- * @see https://www.30secondsofcode.org/js/s/string-case-conversion/
- */
 export function toPascalCase(str: string) {
-  const wordsByBoundaries = str.match(
-    /[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g,
-  );
-  if (wordsByBoundaries === null) return "";
-  return wordsByBoundaries
-    .map((x) => x.slice(0, 1).toUpperCase() + x.slice(1).toLowerCase())
-    .join("");
+  return startCase(camelCase(str)).replace(/ /g, "");
 }
