@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.2.0...flows-ide-v1.3.0) (2024-06-11)
+
+
+### Features
+
+* adds button in Action Provider documentation to allow adding an action provider as a step. ([#44](https://github.com/globus/flows-ide/issues/44)) ([d8cbecf](https://github.com/globus/flows-ide/commit/d8cbecf0067795ca38f8f9e1aeb12b4b9a87f171))
+
 ## [1.2.0](https://github.com/globus/flows-ide/compare/v1.1.0...v1.2.0) (2024-04-29)
 
 
