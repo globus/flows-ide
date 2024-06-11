@@ -1,3 +1,5 @@
+import { camelCase, startCase } from "lodash";
+
 export type ActionProviderEntry = {
   url: string;
   documentation: string;
@@ -182,4 +184,8 @@ export async function fetchActionProviders() {
 
   BOOTSTRAPPED = true;
   return providers;
+}
+
+export function toPascalCase(str: string) {
+  return startCase(camelCase(str)).replace(/ /g, "");
 }

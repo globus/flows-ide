@@ -21,15 +21,18 @@ import {
   StackDivider,
   Stack,
 } from "@chakra-ui/react";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import {
   fetchActionProviders,
   type ActionProviderEntry,
   BOOTSTRAPPED,
 } from "./library";
 import { useEffect, useRef, useState } from "react";
+import { useFlowDefinitionDispatch } from "../FlowDefinitionProvider/FlowDefinitionProvider";
 
 const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
+  const flowDefinitionDispatch = useFlowDefinitionDispatch();
+
   return (
     <AccordionItem>
       <h3>
@@ -51,6 +54,22 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
         ) : null}
         <Flex>
           <ButtonGroup>
+            {ap?.definition?.title ? (
+              <Button
+                colorScheme="blue"
+                variant={"outline"}
+                leftIcon={<PlusSquareIcon />}
+                onClick={() => {
+                  flowDefinitionDispatch?.({
+                    type: "add_ap",
+                    payload: ap,
+                  });
+                }}
+                size={"xs"}
+              >
+                Add State
+              </Button>
+            ) : null}
             <Button
               as={Link}
               href={ap.url}
@@ -90,7 +109,7 @@ export function DocumentationBrowser() {
     transfer: ActionProviderEntry[];
   }>({ main: [], transfer: [] });
 
-  const boostraped = useRef(BOOTSTRAPPED);
+  const bootstrapped = useRef(BOOTSTRAPPED);
 
   useEffect(() => {
     async function execute() {
@@ -98,7 +117,7 @@ export function DocumentationBrowser() {
       setActionProviders(aps);
     }
     execute();
-  }, [boostraped]);
+  }, [bootstrapped]);
 
   useEffect(() => {
     const transfer = actionProviders.filter((ap) =>

@@ -20,14 +20,17 @@ import {
 } from "@chakra-ui/react";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
 } from "lz-string";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
-
 import packageJson from "../../package.json" assert { type: "json" };
+import {
+  useFlowDefinition,
+  useFlowDefinitionDispatch,
+} from "@/components/FlowDefinitionProvider/FlowDefinitionProvider";
 
 export type FlowDefinition = {
   States: {
@@ -52,26 +55,42 @@ export type FlowDefinition = {
 export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const dispatch = useFlowDefinitionDispatch();
+  const definition = useFlowDefinition();
 
-  const [definition, setDefinition] = useState<string | undefined>();
   const [invalidMarkers, setValidity] = useState<any[]>([]);
   const [isSplitRight, setIsSplitRight] = useState(true);
   const [showDocumentation, setShowDocumentation] = useState(false);
 
   const d = searchParams.get("d");
 
-  useEffect(() => {
-    setDefinition(
-      d ? JSON.parse(decompressFromEncodedURIComponent(d)) : undefined,
-    );
-  }, [d]);
+  const replaceDefinition = useCallback(
+    (def: string | undefined) => {
+      try {
+        const v = def ? JSON.parse(def) : undefined;
+        dispatch?.({
+          type: "replace",
+          payload: v,
+        });
+      } catch {
+        // ignore JSON parsing exceptions
+      }
+    },
+    [dispatch],
+  );
 
-  function handleEditorChange(value: string | undefined) {
-    setDefinition(value ? JSON.parse(value) : undefined);
-    if (value) {
-      router.push(`/?d=${compressToEncodedURIComponent(value)}`);
+  useEffect(() => {
+    if (d) {
+      replaceDefinition(decompressFromEncodedURIComponent(d));
     }
-  }
+  }, [d, replaceDefinition]);
+
+  useEffect(() => {
+    if (definition) {
+      const v = compressToEncodedURIComponent(JSON.stringify(definition));
+      router.push(`/?d=${v}`);
+    }
+  }, [definition, router]);
 
   function handleEditorValidate(markers: any[]) {
     const errors = markers.filter((marker) => marker.severity === 8);
@@ -153,7 +172,8 @@ export default function Home() {
               defaultValue={
                 definition ? JSON.stringify(definition, null, 2) : ""
               }
-              onChange={handleEditorChange}
+              value={definition ? JSON.stringify(definition, null, 2) : ""}
+              onChange={replaceDefinition}
               onValidate={handleEditorValidate}
               theme="vs-dark"
               settings={{ enableExperimentalValidation: true }}
@@ -187,7 +207,7 @@ export default function Home() {
                 </Box>
               </Box>
             )}
-            <Diagram definition={definition} />
+            <Diagram />
           </GridItem>
           {showDocumentation && (
             <GridItem area={"documentation"} bg={"gray.100"}>
