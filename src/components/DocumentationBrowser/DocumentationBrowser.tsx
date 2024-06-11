@@ -21,7 +21,7 @@ import {
   StackDivider,
   Stack,
 } from "@chakra-ui/react";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import {
   fetchActionProviders,
   type ActionProviderEntry,
@@ -29,7 +29,6 @@ import {
 } from "./library";
 import { useEffect, useRef, useState } from "react";
 import { useFlowDefinitionDispatch } from "../FlowDefinitionProvider/FlowDefinitionProvider";
-
 
 const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
   const flowDefinitionDispatch = useFlowDefinitionDispatch();
@@ -57,17 +56,18 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
           <ButtonGroup>
             {ap?.definition?.title ? (
               <Button
-                variant={"solid"}
+                colorScheme="blue"
+                variant={"outline"}
+                leftIcon={<PlusSquareIcon />}
                 onClick={() => {
-                    flowDefinitionDispatch?.({
-                      type: "add_ap",
-                      payload: ap,
-                    });
-                  }
-                }
+                  flowDefinitionDispatch?.({
+                    type: "add_ap",
+                    payload: ap,
+                  });
+                }}
                 size={"xs"}
               >
-                Add to Flow
+                Add State
               </Button>
             ) : null}
             <Button
@@ -169,10 +169,7 @@ export function DocumentationBrowser() {
         <CardBody>
           <Accordion allowMultiple>
             {actionProviderMenu.main.map((ap) => (
-              <ActionProviderItem
-                ap={ap}
-                key={ap.url}
-              />
+              <ActionProviderItem ap={ap} key={ap.url} />
             ))}
             <AccordionItem>
               <h3>
@@ -186,10 +183,7 @@ export function DocumentationBrowser() {
               <AccordionPanel pb={4}>
                 <Accordion allowMultiple>
                   {actionProviderMenu.transfer.map((ap) => (
-                    <ActionProviderItem
-                      ap={ap}
-                      key={ap.url}
-                    />
+                    <ActionProviderItem ap={ap} key={ap.url} />
                   ))}
                 </Accordion>
               </AccordionPanel>

@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent,
@@ -64,10 +64,10 @@ export default function Home() {
 
   const d = searchParams.get("d");
 
-  useEffect(() => {
-    if (d) {
+  const replaceDefinition = useCallback(
+    (def: string | undefined) => {
       try {
-        const v = JSON.parse(decompressFromEncodedURIComponent(d));
+        const v = def ? JSON.parse(def) : undefined;
         dispatch?.({
           type: "replace",
           payload: v,
@@ -75,8 +75,15 @@ export default function Home() {
       } catch {
         // ignore JSON parsing exceptions
       }
+    },
+    [dispatch],
+  );
+
+  useEffect(() => {
+    if (d) {
+      replaceDefinition(decompressFromEncodedURIComponent(d));
     }
-  }, [d, dispatch]);
+  }, [d, replaceDefinition]);
 
   useEffect(() => {
     if (definition) {
@@ -84,20 +91,6 @@ export default function Home() {
       router.push(`/?d=${v}`);
     }
   }, [definition, router]);
-
-  function handleEditorChange(value: string | undefined) {
-    try {
-      const v = value
-        ? JSON.parse(value)
-        : undefined;
-      dispatch?.({
-        type: "replace",
-        payload: v,
-      });
-    } catch {
-      // ignore JSON parsing exceptions
-    }
-  }
 
   function handleEditorValidate(markers: any[]) {
     const errors = markers.filter((marker) => marker.severity === 8);
@@ -180,7 +173,7 @@ export default function Home() {
                 definition ? JSON.stringify(definition, null, 2) : ""
               }
               value={definition ? JSON.stringify(definition, null, 2) : ""}
-              onChange={handleEditorChange}
+              onChange={replaceDefinition}
               onValidate={handleEditorValidate}
               theme="vs-dark"
               settings={{ enableExperimentalValidation: true }}
