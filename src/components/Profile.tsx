@@ -1,11 +1,6 @@
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
-  Flex,
-  Heading,
-  Code,
-  Spacer,
   Button,
-  Image,
   Text,
   MenuList,
   Box,
@@ -20,7 +15,16 @@ import router from "next/router";
 export default function Profile() {
   const auth = useGlobusAuth();
   const user = auth.authorization?.user;
-  return auth.isAuthenticated && user ? (
+
+  if (!auth.isAuthenticated || !user) {
+    return (
+      <Button size="xs" onClick={async () => await auth.authorization?.login()}>
+        Sign In
+      </Button>
+    );
+  }
+
+  return (
     <Menu placement="bottom-end">
       <MenuButton
         colorScheme="gray"
@@ -46,9 +50,5 @@ export default function Profile() {
         </MenuItem>
       </MenuList>
     </Menu>
-  ) : (
-    <Button size="xs" onClick={async () => await auth.authorization?.login()}>
-      Sign In
-    </Button>
   );
 }
