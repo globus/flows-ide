@@ -17,6 +17,7 @@ import {
   Button,
   Code,
   Image,
+  HStack,
 } from "@chakra-ui/react";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
@@ -31,6 +32,8 @@ import {
   useFlowDefinition,
   useFlowDefinitionDispatch,
 } from "@/components/FlowDefinitionProvider/FlowDefinitionProvider";
+
+import Profile from "@/components/Profile";
 
 export type FlowDefinition = {
   States: {
@@ -156,15 +159,18 @@ export default function Home() {
                 visualize and create flows
               </Text>
               <Spacer />
-              <Button
-                size="xs"
-                colorScheme="brand"
-                onClick={() => {
-                  setShowDocumentation(!showDocumentation);
-                }}
-              >
-                {showDocumentation ? "Hide" : "Show"} Documentation
-              </Button>
+              <HStack>
+                <Button
+                  size="xs"
+                  colorScheme="brand"
+                  onClick={() => {
+                    setShowDocumentation(!showDocumentation);
+                  }}
+                >
+                  {showDocumentation ? "Hide" : "Show"} Documentation
+                </Button>
+                <Profile />
+              </HStack>
             </Flex>
           </GridItem>
           <GridItem area={"editor"}>
