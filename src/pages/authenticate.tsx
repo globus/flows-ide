@@ -3,6 +3,9 @@ import { useRouter } from "next/router";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { Center, Spinner, Text } from "@chakra-ui/react";
 
+/**
+ * This route is used exclusively for handling the OAuth2 redirect.
+ */
 export default function Authenticate() {
   const auth = useGlobusAuth();
   const router = useRouter();
@@ -16,9 +19,6 @@ export default function Authenticate() {
       if (!instance) {
         return;
       }
-      /**
-       * Attempt to handle incoming OAuth2 redirect.
-       */
       await instance.handleCodeRedirect({
         /**
          * We'll handle the redirect ourselves...
@@ -30,7 +30,7 @@ export default function Authenticate() {
   }, [instance]);
 
   /**
-   * Once the user is authenticated, refresh the tokens and redirect to the transfer page.
+   * Once the user is authenticated, refresh the tokens and redirect to the IDE.
    */
   useEffect(() => {
     async function redirect() {
