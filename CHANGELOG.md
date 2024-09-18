@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.0...flows-ide-v1.4.1) (2024-09-18)
+
+
+### Bug Fixes
+
+* address Next.js build errors ([70a37e4](https://github.com/globus/flows-ide/commit/70a37e49844d71b32a4d8f67e9f50acf968da5cf))
+
 ## [1.4.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.3.0...flows-ide-v1.4.0) (2024-09-18)
 
 
