@@ -103,7 +103,9 @@ export default function Home() {
    * @todo This will likely need to be removed/changed when the `<Panel>` with
    * user Flow selection is enabled.
    */
-  const storedDef = sessionStorage.getItem(STORED_DEFINITION_KEY);
+  const storedDef =
+    globalThis.sessionStorage &&
+    globalThis.sessionStorage.getItem(STORED_DEFINITION_KEY);
 
   const replaceDefinition = useCallback(
     (def: string | undefined) => {
@@ -123,7 +125,7 @@ export default function Home() {
   useEffect(() => {
     if (storedDef) {
       replaceDefinition(storedDef);
-      sessionStorage.removeItem("definition");
+      globalThis.sessionStorage.removeItem("definition");
     }
   }, [storedDef, replaceDefinition]);
 

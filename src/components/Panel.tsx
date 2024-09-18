@@ -11,6 +11,7 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
 import { useEffect, useState } from "react";
 import { useFlowDefinitionDispatch } from "./FlowDefinitionProvider/FlowDefinitionProvider";
+import { FlowDefinition } from "@/pages";
 
 export default function Panel() {
   const auth = useGlobusAuth();
@@ -34,7 +35,7 @@ export default function Panel() {
       const res = await (
         await flows.flows.getAll({
           headers: {
-            Authorization: `Bearer ${token.access_token}`,
+            Authorization: `Bearer ${token?.access_token}`,
           },
         })
       ).json();
@@ -44,6 +45,8 @@ export default function Panel() {
 
     fetchFlows();
   }, [auth.authorization, auth.isAuthenticated]);
+
+  if (!flowDefinitionDispatch) return;
 
   return (
     <Box h="100%" bg={"gray.100"} w={"280px"}>
@@ -59,25 +62,31 @@ export default function Panel() {
           </AccordionButton>
           <AccordionPanel m={0} p={0}>
             <Box fontSize="sm">
-              {userFlows.map((flow) => (
-                <Box
-                  key={flow.id}
-                  onClick={() => {
-                    flowDefinitionDispatch({
-                      type: "replace",
-                      payload: flow.definition,
-                    });
-                  }}
-                  p={2}
-                  _hover={{
-                    bg: "gray.600",
-                    cursor: "pointer",
-                    color: "white",
-                  }}
-                >
-                  {flow.title}
-                </Box>
-              ))}
+              {userFlows.map(
+                (flow: {
+                  id: string;
+                  definition: FlowDefinition;
+                  title: string;
+                }) => (
+                  <Box
+                    key={flow.id}
+                    onClick={() => {
+                      flowDefinitionDispatch({
+                        type: "replace",
+                        payload: flow.definition,
+                      });
+                    }}
+                    p={2}
+                    _hover={{
+                      bg: "gray.600",
+                      cursor: "pointer",
+                      color: "white",
+                    }}
+                  >
+                    {flow.title}
+                  </Box>
+                ),
+              )}
             </Box>
           </AccordionPanel>
         </AccordionItem>

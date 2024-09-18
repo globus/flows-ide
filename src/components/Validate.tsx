@@ -81,32 +81,34 @@ export function ValidateButton() {
      * When Monaco is ready, and we have location errors, we'll add markers to the editor.
      */
     if (monaco && locationErrors) {
-      const markers = locationErrors.map((d) => {
-        const [_definition, _state, stateName] = d.loc;
-        const matches = model.findMatches(
-          `"${stateName}":`,
-          true,
-          true,
-          true,
-          null,
-          true,
-        );
+      const markers = locationErrors.map(
+        (d: { loc: string[]; msg: string }) => {
+          const [_definition, _state, stateName] = d.loc;
+          const matches = model.findMatches(
+            `"${stateName}":`,
+            true,
+            true,
+            true,
+            null,
+            true,
+          );
 
-        const location = matches[0]?.range ?? {
-          startLineNumber: 1,
-          endLineNumber: 1,
-          startColumn: 1,
-          endColumn: 1,
-        };
+          const location = matches[0]?.range ?? {
+            startLineNumber: 1,
+            endLineNumber: 1,
+            startColumn: 1,
+            endColumn: 1,
+          };
 
-        return {
-          ...location,
-          owner: GLOBUS_FLOWS_VALIDATION.OWNER,
-          source: GLOBUS_FLOWS_VALIDATION.SOURCE,
-          message: d.msg,
-          severity: 8,
-        };
-      });
+          return {
+            ...location,
+            owner: GLOBUS_FLOWS_VALIDATION.OWNER,
+            source: GLOBUS_FLOWS_VALIDATION.SOURCE,
+            message: d.msg,
+            severity: 8,
+          };
+        },
+      );
 
       monaco.editor.setModelMarkers(
         model,
