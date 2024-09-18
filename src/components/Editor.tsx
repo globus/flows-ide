@@ -1,8 +1,11 @@
 "use client";
+
 import MonacoEditor, {
   type Monaco,
   type EditorProps,
 } from "@monaco-editor/react";
+import { ValidateButton } from "./Validate";
+import { Box } from "@chakra-ui/react";
 
 type InteralSettings = {
   enableExperimentalValidation: boolean;
@@ -33,13 +36,20 @@ export default function Editor(
   props: { settings?: InteralSettings } & EditorProps,
 ) {
   return (
-    <MonacoEditor
-      defaultLanguage="json"
-      language="json"
-      beforeMount={(monaco) => {
-        configureEditor(monaco, props.settings);
-      }}
-      {...props}
-    />
+    <>
+      <Box pos="relative" h="100%">
+        <MonacoEditor
+          defaultLanguage="json"
+          language="json"
+          beforeMount={(monaco) => {
+            configureEditor(monaco, props.settings);
+          }}
+          {...props}
+        />
+        <Box pos="absolute" bottom={5} right={10}>
+          <ValidateButton />
+        </Box>
+      </Box>
+    </>
   );
 }
