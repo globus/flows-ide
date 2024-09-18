@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.3.0...flows-ide-v1.4.0) (2024-09-18)
+
+
+### Features
+
+* adds optional authentication and Flow service definition validation. ([8578878](https://github.com/globus/flows-ide/commit/8578878048c02a7301bcfbb8dab99dbe1c3b0be8))
+
 ## [1.3.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.2.0...flows-ide-v1.3.0) (2024-06-11)
 
 
