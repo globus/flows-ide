@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Heading,
   Text,
@@ -24,7 +24,6 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
-import { useGlobusAuth } from "@globus/react-auth-context";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
 import {
@@ -33,12 +32,10 @@ import {
 } from "lz-string";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
 import packageJson from "../../package.json" assert { type: "json" };
-import {
-  useFlowDefinition,
-  useFlowDefinitionDispatch,
-} from "@/components/FlowDefinitionProvider/FlowDefinitionProvider";
 
-import Profile, { STORED_DEFINITION_KEY } from "@/components/Profile";
+import { useEditorStore } from "@/stores/editor";
+
+import Profile from "@/components/Profile";
 
 import { GLOBUS_FLOWS_VALIDATION } from "@/components/Validate";
 import Panel from "@/components/Panel";
@@ -86,54 +83,36 @@ const LAYOUT = {
 const ENABLE_PANEL = false;
 
 export default function Home() {
-  const auth = useGlobusAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const dispatch = useFlowDefinitionDispatch();
-  const definition = useFlowDefinition();
+
+  const editorStore = useEditorStore();
+  const definition = editorStore.definition;
+
+  const bootstrapped = useRef(false);
 
   const [invalidMarkers, setValidity] = useState<any[]>([]);
   const [showPanel, setShowPanel] = useState(false);
 
-  const d = searchParams.get("d");
-
-  /**
-   * If we're returning from an OAuth2 redirect, there might be a definition
-   * stored in the session storage that we should make sure to use.
-   * @todo This will likely need to be removed/changed when the `<Panel>` with
-   * user Flow selection is enabled.
-   */
-  const storedDef =
-    globalThis.sessionStorage &&
-    globalThis.sessionStorage.getItem(STORED_DEFINITION_KEY);
-
-  const replaceDefinition = useCallback(
-    (def: string | undefined) => {
-      try {
-        const v = def ? JSON.parse(def) : undefined;
-        dispatch?.({
-          type: "replace",
-          payload: v,
-        });
-      } catch {
-        // ignore JSON parsing exceptions
-      }
-    },
-    [dispatch],
-  );
-
   useEffect(() => {
-    if (storedDef) {
-      replaceDefinition(storedDef);
-      globalThis.sessionStorage.removeItem("definition");
+    if (bootstrapped.current) return;
+    bootstrapped.current = true;
+    /**
+     * If we're returning from an OAuth2 redirect, there might be a definition
+     * stored in the storage that we should make sure to use.
+     */
+    editorStore.restore();
+    /**
+     * Attempt to bootstrap from the initial "d" query parameter.
+     */
+    const queryParameterDef = new URLSearchParams(
+      document?.location?.search || {},
+    ).get("d");
+    if (queryParameterDef) {
+      editorStore.replaceDefinitionFromString(
+        decompressFromEncodedURIComponent(queryParameterDef),
+      );
     }
-  }, [storedDef, replaceDefinition]);
-
-  useEffect(() => {
-    if (d) {
-      replaceDefinition(decompressFromEncodedURIComponent(d));
-    }
-  }, [d, replaceDefinition]);
+  }, [editorStore]);
 
   useEffect(() => {
     if (definition) {
@@ -209,7 +188,7 @@ export default function Home() {
                 definition ? JSON.stringify(definition, null, 2) : ""
               }
               value={definition ? JSON.stringify(definition, null, 2) : ""}
-              onChange={replaceDefinition}
+              onChange={editorStore.replaceDefinitionFromString}
               onValidate={handleEditorValidate}
               theme="vs-dark"
               settings={{ enableExperimentalValidation: true }}

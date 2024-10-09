@@ -1,5 +1,7 @@
 "use client";
 
+import "reactflow/dist/style.css";
+
 import { useEffect, useMemo, useRef } from "react";
 import { Box } from "@chakra-ui/react";
 import Dagre from "@dagrejs/dagre";
@@ -11,12 +13,11 @@ import ReactFlow, {
   useEdgesState,
   useNodesState,
 } from "reactflow";
+
+import { useEditorStore } from "@/stores/editor";
 import StateNode from "./StateNode";
 
 import type { FlowDefinition } from "@/pages/index";
-
-import "reactflow/dist/style.css";
-import { useFlowDefinition } from "../FlowDefinitionProvider/FlowDefinitionProvider";
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
@@ -162,7 +163,7 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
 }
 
 export default function Diagram() {
-  const definition = useFlowDefinition();
+  const definition = useEditorStore((state) => state.definition);
 
   const nodeTypes = useMemo(() => ({ StateNode: StateNode }), []);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);

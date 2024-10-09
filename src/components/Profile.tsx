@@ -11,27 +11,20 @@ import {
 } from "@chakra-ui/react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import router from "next/router";
-import { useFlowDefinition } from "./FlowDefinitionProvider/FlowDefinitionProvider";
 
-export const STORED_DEFINITION_KEY = "definition";
+import { useEditorStore } from "@/stores/editor";
 
 export default function Profile() {
   const auth = useGlobusAuth();
   const user = auth.authorization?.user;
-  const def = useFlowDefinition();
-
-  function storeDefinition() {
-    if (def) {
-      sessionStorage.setItem(STORED_DEFINITION_KEY, JSON.stringify(def));
-    }
-  }
+  const editorStore = useEditorStore();
 
   if (!auth.isAuthenticated || !user) {
     return (
       <Button
         size="xs"
         onClick={async () => {
-          storeDefinition();
+          editorStore.preserve();
           await auth.authorization?.login();
         }}
       >
