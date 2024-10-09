@@ -1,12 +1,5 @@
 import React, { useEffect } from "react";
-import {
-  Alert,
-  AlertIcon,
-  Button,
-  Link,
-  Toast,
-  useToast,
-} from "@chakra-ui/react";
+import { Alert, AlertIcon, Link, useToast } from "@chakra-ui/react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { useEditorStore } from "@/stores/editor";
 
