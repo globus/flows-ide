@@ -35,10 +35,9 @@ export const useEditorStore = create<EditorState>((set, get) => ({
   },
   replace: (def = undefined) => set({ definition: def }),
   preserve: () => {
-    localStorage.setItem(
-      DEFINITION_LOCAL_STORAGE_KEY,
-      JSON.stringify(get().definition),
-    );
+    const def = get().definition;
+    if (!def) return;
+    localStorage.setItem(DEFINITION_LOCAL_STORAGE_KEY, JSON.stringify(def));
   },
   restore: () => {
     const storedDef =
