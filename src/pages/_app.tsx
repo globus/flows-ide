@@ -3,7 +3,10 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Provider as GlobusAuthProvider } from "@globus/react-auth-context";
 
 import theme from "../chakra-ui-theme";
-import { FlowDefinitionProvider } from "@/components/FlowDefinitionProvider/FlowDefinitionProvider";
+
+import SessionManager from "@/components/SessionManager";
+
+import type { AppProps } from "next/app";
 
 const CLIENT = "91847941-14e5-4dcd-acf9-63f53741def8";
 
@@ -15,13 +18,12 @@ const baseURL = globalThis.location
   : "";
 const REDIRECT = `${baseURL}/flows-ide/authenticate`;
 
-function FlowsIDE({ Component, pageProps }: any) {
+function FlowsIDE({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <GlobusAuthProvider client={CLIENT} redirect={REDIRECT} scopes={SCOPES}>
-        <FlowDefinitionProvider>
-          <Component {...pageProps} />
-        </FlowDefinitionProvider>
+        <SessionManager />
+        <Component {...pageProps} />
       </GlobusAuthProvider>
     </ChakraProvider>
   );

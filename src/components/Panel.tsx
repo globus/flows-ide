@@ -10,13 +10,14 @@ import {
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
 import { useEffect, useState } from "react";
-import { useFlowDefinitionDispatch } from "./FlowDefinitionProvider/FlowDefinitionProvider";
+
 import { FlowDefinition } from "@/pages";
+import { useEditorStore } from "@/stores/editor";
 
 export default function Panel() {
   const auth = useGlobusAuth();
   const [userFlows, setFlows] = useState([]);
-  const flowDefinitionDispatch = useFlowDefinitionDispatch();
+  const editorStore = useEditorStore();
 
   useEffect(() => {
     /**
@@ -40,13 +41,11 @@ export default function Panel() {
         })
       ).json();
 
-      setFlows(res.flows);
+      setFlows(res?.flows || []);
     }
 
     fetchFlows();
   }, [auth.authorization, auth.isAuthenticated]);
-
-  if (!flowDefinitionDispatch) return;
 
   return (
     <Box h="100%" bg={"gray.100"} w={"280px"}>
@@ -71,10 +70,7 @@ export default function Panel() {
                   <Box
                     key={flow.id}
                     onClick={() => {
-                      flowDefinitionDispatch({
-                        type: "replace",
-                        payload: flow.definition,
-                      });
+                      editorStore.replace(flow.definition);
                     }}
                     p={2}
                     _hover={{

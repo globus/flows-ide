@@ -28,10 +28,10 @@ import {
   BOOTSTRAPPED,
 } from "./library";
 import { useEffect, useRef, useState } from "react";
-import { useFlowDefinitionDispatch } from "../FlowDefinitionProvider/FlowDefinitionProvider";
+import { useEditorStore } from "@/stores/editor";
 
 const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
-  const flowDefinitionDispatch = useFlowDefinitionDispatch();
+  const editor = useEditorStore();
 
   return (
     <AccordionItem>
@@ -60,10 +60,7 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
                 variant={"outline"}
                 leftIcon={<PlusSquareIcon />}
                 onClick={() => {
-                  flowDefinitionDispatch?.({
-                    type: "add_ap",
-                    payload: ap,
-                  });
+                  editor.addActionProvider(ap);
                 }}
                 size={"xs"}
               >

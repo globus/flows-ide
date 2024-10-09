@@ -1,8 +1,9 @@
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { Fragment, PropsWithChildren, useState } from "react";
-import { useFlowDefinition } from "./FlowDefinitionProvider/FlowDefinitionProvider";
 import { useMonaco } from "@monaco-editor/react";
+
+import { useEditorStore } from "@/stores/editor";
 
 export const GLOBUS_FLOWS_VALIDATION = {
   OWNER: "flows",
@@ -12,7 +13,7 @@ export const GLOBUS_FLOWS_VALIDATION = {
 export function ValidateButton() {
   const auth = useGlobusAuth();
   const toast = useToast();
-  const definition = useFlowDefinition();
+  const definition = useEditorStore((s) => s.definition);
   const monaco = useMonaco();
   const [validating, setValidating] = useState(false);
 
