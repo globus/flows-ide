@@ -15,7 +15,7 @@
     "@dagrejs/dagre": "^1.1.4",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@globus/react-auth-context": "^0.0.5",
+    "@globus/react-auth-context": "^0.0.6",
     "@globus/sdk": "^4.3.1",
     "@monaco-editor/react": "^4.6.0",
     "framer-motion": "^11.5.4",
