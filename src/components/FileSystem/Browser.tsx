@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Button, ButtonGroup, Center } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Box, Button, ButtonGroup, Center, Text } from "@chakra-ui/react";
 import { MinusIcon, PlusSquareIcon } from "@chakra-ui/icons";
 import { useFileSystem } from "@/stores/file-system";
 import { useEditorStore } from "@/stores/editor";
@@ -9,9 +9,18 @@ function File({ entry }) {
   return (
     <Box
       onClick={async () => {
+        if (editorStore.activeEditorHasModifications()) {
+          const result = window.confirm(
+            "Are you sure you want to open a new file? Your changes will be lost.",
+          );
+          if (!result) {
+            return;
+          }
+        }
+
         const file = await entry.handle.getFile();
         const contents = await file.text();
-        editorStore.replaceDefinitionFromString(contents);
+        editorStore.replaceActiveEditorFromString(contents);
       }}
       p={2}
       _hover={{
@@ -20,19 +29,23 @@ function File({ entry }) {
         color: "white",
       }}
     >
-      {"-".repeat(entry.path.split("/").length)}
-      {entry.handle.name}
+      <Text ml={entry.path?.split("/").length}>{entry.handle.name}</Text>
     </Box>
   );
 }
 
 function Directory({ entry }) {
   const fileSystem = useFileSystem();
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <Box
       onClick={async () => {
         const entries = entry.handle.values();
         for await (const e of entries) {
+          if (e.name.startsWith(".")) {
+            continue;
+          }
           await fileSystem.addEntry({
             handle: e,
             path: `${entry.handle.name}/`,
@@ -46,16 +59,14 @@ function Directory({ entry }) {
         color: "white",
       }}
     >
-      <PlusSquareIcon mr={2} />
+      {isOpen ? <PlusSquareIcon mr={2} /> : <MinusIcon mr={2} />}
       {entry.handle.name}
     </Box>
   );
 }
 
 export function FileSystemBrowser() {
-  const editorStore = useEditorStore();
   const fileSystem = useFileSystem();
-
   return (
     <>
       <Center>

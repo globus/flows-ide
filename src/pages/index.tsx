@@ -93,9 +93,7 @@ export default function Home() {
   const [invalidMarkers, setValidity] = useState<any[]>([]);
   const [showPanel, setShowPanel] = useState(false);
 
-  const [mode, setMode] = useState<SupportedModes>(MODES.DEFINITION);
-
-  const isDefinitionMode = mode === MODES.DEFINITION;
+  const isDefinitionMode = editorStore.isDefinitionMode();
 
   const editorContents = isDefinitionMode
     ? editorStore.definition
@@ -196,12 +194,14 @@ export default function Home() {
               backgroundColor="rgb(30, 30, 30)"
               colorScheme="yellow"
               onChange={(index) => {
-                setMode(index === 0 ? MODES.DEFINITION : MODES.INPUT_SCHEMA);
+                editorStore.setMode(
+                  index === 0 ? MODES.DEFINITION : MODES.INPUT_SCHEMA,
+                );
               }}
             >
               <TabList color="white">
-                <Tab>Definiton</Tab>
-                <Tab>Input Schema</Tab>
+                <Tab>Definiton{editorStore.definitionModified && " *"}</Tab>
+                <Tab>Input Schema{editorStore.schemaModified && " *"}</Tab>
               </TabList>
             </Tabs>
             <Editor
@@ -213,19 +213,16 @@ export default function Home() {
               }
               onChange={(value) => {
                 if (isDefinitionMode) {
+                  editorStore.setDefinitionModified(true);
                   editorStore.replaceDefinitionFromString(value);
                 } else {
+                  editorStore.setSchemaModified(true);
                   editorStore.replaceSchemaFromString(value);
                 }
               }}
               onValidate={handleEditorValidate}
               theme="vs-dark"
-              settings={{ enableExperimentalValidation: true, mode }}
-              path={
-                mode === MODES.DEFINITION
-                  ? "definition.json"
-                  : "input-schema.json"
-              }
+              settings={{ enableExperimentalValidation: true }}
             />
           </Box>
           <Box

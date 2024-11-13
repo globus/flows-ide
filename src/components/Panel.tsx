@@ -85,7 +85,9 @@ export default function Panel() {
                   <Box
                     key={flow.id}
                     onClick={() => {
-                      editorStore.replace(flow.definition);
+                      editorStore.replaceDefinitionFromString(
+                        JSON.stringify(flow.definition),
+                      );
                     }}
                     p={2}
                     _hover={{

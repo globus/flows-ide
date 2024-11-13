@@ -6,6 +6,7 @@ import MonacoEditor, {
 } from "@monaco-editor/react";
 import { ValidateButton } from "./Validate";
 import { Box } from "@chakra-ui/react";
+import { useEditorStore } from "@/stores/editor";
 
 export const MODES = {
   DEFINITION: "DEFINITION",
@@ -26,7 +27,6 @@ type InteralSettings = {
 function configureEditor(
   monaco: Monaco,
   settings: InteralSettings = {
-    mode: MODES.DEFINITION,
     enableExperimentalValidation: true,
   },
 ) {
@@ -53,6 +53,13 @@ function configureEditor(
 export default function Editor(
   props: { settings?: InteralSettings } & EditorProps,
 ) {
+  const editoreStore = useEditorStore();
+  const settings = {
+    ...props.settings,
+    mode: isDefinitionMode(props.settings)
+      ? MODES.DEFINITION
+      : MODES.INPUT_SCHEMA,
+  };
   return (
     <>
       <Box pos="relative" h="100%">
@@ -60,11 +67,16 @@ export default function Editor(
           defaultLanguage="json"
           language="json"
           beforeMount={(monaco) => {
-            configureEditor(monaco, props.settings);
+            configureEditor(monaco, settings);
           }}
+          path={
+            editoreStore.isDefinitionMode()
+              ? "definition.json"
+              : "input-schema.json"
+          }
           {...props}
         />
-        {isDefinitionMode(props.settings) && (
+        {editoreStore.isDefinitionMode() && (
           <Box pos="absolute" bottom={5} right={10}>
             <ValidateButton />
           </Box>

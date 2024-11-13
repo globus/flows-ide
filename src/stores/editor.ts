@@ -5,10 +5,24 @@ import { toPascalCase } from "@/components/DocumentationBrowser/library";
 import type { FlowDefinition } from "@/pages";
 import type { ActionProviderEntry } from "@/components/DocumentationBrowser/library";
 
+import { MODES } from "@/components/Editor";
+
+type SupportedModes = (typeof MODES)[keyof typeof MODES];
+
 type EditorState = {
+  mode: SupportedModes;
   schmea: Record<string, unknown> | undefined;
   definition: FlowDefinition | undefined;
-  replace: (def?: FlowDefinition) => void;
+  definitionModified: boolean;
+  schemaModified: boolean;
+  setMode: (mode: SupportedModes) => void;
+  isDefinitionMode: () => boolean;
+  setDefinitionModified: (modified: boolean) => void;
+  setSchemaModified: (modified: boolean) => void;
+  /**
+   * Replace the active editor with the provided string.
+   */
+  replaceActiveEditorFromString: (s?: string) => void;
   replaceSchemaFromString: (s?: string) => void;
   replaceDefinitionFromString: (s?: string) => void;
   /**
@@ -28,8 +42,29 @@ type EditorState = {
 const DEFINITION_LOCAL_STORAGE_KEY = "definition";
 
 export const useEditorStore = create<EditorState>((set, get) => ({
+  mode: MODES.DEFINITION,
   schmea: undefined,
   definition: undefined,
+  definitionModified: false,
+  schemaModified: false,
+  setDefinitionModified: (modified: boolean) =>
+    set({ definitionModified: modified }),
+  setSchemaModified: (modified: boolean) => set({ schemaModified: modified }),
+  setMode: (mode: SupportedModes) => set({ mode }),
+  isDefinitionMode: () => get().mode === MODES.DEFINITION,
+  activeEditorHasModifications: () => {
+    if (get().isDefinitionMode()) {
+      return get().definitionModified;
+    }
+    return get().schemaModified;
+  },
+  replaceActiveEditorFromString: (s?: string) => {
+    if (get().isDefinitionMode()) {
+      get().replaceDefinitionFromString(s);
+    } else {
+      get().replaceSchemaFromString(s);
+    }
+  },
   replaceSchemaFromString(s?: string) {
     try {
       const v = s ? JSON.parse(s) : undefined;
@@ -42,7 +77,6 @@ export const useEditorStore = create<EditorState>((set, get) => ({
       set({ definition: v });
     } catch {}
   },
-  replace: (def = undefined) => set({ definition: def }),
   preserve: () => {
     const def = get().definition;
     if (!def) return;
