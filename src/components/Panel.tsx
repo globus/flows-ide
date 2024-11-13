@@ -14,6 +14,8 @@ import { useEffect, useState } from "react";
 import { FlowDefinition } from "@/pages";
 import { useEditorStore } from "@/stores/editor";
 
+import { FileSystemBrowser } from "./FileSystem/Browser";
+
 export default function Panel() {
   const auth = useGlobusAuth();
   const [userFlows, setFlows] = useState([]);
@@ -54,7 +56,20 @@ export default function Panel() {
           <AccordionButton px={2}>
             <Box flex="1" textAlign="left">
               <Text fontWeight={"bold"} fontSize={"xs"}>
-                Your Flows
+                File System
+              </Text>
+            </Box>
+            <AccordionIcon />
+          </AccordionButton>
+          <AccordionPanel m={0} p={0}>
+            <FileSystemBrowser />
+          </AccordionPanel>
+        </AccordionItem>
+        <AccordionItem>
+          <AccordionButton px={2}>
+            <Box flex="1" textAlign="left">
+              <Text fontWeight={"bold"} fontSize={"xs"}>
+                Your Published Flows
               </Text>
             </Box>
             <AccordionIcon />

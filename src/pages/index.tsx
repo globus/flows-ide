@@ -80,7 +80,7 @@ const LAYOUT = {
 /**
  * Feature flag to enable/disable the "Panel" component.
  */
-const ENABLE_PANEL = false;
+const ENABLE_PANEL = true;
 
 export default function Home() {
   const router = useRouter();
