@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { LuChevronDown } from "react-icons/lu";
 import {
   Button,
   Text,
@@ -8,6 +8,7 @@ import {
   MenuButton,
   MenuDivider,
   MenuItem,
+  Icon,
 } from "@chakra-ui/react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import router from "next/router";
@@ -40,7 +41,7 @@ export default function Profile() {
           colorScheme="gray"
           size="xs"
           as={Button}
-          rightIcon={<ChevronDownIcon />}
+          rightIcon={<Icon as={LuChevronDown} />}
         >
           {user?.preferred_username}
         </MenuButton>

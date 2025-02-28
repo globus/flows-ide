@@ -20,8 +20,9 @@ import {
   CardBody,
   StackDivider,
   Stack,
+  Icon,
 } from "@chakra-ui/react";
-import { ExternalLinkIcon, PlusSquareIcon } from "@chakra-ui/icons";
+import { LuExternalLink, LuPlusSquare } from "react-icons/lu";
 import {
   fetchActionProviders,
   type ActionProviderEntry,
@@ -58,7 +59,7 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
               <Button
                 colorScheme="blue"
                 variant={"outline"}
-                leftIcon={<PlusSquareIcon />}
+                leftIcon={<Icon as={LuPlusSquare} />}
                 onClick={() => {
                   editor.addActionProvider(ap);
                 }}
@@ -75,7 +76,7 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
               variant={"outline"}
             >
               Definition
-              <ExternalLinkIcon mx="2px" />
+              <Icon as={LuExternalLink} mx="2px" />
             </Button>
             <Button
               as={Link}
@@ -85,7 +86,7 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
               variant={"outline"}
             >
               Documentation
-              <ExternalLinkIcon mx="2px" />
+              <Icon as={LuExternalLink} mx="2px" />
             </Button>
           </ButtonGroup>
           <Spacer />
@@ -144,7 +145,7 @@ export function DocumentationBrowser() {
               fontSize={"sm"}
             >
               How to Create a Flow
-              <ExternalLinkIcon mx="2px" />
+              <Icon as={LuExternalLink} mx="2px" />
             </Link>
             <Link
               href="https://docs.globus.org/guides/tutorials/flow-automation/run-a-flow/"
@@ -152,7 +153,7 @@ export function DocumentationBrowser() {
               fontSize={"sm"}
             >
               How to Run a Flow
-              <ExternalLinkIcon mx="2px" />
+              <Icon as={LuExternalLink} mx="2px" />
             </Link>
           </Stack>
         </CardBody>
