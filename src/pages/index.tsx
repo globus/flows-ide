@@ -21,9 +21,7 @@ import {
   Tab,
   TabPanel,
   TabPanels,
-  IconButton,
 } from "@chakra-ui/react";
-import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
 import {
@@ -66,9 +64,6 @@ const HEADER = {
 
 const LAYOUT = {
   HEADER,
-  PANEL: {
-    WIDTH: "280px",
-  },
   TAB_PANEL: {
     /**
      * The tab panel height accounts for the header and the `<TabList>` height.
@@ -80,7 +75,7 @@ const LAYOUT = {
 /**
  * Feature flag to enable/disable the "Panel" component.
  */
-const ENABLE_PANEL = false;
+const ENABLE_PANEL = true;
 
 export default function Home() {
   const router = useRouter();
@@ -91,7 +86,6 @@ export default function Home() {
   const bootstrapped = useRef(false);
 
   const [invalidMarkers, setValidity] = useState<any[]>([]);
-  const [showPanel, setShowPanel] = useState(false);
 
   useEffect(() => {
     if (bootstrapped.current) return;
@@ -144,17 +138,6 @@ export default function Home() {
       <main>
         <Box height={LAYOUT.HEADER.HEIGHT}>
           <Flex bgColor={"brand.800"} px={2} align={"center"}>
-            {ENABLE_PANEL && (
-              <IconButton
-                size="sm"
-                colorScheme="brand"
-                aria-label={showPanel ? "Hide Menu" : "Show Menu"}
-                icon={showPanel ? <CloseIcon /> : <HamburgerIcon />}
-                onClick={() => {
-                  setShowPanel(!showPanel);
-                }}
-              />
-            )}
             <Heading as="h1" color={"white"}>
               <Flex align={"center"}>
                 <Image
@@ -163,12 +146,11 @@ export default function Home() {
                   boxSize={LAYOUT.HEADER.HEIGHT}
                   objectFit="contain"
                   p={1}
-                  mx={2}
                 />
               </Flex>
             </Heading>
             <Text color="white">
-              <Code mr={1} colorScheme={"red"} variant={"solid"}>
+              <Code mx={1} colorScheme={"red"} variant={"solid"}>
                 v{packageJson.version}-beta
               </Code>
               visualize and create flows
@@ -181,8 +163,8 @@ export default function Home() {
         </Box>
 
         <Flex h={`calc(100vh - ${LAYOUT.HEADER.HEIGHT})`} w={"100vw"}>
-          {showPanel && <Panel />}
-          <Box h="100%" w="50%">
+          {ENABLE_PANEL && <Panel />}
+          <Box h="100%" w="50vw">
             <Editor
               defaultValue={
                 definition ? JSON.stringify(definition, null, 2) : ""
@@ -194,13 +176,7 @@ export default function Home() {
               settings={{ enableExperimentalValidation: true }}
             />
           </Box>
-          <Box
-            h="100%"
-            /**
-             * The "Preview" panel width is dynamic based on whether the "Panel" is shown.
-             */
-            w={`calc(50% - ${showPanel ? LAYOUT.PANEL.WIDTH : "0px"})`}
-          >
+          <Box h="100%" w="100%" maxW="50vw">
             <Tabs>
               <TabList>
                 <Tab>Diagram</Tab>
