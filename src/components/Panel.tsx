@@ -6,6 +6,13 @@ import {
   AccordionIcon,
   AccordionPanel,
   Text,
+  Button,
+  Flex,
+  Spacer,
+  Icon,
+  Heading,
+  HStack,
+  VStack,
 } from "@chakra-ui/react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
@@ -13,32 +20,26 @@ import { useEffect, useState } from "react";
 
 import { FlowDefinition } from "@/pages";
 import { useEditorStore } from "@/stores/editor";
+import { LuBookOpenCheck, LuFolderTree } from "react-icons/lu";
+import { set } from "lodash";
 
 export default function Panel() {
   const auth = useGlobusAuth();
-  const [userFlows, setFlows] = useState([]);
   const editorStore = useEditorStore();
+  const [activeSection, setActiveSection] = useState<
+    "explorer" | "published_flows"
+  >("explorer");
+  const [minimized, setMinimized] = useState(false);
+  const [userFlows, setFlows] = useState([]);
 
   useEffect(() => {
-    /**
-     * @todo Update to pass `manager` to SDK method.
-     * @see https://github.com/globus/globus-sdk-javascript/pull/304
-     */
-    const token =
-      auth.authorization?.tokens?.getByResourceServer("flows.globus.org");
-
-    if (!token) {
+    if (!auth.isAuthenticated) {
       setFlows([]);
       return;
     }
-
     async function fetchFlows() {
       const res = await (
-        await flows.flows.getAll({
-          headers: {
-            Authorization: `Bearer ${token?.access_token}`,
-          },
-        })
+        await flows.flows.getAll({}, { manager: auth.authorization })
       ).json();
 
       setFlows(res?.flows || []);
@@ -48,19 +49,58 @@ export default function Panel() {
   }, [auth.authorization, auth.isAuthenticated]);
 
   return (
-    <Box h="100%" bg={"gray.100"} w={"280px"}>
-      <Accordion defaultIndex={[0]} allowMultiple>
-        <AccordionItem>
-          <AccordionButton px={2}>
-            <Box flex="1" textAlign="left">
-              <Text fontWeight={"bold"} fontSize={"xs"}>
-                Your Flows
-              </Text>
-            </Box>
-            <AccordionIcon />
-          </AccordionButton>
-          <AccordionPanel m={0} p={0}>
+    <HStack spacing={0}>
+      <Box h="100%" bg={"brand.800"} w={"50px"}>
+        <VStack spacing={0}>
+          <Button
+            onClick={() => {
+              setMinimized(!minimized && activeSection === "explorer");
+              setActiveSection("explorer");
+            }}
+            colorScheme="blue"
+            rounded={0}
+            w="100%"
+          >
+            <Icon as={LuFolderTree} />
+          </Button>
+          <Button
+            onClick={() => {
+              setMinimized(!minimized && activeSection === "published_flows");
+              setActiveSection("published_flows");
+            }}
+            colorScheme="blue"
+            rounded={0}
+            w="100%"
+          >
+            <Icon as={LuBookOpenCheck} />
+          </Button>
+        </VStack>
+      </Box>
+      <Box
+        h="100%"
+        bg={"gray.100"}
+        w="230px"
+        display={minimized ? "none" : "block"}
+      >
+        <Box>
+          <Heading
+            p={2}
+            fontSize={"sm"}
+            borderBottom={1}
+            borderBottomStyle={"solid"}
+            borderBottomColor={"gray"}
+          >
+            {activeSection === "explorer" ? "Explorer" : "Published Flows"}
+          </Heading>
+
+          {activeSection === "published_flows" && (
             <Box fontSize="sm">
+              {!auth.isAuthenticated && (
+                <Text p={4} color={"gray.500"}>
+                  You must be signed in to view your flows published on Globus.
+                </Text>
+              )}
+
               {userFlows.map(
                 (flow: {
                   id: string;
@@ -84,9 +124,9 @@ export default function Panel() {
                 ),
               )}
             </Box>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-    </Box>
+          )}
+        </Box>
+      </Box>
+    </HStack>
   );
 }

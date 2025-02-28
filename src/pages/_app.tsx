@@ -21,7 +21,12 @@ const REDIRECT = `${baseURL}/flows-ide/authenticate`;
 function FlowsIDE({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
-      <GlobusAuthProvider client={CLIENT} redirect={REDIRECT} scopes={SCOPES}>
+      <GlobusAuthProvider
+        client={CLIENT}
+        redirect={REDIRECT}
+        scopes={SCOPES}
+        storage={globalThis.sessionStorage}
+      >
         <SessionManager />
         <Component {...pageProps} />
       </GlobusAuthProvider>
