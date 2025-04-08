@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.5](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.4...flows-ide-v1.4.5) (2025-04-08)
+
+
+### Bug Fixes
+
+* Addresses issue causing 'Validate' button to be hidden behind editor ([e17ab89](https://github.com/globus/flows-ide/commit/e17ab8919247003bdc5e443599eeda404abe770a))
+
 ## [1.4.4](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.3...flows-ide-v1.4.4) (2025-04-08)
 
 
