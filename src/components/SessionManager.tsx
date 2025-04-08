@@ -11,7 +11,11 @@ export default function SessionManager() {
   useEffect(() => {
     async function attemptRefresh() {
       const results = await auth.authorization?.refreshTokens();
-      const failed = results?.find((r) => r.value === null);
+      const failed = results?.find(
+        (r) =>
+          r.status === "rejected" ||
+          (r.status === "fulfilled" && r.value === null),
+      );
       if (failed) {
         toast({
           render: () => {
