@@ -46,7 +46,7 @@ export default function Editor(
           }}
           {...props}
         />
-        <Box pos="absolute" bottom={5} right={10}>
+        <Box pos="absolute" bottom={5} right={10} zIndex={10}>
           <ValidateButton />
         </Box>
       </Box>
