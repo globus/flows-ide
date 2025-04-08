@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.3](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.2...flows-ide-v1.4.3) (2025-04-08)
+
+
+### Bug Fixes
+
+* only store definition when a value is present ([107d95f](https://github.com/globus/flows-ide/commit/107d95fe2bb7bc5d798876a48e195f0c771b0e81))
+
 ## [1.4.2](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.1...flows-ide-v1.4.2) (2024-10-09)
 
 
