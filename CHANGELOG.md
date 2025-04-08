@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.4](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.3...flows-ide-v1.4.4) (2025-04-08)
+
+
+### Bug Fixes
+
+* Ensure session refresh rejected states are handled properly ([60a1264](https://github.com/globus/flows-ide/commit/60a1264a9df6921deec3d4e3bb9885d29f38378c))
+
 ## [1.4.3](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.2...flows-ide-v1.4.3) (2025-04-08)
 
 
