@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.6](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.5...flows-ide-v1.4.6) (2025-04-16)
+
+
+### Bug Fixes
+
+* Avoid crashes in layout when a State name is removed from the definition ([bfdd52a](https://github.com/globus/flows-ide/commit/bfdd52a410b50afb99389006a33c0b427a8a3915))
+
 ## [1.4.5](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.4...flows-ide-v1.4.5) (2025-04-08)
 
 
