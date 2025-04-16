@@ -73,9 +73,12 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
     return result;
   }
 
-  const nodes = Object.entries(States).map(([id, state]) => {
+  const nodes = Object.entries(States).map(([id, state], i) => {
     return {
-      id,
+      /**
+       * Ensure the `id` of the node has a distinct value, even when the user might delete the named State key during editing.
+       */
+      id: id.length > 0 ? id : `StateNode--${i}`,
       type: "StateNode",
       data: { id, state, definition },
       markerStart: "arrow",
