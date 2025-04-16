@@ -1,27 +1,29 @@
 import { camelCase, startCase } from "lodash";
 
+type ActionDefinition = {
+  admin_contact: string;
+  administered_by: string[];
+  api_version: string;
+  description: string | null;
+  event_types: string[] | null;
+  globus_auth_scope: string;
+  input_schema: unknown;
+  keywords: string[] | null;
+  log_supported: boolean;
+  maximum_deadline: string;
+  runnable_by: string[];
+  subtitle: string;
+  synchronous: boolean;
+  title: string;
+  types: string[];
+  visible_to: string[];
+  [key: string]: unknown;
+};
+
 export type ActionProviderEntry = {
   url: string;
   documentation: string;
-  definition?: {
-    admin_contact: string;
-    administered_by: string[];
-    api_version: string;
-    description: string | null;
-    event_types: string[] | null;
-    globus_auth_scope: string;
-    input_schema: unknown;
-    keywords: string[] | null;
-    log_supported: boolean;
-    maximum_deadline: string;
-    runnable_by: string[];
-    subtitle: string;
-    synchronous: boolean;
-    title: string;
-    types: string[];
-    visible_to: string[];
-    [key: string]: unknown;
-  };
+  definition?: ActionDefinition;
 };
 
 const ACTION_PROVIDERS_HOSTS = {
@@ -42,44 +44,6 @@ export const ACTION_PROVIDERS: ActionProviderEntry[] = [
     url: ACTION_PROVIDERS_HOST + "hello_world",
     documentation:
       "https://docs.globus.org/api/flows/hosted-action-providers/ap-hello-world/",
-    /**
-     * @todo Once the CORs errors are addressed, the "Hello World" definition can be removed.
-     * We're just using the full definition here FPO.
-     */
-    definition: {
-      admin_contact: "support@globus.org",
-      administered_by: [],
-      api_version: "1.0",
-      description: null,
-      event_types: null,
-      globus_auth_scope:
-        "https://auth.globus.org/scopes/actions.globus.org/hello_world",
-      input_schema: {
-        $schema: "http://json-schema.org/draft-07/schema#",
-        additionalProperties: false,
-        properties: {
-          echo_string: {
-            type: "string",
-          },
-          required_dependent_scope: {
-            type: "string",
-          },
-          sleep_time: {
-            type: "integer",
-          },
-        },
-        type: "object",
-      },
-      keywords: null,
-      log_supported: false,
-      maximum_deadline: "P30D",
-      runnable_by: ["all_authenticated_users"],
-      subtitle: "An Action responding Hello to an input value",
-      synchronous: false,
-      title: "Hello World",
-      types: ["ACTION"],
-      visible_to: ["public"],
-    },
   },
   {
     url: "https://transfer.actions.globus.org/collection_info",
@@ -178,7 +142,7 @@ export async function fetchActionProviders() {
       const response = await fetch(ap.url);
       definition = await response.json();
     } catch (e) {}
-    ap.definition = definition as unknown as ActionProviderEntry["definition"];
+    ap.definition = definition as unknown as ActionDefinition;
   });
   await Promise.all(promises);
 
