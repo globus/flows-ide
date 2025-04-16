@@ -126,7 +126,7 @@ export const ACTION_PROVIDERS: ActionProviderEntry[] = [
       "https://docs.globus.org/api/transfer/action-providers/transfer/",
   },
   {
-    url: "https://compute.actions.globus.org",
+    url: "https://compute.actions.globus.org/v3",
     documentation:
       "https://globus-compute.readthedocs.io/en/latest/actionprovider.html",
   },
