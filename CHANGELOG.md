@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.7](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.6...flows-ide-v1.4.7) (2025-04-16)
+
+
+### Bug Fixes
+
+* Updates Compute AP entry to reference V3 action provider. ([#222](https://github.com/globus/flows-ide/issues/222)) ([31d8f80](https://github.com/globus/flows-ide/commit/31d8f80f8d4dff781c65201acb23bc5af5bbfb2a))
+
 ## [1.4.6](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.5...flows-ide-v1.4.6) (2025-04-16)
 
 
