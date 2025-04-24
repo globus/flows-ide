@@ -1,5 +1,6 @@
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { useGlobusAuth } from "@globus/react-auth-context";
+import { flows } from "@globus/sdk";
 import { Fragment, PropsWithChildren, useState } from "react";
 import { useMonaco } from "@monaco-editor/react";
 
@@ -30,16 +31,14 @@ export function ValidateButton() {
      */
     monaco.editor.removeAllMarkers(GLOBUS_FLOWS_VALIDATION.OWNER);
 
-    /**
-     * @todo Add to SDK
-     */
-    const res = await fetch("https://flows.globus.org/flows/validate", {
-      method: "POST",
-      body: JSON.stringify({ definition }),
-      headers: {
-        Authorization: `Bearer ${auth.authorization?.tokens.getByResourceServer("flows.globus.org")?.access_token}`,
+    const res = await flows.flows.validate(
+      {
+        payload: {
+          definition: definition as Record<string, unknown>,
+        },
       },
-    });
+      { manager: auth.authorization },
+    );
 
     const json = await res.json();
 
@@ -57,6 +56,18 @@ export function ValidateButton() {
       setValidating(false);
       return;
     }
+
+    if (!("error" in json)) {
+      toast({
+        title: "Unknown vailidation error encountered.",
+        status: "error",
+        position: "bottom-right",
+        isClosable: true,
+      });
+      setValidating(false);
+      return;
+    }
+
     /**
      * Account for validation errors being different shapes...
      */
@@ -74,7 +85,8 @@ export function ValidateButton() {
     toast({
       title: `Invalid Definition (${json.error.code})`,
       status: "error",
-      description,
+      description:
+        typeof description === "string" ? description : description.join(", "),
       position: "bottom-right",
       isClosable: true,
     });
