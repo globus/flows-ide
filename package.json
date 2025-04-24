@@ -15,7 +15,7 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@globus/react-auth-context": "^0.0.9",
-    "@globus/sdk": "^5.1.1",
+    "@globus/sdk": "^5.7.0",
     "@monaco-editor/react": "^4.7.0",
     "framer-motion": "^12.4.7",
     "lodash": "^4.17.21",
