@@ -13,8 +13,13 @@
     "@chakra-ui/react": "^2.10.9",
     "@dagrejs/dagre": "^1.1.5",
     "@emotion/react": "^11.14.0",
+<<<<<<< HEAD
     "@emotion/styled": "^11.14.1",
     "@globus/react-auth-context": "^0.0.9",
+=======
+    "@emotion/styled": "^11.14.0",
+    "@globus/react-auth-context": "^0.2.0",
+>>>>>>> 9c99a3e (chore: env-based development, bump @globus/react-auth-context)
     "@globus/sdk": "^5.7.0",
     "@monaco-editor/react": "^4.7.0",
     "framer-motion": "^12.4.7",
