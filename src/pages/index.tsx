@@ -179,7 +179,7 @@ export default function Home() {
           <Box h="100%" w="100%" maxW="50vw">
             <Tabs>
               <TabList>
-                <Tab>Diagram</Tab>
+                <Tab>Definition Diagram</Tab>
                 <Tab>Documentation</Tab>
               </TabList>
               <TabPanels>
