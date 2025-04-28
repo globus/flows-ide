@@ -21,7 +21,6 @@ import { useEffect, useState } from "react";
 import { FlowDefinition } from "@/pages";
 import { useEditorStore } from "@/stores/editor";
 import { LuBookOpenCheck, LuFolderTree } from "react-icons/lu";
-import { set } from "lodash";
 
 export default function Panel() {
   const auth = useGlobusAuth();
