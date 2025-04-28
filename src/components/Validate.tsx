@@ -155,6 +155,7 @@ export function ValidateButton() {
         isLoading={validating}
         onClick={validate}
         colorScheme="orange"
+        size="sm"
         isDisabled={!monaco || !auth.isAuthenticated || validating}
       >
         Validate
