@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/hydrogen
+          node-version: lts/iron
           cache: "npm"
       - run: npm install
-      - run: sst deploy --stage sandbox
+      - run: npx sst deploy --stage sandbox
