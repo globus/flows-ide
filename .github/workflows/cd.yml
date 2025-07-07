@@ -23,4 +23,5 @@ jobs:
         with:
           node-version: lts/hydrogen
           cache: "npm"
+      - run: npm install
       - run: sst deploy --stage sandbox
