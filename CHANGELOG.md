@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.5.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.7...flows-ide-v1.5.0) (2025-07-07)
+
+
+### Features
+
+* adds SST ([#258](https://github.com/globus/flows-ide/issues/258)) ([da9fc9c](https://github.com/globus/flows-ide/commit/da9fc9cff8852585973f40d1fe2274550244cc48))
+
+
+### Bug Fixes
+
+* adds npm install to GitHub Actions ([9ffd245](https://github.com/globus/flows-ide/commit/9ffd245d25039f5814c79081fb177db31670e5f0))
+
 ## [1.4.7](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.6...flows-ide-v1.4.7) (2025-04-16)
 
 
