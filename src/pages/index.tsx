@@ -22,7 +22,7 @@ import {
   TabPanel,
   TabPanels,
 } from "@chakra-ui/react";
-import Editor from "../components/Editor";
+import Editor, { MODES, SupportedModes } from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
 import {
   compressToEncodedURIComponent,
@@ -87,6 +87,14 @@ export default function Home() {
 
   const [invalidMarkers, setValidity] = useState<any[]>([]);
 
+  const [mode, setMode] = useState<SupportedModes>(MODES.DEFINITION);
+
+  const isDefinitionMode = mode === MODES.DEFINITION;
+
+  const editorContents = isDefinitionMode
+    ? editorStore.definition
+    : editorStore.schmea;
+
   useEffect(() => {
     if (bootstrapped.current) return;
     bootstrapped.current = true;
@@ -109,11 +117,11 @@ export default function Home() {
   }, [editorStore]);
 
   useEffect(() => {
-    if (definition) {
+    if (isDefinitionMode && definition) {
       const v = compressToEncodedURIComponent(JSON.stringify(definition));
       router.push(`/?d=${v}`);
     }
-  }, [definition, router]);
+  }, [isDefinitionMode, definition, router]);
 
   function handleEditorValidate(markers: any[]) {
     const errors = markers.filter(
@@ -165,21 +173,48 @@ export default function Home() {
         <Flex h={`calc(100vh - ${LAYOUT.HEADER.HEIGHT})`} w={"100vw"}>
           {ENABLE_PANEL && <Panel />}
           <Box h="100%" w="50vw">
+            <Tabs
+              fontFamily="monospace"
+              backgroundColor="rgb(30, 30, 30)"
+              colorScheme="yellow"
+              onChange={(index) => {
+                setMode(index === 0 ? MODES.DEFINITION : MODES.INPUT_SCHEMA);
+              }}
+            >
+              <TabList color="white">
+                <Tab>Definiton</Tab>
+                <Tab>Input Schema</Tab>
+              </TabList>
+            </Tabs>
             <Editor
               defaultValue={
-                definition ? JSON.stringify(definition, null, 2) : ""
+                editorContents ? JSON.stringify(editorContents, null, 2) : ""
               }
-              value={definition ? JSON.stringify(definition, null, 2) : ""}
-              onChange={editorStore.replaceDefinitionFromString}
+              value={
+                editorContents ? JSON.stringify(editorContents, null, 2) : ""
+              }
+              onChange={(value) => {
+                if (isDefinitionMode) {
+                  editorStore.replaceDefinitionFromString(value);
+                } else {
+                  editorStore.replaceSchemaFromString(value);
+                }
+              }}
               onValidate={handleEditorValidate}
               theme="vs-dark"
-              settings={{ enableExperimentalValidation: true }}
+              settings={{ enableExperimentalValidation: true, mode }}
+              path={
+                mode === MODES.DEFINITION
+                  ? "definition.json"
+                  : "input-schema.json"
+              }
             />
           </Box>
           <Box h="100%" w="100%" maxW="50vw">
             <Tabs>
               <TabList>
-                <Tab>Definition Diagram</Tab>
+                <Tab>Definiton Diagram</Tab>
+                {/* <Tab>Input Schema UI</Tab> */}
                 <Tab>Documentation</Tab>
               </TabList>
               <TabPanels>
@@ -214,6 +249,7 @@ export default function Home() {
                   )}
                   <Diagram />
                 </TabPanel>
+                {/* <TabPanel></TabPanel> */}
                 <TabPanel
                   h={LAYOUT.TAB_PANEL.HEIGHT}
                   maxH={LAYOUT.TAB_PANEL.HEIGHT}
