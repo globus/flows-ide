@@ -21,10 +21,8 @@ import {
   Tab,
   TabPanel,
   TabPanels,
-  IconButton,
 } from "@chakra-ui/react";
-import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
-import Editor from "../components/Editor";
+import Editor, { MODES, SupportedModes } from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
 import {
   compressToEncodedURIComponent,
@@ -66,9 +64,6 @@ const HEADER = {
 
 const LAYOUT = {
   HEADER,
-  PANEL: {
-    WIDTH: "280px",
-  },
   TAB_PANEL: {
     /**
      * The tab panel height accounts for the header and the `<TabList>` height.
@@ -91,7 +86,14 @@ export default function Home() {
   const bootstrapped = useRef(false);
 
   const [invalidMarkers, setValidity] = useState<any[]>([]);
-  const [showPanel, setShowPanel] = useState(false);
+
+  const [mode, setMode] = useState<SupportedModes>(MODES.DEFINITION);
+
+  const isDefinitionMode = mode === MODES.DEFINITION;
+
+  const editorContents = isDefinitionMode
+    ? editorStore.definition
+    : editorStore.schmea;
 
   useEffect(() => {
     if (bootstrapped.current) return;
@@ -115,11 +117,11 @@ export default function Home() {
   }, [editorStore]);
 
   useEffect(() => {
-    if (definition) {
+    if (isDefinitionMode && definition) {
       const v = compressToEncodedURIComponent(JSON.stringify(definition));
       router.push(`/?d=${v}`);
     }
-  }, [definition, router]);
+  }, [isDefinitionMode, definition, router]);
 
   function handleEditorValidate(markers: any[]) {
     const errors = markers.filter(
@@ -144,17 +146,6 @@ export default function Home() {
       <main>
         <Box height={LAYOUT.HEADER.HEIGHT}>
           <Flex bgColor={"brand.800"} px={2} align={"center"}>
-            {ENABLE_PANEL && (
-              <IconButton
-                size="sm"
-                colorScheme="brand"
-                aria-label={showPanel ? "Hide Menu" : "Show Menu"}
-                icon={showPanel ? <CloseIcon /> : <HamburgerIcon />}
-                onClick={() => {
-                  setShowPanel(!showPanel);
-                }}
-              />
-            )}
             <Heading as="h1" color={"white"}>
               <Flex align={"center"}>
                 <Image
@@ -163,12 +154,11 @@ export default function Home() {
                   boxSize={LAYOUT.HEADER.HEIGHT}
                   objectFit="contain"
                   p={1}
-                  mx={2}
                 />
               </Flex>
             </Heading>
             <Text color="white">
-              <Code mr={1} colorScheme={"red"} variant={"solid"}>
+              <Code mx={1} colorScheme={"red"} variant={"solid"}>
                 v{packageJson.version}-beta
               </Code>
               visualize and create flows
@@ -181,29 +171,50 @@ export default function Home() {
         </Box>
 
         <Flex h={`calc(100vh - ${LAYOUT.HEADER.HEIGHT})`} w={"100vw"}>
-          {showPanel && <Panel />}
-          <Box h="100%" w="50%">
+          {ENABLE_PANEL && <Panel />}
+          <Box h="100%" w="50vw">
+            <Tabs
+              fontFamily="monospace"
+              backgroundColor="rgb(30, 30, 30)"
+              colorScheme="yellow"
+              onChange={(index) => {
+                setMode(index === 0 ? MODES.DEFINITION : MODES.INPUT_SCHEMA);
+              }}
+            >
+              <TabList color="white">
+                <Tab>Definiton</Tab>
+                <Tab>Input Schema</Tab>
+              </TabList>
+            </Tabs>
             <Editor
               defaultValue={
-                definition ? JSON.stringify(definition, null, 2) : ""
+                editorContents ? JSON.stringify(editorContents, null, 2) : ""
               }
-              value={definition ? JSON.stringify(definition, null, 2) : ""}
-              onChange={editorStore.replaceDefinitionFromString}
+              value={
+                editorContents ? JSON.stringify(editorContents, null, 2) : ""
+              }
+              onChange={(value) => {
+                if (isDefinitionMode) {
+                  editorStore.replaceDefinitionFromString(value);
+                } else {
+                  editorStore.replaceSchemaFromString(value);
+                }
+              }}
               onValidate={handleEditorValidate}
               theme="vs-dark"
-              settings={{ enableExperimentalValidation: true }}
+              settings={{ enableExperimentalValidation: true, mode }}
+              path={
+                mode === MODES.DEFINITION
+                  ? "definition.json"
+                  : "input-schema.json"
+              }
             />
           </Box>
-          <Box
-            h="100%"
-            /**
-             * The "Preview" panel width is dynamic based on whether the "Panel" is shown.
-             */
-            w={`calc(50% - ${showPanel ? LAYOUT.PANEL.WIDTH : "0px"})`}
-          >
+          <Box h="100%" w="100%" maxW="50vw">
             <Tabs>
               <TabList>
-                <Tab>Diagram</Tab>
+                <Tab>Definiton Diagram</Tab>
+                {/* <Tab>Input Schema UI</Tab> */}
                 <Tab>Documentation</Tab>
               </TabList>
               <TabPanels>
@@ -238,6 +249,7 @@ export default function Home() {
                   )}
                   <Diagram />
                 </TabPanel>
+                {/* <TabPanel></TabPanel> */}
                 <TabPanel
                   h={LAYOUT.TAB_PANEL.HEIGHT}
                   maxH={LAYOUT.TAB_PANEL.HEIGHT}
