@@ -22,7 +22,7 @@ import {
   Stack,
   Icon,
 } from "@chakra-ui/react";
-import { LuExternalLink, LuPlusSquare } from "react-icons/lu";
+import { LuExternalLink, LuSquarePlus } from "react-icons/lu";
 import {
   fetchActionProviders,
   type ActionProviderEntry,
@@ -59,7 +59,7 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
               <Button
                 colorScheme="blue"
                 variant={"outline"}
-                leftIcon={<Icon as={LuPlusSquare} />}
+                leftIcon={<Icon as={LuSquarePlus} />}
                 onClick={() => {
                   editor.addActionProvider(ap);
                 }}
