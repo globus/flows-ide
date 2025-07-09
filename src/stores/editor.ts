@@ -6,8 +6,10 @@ import type { FlowDefinition } from "@/pages";
 import type { ActionProviderEntry } from "@/components/DocumentationBrowser/library";
 
 type EditorState = {
+  schmea: Record<string, unknown> | undefined;
   definition: FlowDefinition | undefined;
   replace: (def?: FlowDefinition) => void;
+  replaceSchemaFromString: (s?: string) => void;
   replaceDefinitionFromString: (s?: string) => void;
   /**
    * Attempt to restore the definition from local storage.
@@ -26,7 +28,14 @@ type EditorState = {
 const DEFINITION_LOCAL_STORAGE_KEY = "definition";
 
 export const useEditorStore = create<EditorState>((set, get) => ({
+  schmea: undefined,
   definition: undefined,
+  replaceSchemaFromString(s?: string) {
+    try {
+      const v = s ? JSON.parse(s) : undefined;
+      set({ schmea: v });
+    } catch {}
+  },
   replaceDefinitionFromString(s?: string) {
     try {
       const v = s ? JSON.parse(s) : undefined;
