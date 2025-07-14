@@ -38,6 +38,7 @@ import Profile from "@/components/Profile";
 import { GLOBUS_FLOWS_VALIDATION } from "@/components/Validate";
 import Panel from "@/components/Panel";
 import { FlowsStartForm, Provider } from "@globus/react-components";
+import { ClipboardCopyButton } from "@/components/ClipboardCopyButton";
 
 export type FlowDefinition = {
   States: {
@@ -108,9 +109,7 @@ export default function Home() {
     /**
      * Attempt to bootstrap from the initial "d" and "s" query parameters.
      */
-    const queryParams = new URLSearchParams(
-      document?.location?.search || {},
-    );
+    const queryParams = new URLSearchParams(document?.location?.search || {});
     const queryParameterDef = queryParams.get("d");
     const queryParameterSchema = queryParams.get("s");
     if (queryParameterDef) {
@@ -123,21 +122,24 @@ export default function Home() {
         decompressFromEncodedURIComponent(queryParameterSchema),
       );
     }
+    /**
+     * Remove the query parameters so that we don't keep bootstrapping
+     */
+    if (queryParameterDef || queryParameterSchema) {
+      const newQueryParams = new URLSearchParams(
+        document?.location?.search || {},
+      );
+      newQueryParams.delete("d");
+      newQueryParams.delete("s");
+      const qpString = newQueryParams.toString();
+      const newUrl = `${document.location.origin}${document.location.pathname}${qpString ? `?${qpString}` : ""}`;
+      router.replace(newUrl);
+    }
   }, [editorStore]);
 
   useEffect(() => {
-    if (isDefinitionMode && definition) {
-      const v = compressToEncodedURIComponent(JSON.stringify(definition));
-      router.push(`/?d=${v}`);
-    }
-  }, [isDefinitionMode, definition, router]);
-
-  useEffect(() => {
-    if (!isDefinitionMode && schema) {
-      const v = compressToEncodedURIComponent(JSON.stringify(schema));
-      router.push(`/?s=${v}`);
-    }
-  }, [isDefinitionMode, schema, router]);
+    editorStore.preserve();
+  }, [editorStore.definition, editorStore.schema, editorStore.preserve]);
 
   function handleEditorValidate(markers: any[]) {
     const errors = markers.filter(
@@ -181,6 +183,7 @@ export default function Home() {
             </Text>
             <Spacer />
             <HStack>
+              <ClipboardCopyButton />
               <Profile />
             </HStack>
           </Flex>
@@ -268,8 +271,8 @@ export default function Home() {
                 <TabPanel>
                   {schema && (
                     <Provider>
-                      <FlowsStartForm 
-                        schema={schema} 
+                      <FlowsStartForm
+                        schema={schema}
                         uiSchema={{
                           "ui:submitButtonOptions": {
                             norender: true,
