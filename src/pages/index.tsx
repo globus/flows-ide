@@ -37,6 +37,7 @@ import Profile from "@/components/Profile";
 
 import { GLOBUS_FLOWS_VALIDATION } from "@/components/Validate";
 import Panel from "@/components/Panel";
+import { FlowsStartForm, Provider } from "@globus/react-components";
 
 export type FlowDefinition = {
   States: {
@@ -82,6 +83,7 @@ export default function Home() {
 
   const editorStore = useEditorStore();
   const definition = editorStore.definition;
+  const schema = editorStore.schema;
 
   const bootstrapped = useRef(false);
 
@@ -93,7 +95,7 @@ export default function Home() {
 
   const editorContents = isDefinitionMode
     ? editorStore.definition
-    : editorStore.schmea;
+    : editorStore.schema;
 
   useEffect(() => {
     if (bootstrapped.current) return;
@@ -104,14 +106,21 @@ export default function Home() {
      */
     editorStore.restore();
     /**
-     * Attempt to bootstrap from the initial "d" query parameter.
+     * Attempt to bootstrap from the initial "d" and "s" query parameters.
      */
-    const queryParameterDef = new URLSearchParams(
+    const queryParams = new URLSearchParams(
       document?.location?.search || {},
-    ).get("d");
+    );
+    const queryParameterDef = queryParams.get("d");
+    const queryParameterSchema = queryParams.get("s");
     if (queryParameterDef) {
       editorStore.replaceDefinitionFromString(
         decompressFromEncodedURIComponent(queryParameterDef),
+      );
+    }
+    if (queryParameterSchema) {
+      editorStore.replaceSchemaFromString(
+        decompressFromEncodedURIComponent(queryParameterSchema),
       );
     }
   }, [editorStore]);
@@ -122,6 +131,13 @@ export default function Home() {
       router.push(`/?d=${v}`);
     }
   }, [isDefinitionMode, definition, router]);
+
+  useEffect(() => {
+    if (!isDefinitionMode && schema) {
+      const v = compressToEncodedURIComponent(JSON.stringify(schema));
+      router.push(`/?s=${v}`);
+    }
+  }, [isDefinitionMode, schema, router]);
 
   function handleEditorValidate(markers: any[]) {
     const errors = markers.filter(
@@ -214,7 +230,7 @@ export default function Home() {
             <Tabs>
               <TabList>
                 <Tab>Definiton Diagram</Tab>
-                {/* <Tab>Input Schema UI</Tab> */}
+                <Tab>Input Schema UI</Tab>
                 <Tab>Documentation</Tab>
               </TabList>
               <TabPanels>
@@ -249,7 +265,20 @@ export default function Home() {
                   )}
                   <Diagram />
                 </TabPanel>
-                {/* <TabPanel></TabPanel> */}
+                <TabPanel>
+                  {schema && (
+                    <Provider>
+                      <FlowsStartForm 
+                        schema={schema} 
+                        uiSchema={{
+                          "ui:submitButtonOptions": {
+                            norender: true,
+                          },
+                        }}
+                      />
+                    </Provider>
+                  )}
+                </TabPanel>
                 <TabPanel
                   h={LAYOUT.TAB_PANEL.HEIGHT}
                   maxH={LAYOUT.TAB_PANEL.HEIGHT}
