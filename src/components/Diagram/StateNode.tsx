@@ -1,5 +1,5 @@
 "use client";
-import { Badge, Box, Flex, Text } from "@chakra-ui/react";
+import { Badge, Paper, Flex, Stack, Text } from "@mantine/core";
 import { Handle, Position } from "reactflow";
 
 import type { FlowDefinition } from "@/pages";
@@ -9,10 +9,10 @@ type State = FlowDefinition["States"][string];
 function TypeBadge({ type, ...rest }: { type: string }) {
   if (!type) return null;
   const props = {
-    Fail: { colorScheme: "red" },
-    Pass: { colorScheme: "green" },
-    Choice: { colorScheme: "blue" },
-    ExpressionEval: { colorScheme: "purple" },
+    Fail: { color: "red" },
+    Pass: { color: "green" },
+    Choice: { color: "blue" },
+    ExpressionEval: { color: "purple" },
   }[type];
   return (
     <Badge variant={"outline"} {...props} {...rest}>
@@ -21,7 +21,7 @@ function TypeBadge({ type, ...rest }: { type: string }) {
   );
 }
 
-function getStypePropsForState({
+function getStylePropsForState({
   isStart,
   isEnd,
   state,
@@ -30,13 +30,13 @@ function getStypePropsForState({
   isEnd: boolean;
   state?: State;
 }) {
-  if (isStart) return { backgroundColor: "green.50" };
-  if (isEnd) return { backgroundColor: "green.50" };
+  if (isStart) return { bg: "green.1" };
+  if (isEnd) return { bg: "green.1" };
 
-  if (state?.Type === "Fail") return { backgroundColor: "red.50" };
+  if (state?.Type === "Fail") return { bg: "red.1" };
 
   return {
-    backgroundColor: "white",
+    bg: "white",
   };
 }
 
@@ -80,20 +80,16 @@ export default function StateNode({
         {!isStart && (
           <Handle type="target" isConnectable={false} position={Position.Top} />
         )}
-        <Box
-          border="1px"
-          borderColor="gray.200"
-          p={2}
-          borderRadius="sm"
-          {...getStypePropsForState({ isStart, isEnd, state })}
+        <Paper
+          withBorder
+          p="xs"
+          {...getStylePropsForState({ isStart, isEnd, state })}
         >
-          <Box fontWeight={"bold"}>
-            {id}
-            <Box>
-              <TypeBadge type={state?.Type || ""} />
-            </Box>
-          </Box>
-        </Box>
+          <Stack gap={1}>
+            <Text>{id}</Text>
+            <TypeBadge type={state?.Type || ""} />
+          </Stack>
+        </Paper>
         <Handle
           type="source"
           isConnectable={false}

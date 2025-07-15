@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useGlobusAuth } from "@globus/react-auth-context";
-import { Center, Spinner, Text } from "@chakra-ui/react";
+import { Center, Text, Loader } from "@mantine/core";
 
 /**
  * This route is used exclusively for handling the OAuth2 redirect.
@@ -45,8 +45,8 @@ export default function Authenticate() {
 
   return (
     <>
-      <Center mt={4}>
-        <Spinner mr="2" />
+      <Center mt="xl">
+        <Loader mr="xs" size="sm" />
         <Text>Attempting to validate credentials...</Text>
       </Center>
     </>

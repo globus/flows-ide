@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
-import { Alert, AlertIcon, Link, useToast } from "@chakra-ui/react";
+import { Anchor, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { useEditorStore } from "@/stores/editor";
 
 export default function SessionManager() {
   const auth = useGlobusAuth();
-  const toast = useToast();
   const editorStore = useEditorStore();
 
   useEffect(() => {
@@ -17,31 +18,32 @@ export default function SessionManager() {
           (r.status === "fulfilled" && r.value === null),
       );
       if (failed) {
-        toast({
-          render: () => {
-            return (
-              <Alert status="error" variant="solid" rounded={4}>
-                <AlertIcon /> Unable to refresh session – please&nbsp;
-                <Link
-                  textDecor="underline"
-                  onClick={async () => {
-                    editorStore.preserve();
-                    await auth.authorization?.login();
-                  }}
-                >
-                  sign in
-                </Link>
-                &nbsp;again.
-              </Alert>
-            );
-          },
-          position: "top",
-          duration: null,
+        const message = (
+          <Text>
+            Unable to refresh session – please&nbsp;
+            <Anchor
+              onClick={async () => {
+                editorStore.preserve();
+                await auth.authorization?.login();
+              }}
+            >
+              sign in
+            </Anchor>
+            &nbsp;again.
+          </Text>
+        );
+        notifications.show({
+          title: "Session Refresh Failed",
+          message,
+          position: "top-center",
+          autoClose: false,
+          withCloseButton: false,
+          color: "red",
         });
       }
     }
     attemptRefresh();
-  }, [auth.authorization, toast, editorStore]);
+  }, [auth.authorization, editorStore]);
 
   return null;
 }

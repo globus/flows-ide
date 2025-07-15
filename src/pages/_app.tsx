@@ -1,11 +1,14 @@
 import "../styles.css";
-import { ChakraProvider } from "@chakra-ui/react";
+import "@mantine/core/styles.css";
+import "@mantine/notifications/styles.css";
+
 import { Provider as GlobusAuthProvider } from "@globus/react-auth-context";
 import { info } from "@globus/sdk";
 
 import { version } from "../../package.json" assert { type: "json" };
 
-import theme from "../chakra-ui-theme";
+import { createTheme, MantineProvider } from "@mantine/core";
+import { Notifications } from "@mantine/notifications";
 
 import SessionManager from "@/components/SessionManager";
 
@@ -24,6 +27,25 @@ info.addClientInfo({
   version,
 });
 
+const theme = createTheme({
+  primaryColor: "brand",
+  colors: {
+    brand: [
+      "#f5f9fd",
+      "#cddaeb",
+      "#94c9fb",
+      "#1e70b9",
+      "#335b96",
+      "#244b8b",
+      "#214277",
+      "#273866",
+      "#273866",
+      "#273866",
+      "#273866",
+    ],
+  },
+});
+
 const baseURL = globalThis.location
   ? `${globalThis.location.protocol}//${globalThis.location.host}`
   : "";
@@ -37,7 +59,7 @@ function FlowsIDE({ Component, pageProps }: AppProps) {
     );
   }
   return (
-    <ChakraProvider theme={theme}>
+    <MantineProvider theme={theme}>
       <GlobusAuthProvider
         client={CLIENT}
         redirect={REDIRECT}
@@ -47,8 +69,9 @@ function FlowsIDE({ Component, pageProps }: AppProps) {
       >
         <SessionManager />
         <Component {...pageProps} />
+        <Notifications />
       </GlobusAuthProvider>
-    </ChakraProvider>
+    </MantineProvider>
   );
 }
 

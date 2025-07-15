@@ -5,7 +5,7 @@ import MonacoEditor, {
   type EditorProps,
 } from "@monaco-editor/react";
 import { ValidateButton } from "./Validate";
-import { Box } from "@chakra-ui/react";
+import { Box } from "@mantine/core";
 
 export const MODES = {
   DEFINITION: "DEFINITION",
@@ -55,7 +55,7 @@ export default function Editor(
 ) {
   return (
     <>
-      <Box pos="relative" h="100%">
+      <Box pos="relative">
         <MonacoEditor
           defaultLanguage="json"
           language="json"
@@ -65,7 +65,14 @@ export default function Editor(
           {...props}
         />
         {isDefinitionMode(props.settings) && (
-          <Box pos="absolute" bottom={5} right={10} zIndex={10}>
+          <Box
+            pos="absolute"
+            bottom={5}
+            right={10}
+            style={{
+              zIndex: 9,
+            }}
+          >
             <ValidateButton />
           </Box>
         )}

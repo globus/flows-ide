@@ -1,32 +1,32 @@
 "use client";
 
 import { useEditorStore } from "@/stores/editor";
-import { Button, useClipboard } from "@chakra-ui/react";
+import { CopyButton, Button } from "@mantine/core";
 import { compressToEncodedURIComponent } from "lz-string";
-import { useEffect } from "react";
 import { LuCheck } from "react-icons/lu";
 
 export function ClipboardCopyButton() {
   const definition = useEditorStore((state) => state.definition);
   const schema = useEditorStore((state) => state.schema);
-  const { onCopy, hasCopied, setValue } = useClipboard("");
 
-  useEffect(() => {
-    setValue(
-      `${globalThis.document.location.origin}/flows-ide?d=${compressToEncodedURIComponent(
-        JSON.stringify(definition),
-      )}&s=${compressToEncodedURIComponent(JSON.stringify(schema))}`,
-    );
-  }, [definition, schema, setValue]);
+  const host = globalThis?.document?.location.origin;
 
   return (
-    <Button
-      size="xs"
-      colorScheme={!hasCopied ? "blue" : "green"}
-      onClick={onCopy}
-      leftIcon={hasCopied ? <LuCheck /> : undefined}
+    <CopyButton
+      value={`${host}/flows-ide?d=${compressToEncodedURIComponent(
+        JSON.stringify(definition),
+      )}&s=${compressToEncodedURIComponent(JSON.stringify(schema))}`}
     >
-      {hasCopied ? "Shareable URL Copied to Clipboard" : "Share"}
-    </Button>
+      {({ copied, copy }) => (
+        <Button
+          leftSection={copied ? <LuCheck /> : undefined}
+          color={copied ? "teal" : "blue"}
+          onClick={copy}
+          size="xs"
+        >
+          {copied ? "Shareable URL Copied to Clipboard" : "Share"}
+        </Button>
+      )}
+    </CopyButton>
   );
 }

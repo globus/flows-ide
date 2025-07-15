@@ -1,4 +1,5 @@
-import { Button, Tooltip, useToast } from "@chakra-ui/react";
+import { Button, Tooltip } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
 import { Fragment, PropsWithChildren, useState } from "react";
@@ -13,7 +14,6 @@ export const GLOBUS_FLOWS_VALIDATION = {
 
 export function ValidateButton() {
   const auth = useGlobusAuth();
-  const toast = useToast();
   const definition = useEditorStore((s) => s.definition);
   const monaco = useMonaco();
   const [validating, setValidating] = useState(false);
@@ -47,22 +47,22 @@ export function ValidateButton() {
        * If the definition is valid, all markers have been removed and we can
        * display a success toast.
        */
-      toast({
-        title: "Definition is valid!",
-        status: "success",
+      notifications.show({
+        message: "Definition is valid!",
+        color: "green",
         position: "bottom-right",
-        isClosable: true,
+        withCloseButton: true,
       });
       setValidating(false);
       return;
     }
 
     if (!("error" in json)) {
-      toast({
-        title: "Unknown vailidation error encountered.",
-        status: "error",
+      notifications.show({
+        message: "Unknown validation error encountered.",
+        color: "red",
         position: "bottom-right",
-        isClosable: true,
+        withCloseButton: true,
       });
       setValidating(false);
       return;
@@ -82,13 +82,13 @@ export function ValidateButton() {
       ? `${json.error.detail.length} error${json.error.detail.length > 1 ? "s" : ""} found – see editor for details.`
       : (json.error.message ?? json.error.detail);
 
-    toast({
+    notifications.show({
       title: `Invalid Definition (${json.error.code})`,
-      status: "error",
-      description:
+      color: "red",
+      message:
         typeof description === "string" ? description : description.join(", "),
       position: "bottom-right",
-      isClosable: true,
+      withCloseButton: true,
     });
     /**
      * When Monaco is ready, and we have location errors, we'll add markers to the editor.
@@ -142,7 +142,7 @@ export function ValidateButton() {
     auth.isAuthenticated === false
       ? ({ children }: PropsWithChildren) => (
           <Tooltip
-            hasArrow
+            withArrow
             label="You must sign in in order to validate using the Globus Flows service."
           >
             {children}
@@ -152,11 +152,11 @@ export function ValidateButton() {
   return (
     <Wrapper>
       <Button
-        isLoading={validating}
+        loading={validating}
         onClick={validate}
-        colorScheme="orange"
-        size="sm"
-        isDisabled={!monaco || !auth.isAuthenticated || validating}
+        color="orange"
+        size="xs"
+        disabled={!monaco || !auth.isAuthenticated || validating}
       >
         Validate
       </Button>

@@ -2,32 +2,24 @@ import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import {
-  Heading,
-  Text,
+  Alert,
   Box,
   Flex,
-  Spacer,
-  Alert,
-  AlertTitle,
-  AlertDescription,
-  AlertIcon,
-  ListItem,
-  List,
+  Title,
+  Text,
   Code,
-  Image,
-  HStack,
+  Group,
   Tabs,
-  TabList,
-  Tab,
-  TabPanel,
-  TabPanels,
-} from "@chakra-ui/react";
+  Stack,
+  Image,
+  AppShell,
+  SimpleGrid,
+  Center,
+  ScrollArea,
+} from "@mantine/core";
 import Editor, { MODES, SupportedModes } from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
-import {
-  compressToEncodedURIComponent,
-  decompressFromEncodedURIComponent,
-} from "lz-string";
+import { decompressFromEncodedURIComponent } from "lz-string";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
 import packageJson from "../../package.json" assert { type: "json" };
 
@@ -37,7 +29,7 @@ import Profile from "@/components/Profile";
 
 import { GLOBUS_FLOWS_VALIDATION } from "@/components/Validate";
 import Panel from "@/components/Panel";
-import { FlowsStartForm, Provider } from "@globus/react-components";
+import { FlowsStartForm } from "@globus/react-components";
 import { ClipboardCopyButton } from "@/components/ClipboardCopyButton";
 
 export type FlowDefinition = {
@@ -60,43 +52,24 @@ export type FlowDefinition = {
   Comment?: string;
 };
 
-const HEADER = {
-  HEIGHT: "50px",
-};
-
-const LAYOUT = {
-  HEADER,
-  TAB_PANEL: {
-    /**
-     * The tab panel height accounts for the header and the `<TabList>` height.
-     */
-    HEIGHT: `calc(100vh - (${HEADER.HEIGHT} + 42px))`,
-  },
-};
-
 /**
  * Feature flag to enable/disable the "Panel" component.
  */
 const ENABLE_PANEL = false;
 
+const APP_SHELL_HEIGHT =
+  "calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))";
+const APP_SHELL_MAIN_INNER_HEIGHT = `calc(${APP_SHELL_HEIGHT} - 36px)`;
+
 export default function Home() {
   const router = useRouter();
 
   const editorStore = useEditorStore();
-  const definition = editorStore.definition;
   const schema = editorStore.schema;
 
   const bootstrapped = useRef(false);
 
   const [invalidMarkers, setValidity] = useState<any[]>([]);
-
-  const [mode, setMode] = useState<SupportedModes>(MODES.DEFINITION);
-
-  const isDefinitionMode = mode === MODES.DEFINITION;
-
-  const editorContents = isDefinitionMode
-    ? editorStore.definition
-    : editorStore.schema;
 
   useEffect(() => {
     if (bootstrapped.current) return;
@@ -161,139 +134,153 @@ export default function Home() {
         <meta name="description" content="visualize and create flows" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main>
-        <Box height={LAYOUT.HEADER.HEIGHT}>
-          <Flex bgColor={"brand.800"} px={2} align={"center"}>
-            <Heading as="h1" color={"white"}>
-              <Flex align={"center"}>
+      <AppShell header={{ height: 50 }}>
+        <AppShell.Header bg="brand">
+          <Flex justify="space-between" align="center" h="100%" px="sm">
+            <Group align="center">
+              <Title component="h1" c={"white"}>
                 <Image
                   src={`${process.env.NEXT_PUBLIC_BASE_PATH}/globus-logo.svg`}
                   alt="Globus Flows IDE"
-                  boxSize={LAYOUT.HEADER.HEIGHT}
-                  objectFit="contain"
-                  p={1}
+                  h={25}
                 />
-              </Flex>
-            </Heading>
-            <Text color="white">
-              <Code mx={1} colorScheme={"red"} variant={"solid"}>
-                v{packageJson.version}-beta
-              </Code>
-              visualize and create flows
-            </Text>
-            <Spacer />
-            <HStack>
+              </Title>
+              <Text c="white">
+                <Code color="red" mr="sm">
+                  v{packageJson.version}-beta
+                </Code>
+                visualize and create flows
+              </Text>
+            </Group>
+            <Group>
               <ClipboardCopyButton />
               <Profile />
-            </HStack>
+            </Group>
           </Flex>
-        </Box>
-
-        <Flex h={`calc(100vh - ${LAYOUT.HEADER.HEIGHT})`} w={"100vw"}>
+        </AppShell.Header>
+        <AppShell.Main>
           {ENABLE_PANEL && <Panel />}
-          <Box h="100%" w="50vw">
-            <Tabs
-              fontFamily="monospace"
-              backgroundColor="rgb(30, 30, 30)"
-              colorScheme="yellow"
-              onChange={(index) => {
-                setMode(index === 0 ? MODES.DEFINITION : MODES.INPUT_SCHEMA);
-              }}
-            >
-              <TabList color="white">
-                <Tab>Definiton</Tab>
-                <Tab>Input Schema</Tab>
-              </TabList>
+          <SimpleGrid cols={2} spacing={0} h={APP_SHELL_HEIGHT}>
+            <Tabs defaultValue="definition">
+              <Tabs.List>
+                <Tabs.Tab value="definition">Definition</Tabs.Tab>
+                <Tabs.Tab value="input-schema">Input Schema</Tabs.Tab>
+              </Tabs.List>
+
+              <Tabs.Panel value="definition">
+                <Editor
+                  defaultValue={
+                    editorStore.definition
+                      ? JSON.stringify(editorStore.definition, null, 2)
+                      : ""
+                  }
+                  value={
+                    editorStore.definition
+                      ? JSON.stringify(editorStore.definition, null, 2)
+                      : ""
+                  }
+                  onChange={(value) => {
+                    editorStore.replaceDefinitionFromString(value);
+                  }}
+                  onValidate={handleEditorValidate}
+                  theme="vs-dark"
+                  settings={{
+                    enableExperimentalValidation: true,
+                    mode: "DEFINITION",
+                  }}
+                  path={"definition.json"}
+                  height={APP_SHELL_MAIN_INNER_HEIGHT}
+                />
+              </Tabs.Panel>
+              <Tabs.Panel value="input-schema">
+                <Editor
+                  defaultValue={
+                    editorStore.schema
+                      ? JSON.stringify(editorStore.schema, null, 2)
+                      : ""
+                  }
+                  value={
+                    editorStore.schema
+                      ? JSON.stringify(editorStore.schema, null, 2)
+                      : ""
+                  }
+                  onChange={(value) => {
+                    editorStore.replaceSchemaFromString(value);
+                  }}
+                  onValidate={handleEditorValidate}
+                  theme="vs-dark"
+                  settings={{
+                    enableExperimentalValidation: true,
+                    mode: "INPUT_SCHEMA",
+                  }}
+                  path="input-schema.json"
+                  height={APP_SHELL_MAIN_INNER_HEIGHT}
+                />
+              </Tabs.Panel>
             </Tabs>
-            <Editor
-              defaultValue={
-                editorContents ? JSON.stringify(editorContents, null, 2) : ""
-              }
-              value={
-                editorContents ? JSON.stringify(editorContents, null, 2) : ""
-              }
-              onChange={(value) => {
-                if (isDefinitionMode) {
-                  editorStore.replaceDefinitionFromString(value);
-                } else {
-                  editorStore.replaceSchemaFromString(value);
-                }
-              }}
-              onValidate={handleEditorValidate}
-              theme="vs-dark"
-              settings={{ enableExperimentalValidation: true, mode }}
-              path={
-                mode === MODES.DEFINITION
-                  ? "definition.json"
-                  : "input-schema.json"
-              }
-            />
-          </Box>
-          <Box h="100%" w="100%" maxW="50vw">
-            <Tabs>
-              <TabList>
-                <Tab>Definiton Diagram</Tab>
-                <Tab>Input Schema UI</Tab>
-                <Tab>Documentation</Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel h={LAYOUT.TAB_PANEL.HEIGHT}>
-                  {invalidMarkers.length > 0 && (
-                    <Box m={-4} position={"fixed"} zIndex={1} w="100%">
-                      <Alert status="error">
-                        <AlertIcon />
-                        <AlertTitle>Invalid JSON</AlertTitle>
-                        <Box>
-                          <AlertDescription>
-                            Diagram will be disabled until errors are addressed.
-                          </AlertDescription>
-                        </Box>
-                      </Alert>
-                      <Box>
-                        <List>
-                          {invalidMarkers.map((marker, i) => (
-                            <ListItem key={i}>
-                              <Alert status="error">
-                                <AlertIcon />
-                                <AlertTitle>
-                                  {marker.message} at line{" "}
-                                  {marker.startLineNumber}
-                                </AlertTitle>
-                              </Alert>
-                            </ListItem>
-                          ))}
-                        </List>
-                      </Box>
-                    </Box>
-                  )}
+            <Tabs defaultValue="definition">
+              <Tabs.List>
+                <Tabs.Tab value="definition">Definiton Diagram</Tabs.Tab>
+                <Tabs.Tab value="input-schema">Input Schema UI</Tabs.Tab>
+                <Tabs.Tab value="documentation">Documentation</Tabs.Tab>
+              </Tabs.List>
+              <Tabs.Panel value="definition">
+                {invalidMarkers.length > 0 && (
+                  <Box m={-4} p={"fixed"} w="100%" style={{ zIndex: 1 }}>
+                    <Alert color="red" title="Invalid JSON">
+                      Diagram will be disabled until errors are addressed.
+                    </Alert>
+                    <Stack>
+                      {invalidMarkers.map((marker, i) => (
+                        <Alert
+                          key={i}
+                          color="red"
+                          title={`${marker.message} at line ${marker.startLineNumber}`}
+                        />
+                      ))}
+                    </Stack>
+                  </Box>
+                )}
+                <Box h={APP_SHELL_MAIN_INNER_HEIGHT} w="100%">
                   <Diagram />
-                </TabPanel>
-                <TabPanel>
-                  {schema && (
-                    <Provider>
-                      <FlowsStartForm
-                        schema={schema}
-                        uiSchema={{
-                          "ui:submitButtonOptions": {
-                            norender: true,
-                          },
-                        }}
-                      />
-                    </Provider>
-                  )}
-                </TabPanel>
-                <TabPanel
-                  h={LAYOUT.TAB_PANEL.HEIGHT}
-                  maxH={LAYOUT.TAB_PANEL.HEIGHT}
-                  overflow="scroll"
-                >
+                </Box>
+              </Tabs.Panel>
+              <Tabs.Panel value="input-schema">
+                {schema ? (
+                  <ScrollArea h={APP_SHELL_MAIN_INNER_HEIGHT}>
+                    <Alert>
+                      <Text>
+                        This is an experimental rendering of your input schema
+                        as a form, similar to the Guided Start page in the
+                        Globus Web Application.
+                      </Text>
+                    </Alert>
+                    <FlowsStartForm
+                      schema={schema}
+                      uiSchema={{
+                        "ui:submitButtonOptions": {
+                          norender: true,
+                        },
+                      }}
+                    />
+                  </ScrollArea>
+                ) : (
+                  <Center my="md">
+                    <Text c="dimmed">
+                      Start by defining an input schema in the editor.
+                    </Text>
+                  </Center>
+                )}
+              </Tabs.Panel>
+              <Tabs.Panel value="documentation">
+                <ScrollArea h={APP_SHELL_MAIN_INNER_HEIGHT}>
                   <DocumentationBrowser />
-                </TabPanel>
-              </TabPanels>
+                </ScrollArea>
+              </Tabs.Panel>
             </Tabs>
-          </Box>
-        </Flex>
-      </main>
+          </SimpleGrid>
+        </AppShell.Main>
+      </AppShell>
     </>
   );
 }
