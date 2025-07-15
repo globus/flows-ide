@@ -1,19 +1,4 @@
-import {
-  Box,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-  Text,
-  Button,
-  Flex,
-  Spacer,
-  Icon,
-  Heading,
-  HStack,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Text, Button, Title, Stack, Group } from "@mantine/core";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
 import { useEffect, useState } from "react";
@@ -48,32 +33,30 @@ export default function Panel() {
   }, [auth.authorization, auth.isAuthenticated]);
 
   return (
-    <HStack spacing={0}>
-      <Box h="100%" bg={"brand.800"} w={"50px"}>
-        <VStack spacing={0}>
+    <Group>
+      <Box h="100%" bg={"brand.8"} w={"50px"}>
+        <Stack>
           <Button
             onClick={() => {
               setMinimized(!minimized && activeSection === "explorer");
               setActiveSection("explorer");
             }}
-            colorScheme="blue"
-            rounded={0}
+            color="blue"
             w="100%"
           >
-            <Icon as={LuFolderTree} />
+            <LuFolderTree />
           </Button>
           <Button
             onClick={() => {
               setMinimized(!minimized && activeSection === "published_flows");
               setActiveSection("published_flows");
             }}
-            colorScheme="blue"
-            rounded={0}
+            color="blue"
             w="100%"
           >
-            <Icon as={LuBookOpenCheck} />
+            <LuBookOpenCheck />
           </Button>
-        </VStack>
+        </Stack>
       </Box>
       <Box
         h="100%"
@@ -82,18 +65,18 @@ export default function Panel() {
         display={minimized ? "none" : "block"}
       >
         <Box>
-          <Heading
+          <Title
             p={2}
-            fontSize={"sm"}
+            fs={"sm"}
             borderBottom={1}
             borderBottomStyle={"solid"}
             borderBottomColor={"gray"}
           >
             {activeSection === "explorer" ? "Explorer" : "Published Flows"}
-          </Heading>
+          </Title>
 
           {activeSection === "published_flows" && (
-            <Box fontSize="sm">
+            <Box fs="sm">
               {!auth.isAuthenticated && (
                 <Text p={4} color={"gray.500"}>
                   You must be signed in to view your flows published on Globus.
@@ -126,6 +109,6 @@ export default function Panel() {
           )}
         </Box>
       </Box>
-    </HStack>
+    </Group>
   );
 }

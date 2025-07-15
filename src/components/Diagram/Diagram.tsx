@@ -3,7 +3,7 @@
 import "reactflow/dist/style.css";
 
 import { useEffect, useMemo, useRef } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box } from "@mantine/core";
 import Dagre from "@dagrejs/dagre";
 import ReactFlow, {
   MiniMap,
@@ -193,19 +193,17 @@ export default function Diagram() {
   }, [definition, previousNodes, setEdges, setNodes]);
 
   return (
-    <Box h={"100%"} w={"100%"}>
-      <ReactFlow
-        nodeTypes={nodeTypes}
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        fitView
-      >
-        <MiniMap />
-        <Controls />
-        <Background />
-      </ReactFlow>
-    </Box>
+    <ReactFlow
+      nodeTypes={nodeTypes}
+      nodes={nodes}
+      edges={edges}
+      onNodesChange={onNodesChange}
+      onEdgesChange={onEdgesChange}
+      fitView
+    >
+      <MiniMap />
+      <Controls />
+      <Background />
+    </ReactFlow>
   );
 }

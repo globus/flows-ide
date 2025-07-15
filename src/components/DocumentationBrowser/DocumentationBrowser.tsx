@@ -1,27 +1,16 @@
 "use client";
 
 import {
+  Anchor,
   Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Box,
-  Heading,
-  Link,
-  Flex,
-  Button,
-  Code,
   Text,
-  Spacer,
-  ButtonGroup,
-  Card,
-  CardHeader,
-  CardBody,
-  StackDivider,
+  Code,
+  Button,
+  Title,
   Stack,
-  Icon,
-} from "@chakra-ui/react";
+  Paper,
+  Group,
+} from "@mantine/core";
 import { LuExternalLink, LuSquarePlus } from "react-icons/lu";
 import {
   fetchActionProviders,
@@ -35,65 +24,51 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
   const editor = useEditorStore();
 
   return (
-    <AccordionItem>
-      <h3>
-        <AccordionButton>
-          <Box as="span" flex="1" textAlign="left">
-            {ap.definition?.title ?? ap.url}
-          </Box>
-          <AccordionIcon />
-        </AccordionButton>
-      </h3>
-      <AccordionPanel pb={4}>
-        {ap.definition?.subtitle ? (
-          <Box>
-            <Text>{ap.definition?.subtitle ?? ""}</Text>
-            <Code variant="outline" colorScheme="pink" my={2}>
-              {ap.definition?.globus_auth_scope}
-            </Code>
-          </Box>
-        ) : null}
-        <Flex>
-          <ButtonGroup>
-            {ap?.definition?.title ? (
-              <Button
-                colorScheme="blue"
-                variant={"outline"}
-                leftIcon={<Icon as={LuSquarePlus} />}
-                onClick={() => {
-                  editor.addActionProvider(ap);
-                }}
-                size={"xs"}
-              >
-                Add State
-              </Button>
-            ) : null}
-            <Button
-              as={Link}
-              href={ap.url}
-              isExternal
-              size={"xs"}
-              variant={"outline"}
-            >
+    <Accordion.Item value={ap.url}>
+      <Accordion.Control>{ap.definition?.title ?? ap.url}</Accordion.Control>
+      <Accordion.Panel>
+        <Stack gap={1} mb="xs">
+          {ap.definition?.subtitle ? (
+            <Text size="xs">{ap.definition?.subtitle ?? ""}</Text>
+          ) : null}
+          <Text size="xs">Contact: {ap.definition?.admin_contact}</Text>
+          <Text size="xs">
+            Scope: <Code>{ap.definition?.globus_auth_scope}</Code>
+          </Text>
+        </Stack>
+        <Group justify="space-between">
+          <Group gap="xs">
+            <Button component="a" href={ap.url} size={"xs"} variant={"outline"}>
               Definition
-              <Icon as={LuExternalLink} mx="2px" />
+              <LuExternalLink />
             </Button>
             <Button
-              as={Link}
+              component="a"
               href={ap.documentation}
-              isExternal
               size={"xs"}
               variant={"outline"}
             >
               Documentation
-              <Icon as={LuExternalLink} mx="2px" />
+              <LuExternalLink />
             </Button>
-          </ButtonGroup>
-          <Spacer />
-          <Text fontSize="xs">{ap.definition?.admin_contact}</Text>
-        </Flex>
-      </AccordionPanel>
-    </AccordionItem>
+          </Group>
+
+          {ap?.definition?.title ? (
+            <Button
+              color="blue"
+              variant={"outline"}
+              leftSection={<LuSquarePlus />}
+              onClick={() => {
+                editor.addActionProvider(ap);
+              }}
+              size={"xs"}
+            >
+              Add State
+            </Button>
+          ) : null}
+        </Group>
+      </Accordion.Panel>
+    </Accordion.Item>
   );
 };
 
@@ -130,65 +105,48 @@ export function DocumentationBrowser() {
   }, [actionProviders]);
 
   return (
-    <Stack p={2}>
-      <Card as="section" size="sm">
-        <CardHeader>
-          <Heading as="h2" size="xs">
-            Guides + Tutorials
-          </Heading>
-        </CardHeader>
-        <CardBody>
-          <Stack divider={<StackDivider />} spacing="4">
-            <Link
-              href="https://docs.globus.org/guides/tutorials/flow-automation/create-a-flow/"
-              isExternal
-              fontSize={"sm"}
-            >
-              How to Create a Flow
-              <Icon as={LuExternalLink} mx="2px" />
-            </Link>
-            <Link
-              href="https://docs.globus.org/guides/tutorials/flow-automation/run-a-flow/"
-              isExternal
-              fontSize={"sm"}
-            >
-              How to Run a Flow
-              <Icon as={LuExternalLink} mx="2px" />
-            </Link>
-          </Stack>
-        </CardBody>
-      </Card>
-      <Card as="section" size="sm">
-        <CardHeader>
-          <Heading as="h2" size="xs">
-            Action Providers
-          </Heading>
-        </CardHeader>
-        <CardBody>
-          <Accordion allowMultiple>
-            {actionProviderMenu.main.map((ap) => (
-              <ActionProviderItem ap={ap} key={ap.url} />
-            ))}
-            <AccordionItem>
-              <h3>
-                <AccordionButton>
-                  <Box as="span" flex="1" textAlign="left">
-                    Globus Transfer
-                  </Box>
-                  <AccordionIcon />
-                </AccordionButton>
-              </h3>
-              <AccordionPanel pb={4}>
-                <Accordion allowMultiple>
-                  {actionProviderMenu.transfer.map((ap) => (
-                    <ActionProviderItem ap={ap} key={ap.url} />
-                  ))}
-                </Accordion>
-              </AccordionPanel>
-            </AccordionItem>
-          </Accordion>
-        </CardBody>
-      </Card>
+    <Stack p="md">
+      <Paper component="section" withBorder p="sm">
+        <Title component="h2" size="xs">
+          Guides + Tutorials
+        </Title>
+        <Stack gap="xs" mt="sm">
+          <Anchor
+            href="https://docs.globus.org/guides/tutorials/flow-automation/create-a-flow/"
+            size="sm"
+          >
+            How to Create a Flow
+            <LuExternalLink size={12} />
+          </Anchor>
+          <Anchor
+            href="https://docs.globus.org/guides/tutorials/flow-automation/run-a-flow/"
+            size="sm"
+          >
+            How to Run a Flow
+            <LuExternalLink size={12} />
+          </Anchor>
+        </Stack>
+      </Paper>
+      <Paper component="section" withBorder p="sm">
+        <Title component="h2" size="xs">
+          Action Providers
+        </Title>
+        <Accordion multiple>
+          {actionProviderMenu.main.map((ap) => (
+            <ActionProviderItem ap={ap} key={ap.url} />
+          ))}
+          <Accordion.Item value="transfer">
+            <Accordion.Control>Globus Transfer</Accordion.Control>
+            <Accordion.Panel>
+              <Accordion multiple>
+                {actionProviderMenu.transfer.map((ap) => (
+                  <ActionProviderItem ap={ap} key={ap.url} />
+                ))}
+              </Accordion>
+            </Accordion.Panel>
+          </Accordion.Item>
+        </Accordion>
+      </Paper>
     </Stack>
   );
 }
