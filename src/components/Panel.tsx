@@ -7,6 +7,10 @@ import { FlowDefinition } from "@/pages";
 import { useEditorStore } from "@/stores/editor";
 import { LuBookOpenCheck, LuFolderTree } from "react-icons/lu";
 
+type Flows = Awaited<
+  ReturnType<Awaited<ReturnType<typeof flows.flows.getAll>>["json"]>
+>["flows"];
+
 export default function Panel() {
   const auth = useGlobusAuth();
   const editorStore = useEditorStore();
@@ -14,7 +18,7 @@ export default function Panel() {
     "explorer" | "published_flows"
   >("explorer");
   const [minimized, setMinimized] = useState(false);
-  const [userFlows, setFlows] = useState([]);
+  const [userFlows, setFlows] = useState<Flows>([]);
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
@@ -65,13 +69,7 @@ export default function Panel() {
         display={minimized ? "none" : "block"}
       >
         <Box>
-          <Title
-            p={2}
-            fs={"sm"}
-            borderBottom={1}
-            borderBottomStyle={"solid"}
-            borderBottomColor={"gray"}
-          >
+          <Title p={2} fs={"sm"}>
             {activeSection === "explorer" ? "Explorer" : "Published Flows"}
           </Title>
 
@@ -83,28 +81,17 @@ export default function Panel() {
                 </Text>
               )}
 
-              {userFlows.map(
-                (flow: {
-                  id: string;
-                  definition: FlowDefinition;
-                  title: string;
-                }) => (
-                  <Box
-                    key={flow.id}
-                    onClick={() => {
-                      editorStore.replace(flow.definition);
-                    }}
-                    p={2}
-                    _hover={{
-                      bg: "gray.600",
-                      cursor: "pointer",
-                      color: "white",
-                    }}
-                  >
-                    {flow.title}
-                  </Box>
-                ),
-              )}
+              {userFlows?.map((flow) => (
+                <Box
+                  key={flow.id}
+                  onClick={() => {
+                    editorStore.replace(flow.definition as FlowDefinition);
+                  }}
+                  p={2}
+                >
+                  {flow.title}
+                </Box>
+              ))}
             </Box>
           )}
         </Box>

@@ -34,7 +34,8 @@ export function ValidateButton() {
     const res = await flows.flows.validate(
       {
         payload: {
-          definition: definition as Record<string, unknown>,
+          // @todo This should probably be a more accurate type.
+          definition: definition as any,
         },
       },
       { manager: auth.authorization },

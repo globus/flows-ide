@@ -111,11 +111,16 @@ export default function Home() {
       const newUrl = `${document.location.origin}${document.location.pathname}${qpString ? `?${qpString}` : ""}`;
       router.replace(newUrl);
     }
-  }, [editorStore]);
+  }, [editorStore, router]);
 
   useEffect(() => {
     editorStore.preserve();
-  }, [editorStore.definition, editorStore.schema, editorStore.preserve]);
+  }, [
+    editorStore.definition,
+    editorStore.schema,
+    editorStore.preserve,
+    editorStore,
+  ]);
 
   function handleEditorValidate(markers: any[]) {
     const errors = markers.filter(
