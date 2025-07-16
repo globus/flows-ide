@@ -16,8 +16,9 @@ import {
   SimpleGrid,
   Center,
   ScrollArea,
+  Paper,
 } from "@mantine/core";
-import Editor, { MODES, SupportedModes } from "../components/Editor";
+import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
 import { decompressFromEncodedURIComponent } from "lz-string";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
@@ -30,7 +31,9 @@ import Profile from "@/components/Profile";
 import { GLOBUS_FLOWS_VALIDATION } from "@/components/Validate";
 import Panel from "@/components/Panel";
 import { FlowsStartForm } from "@globus/react-components";
-import { ClipboardCopyButton } from "@/components/ClipboardCopyButton";
+import { ShareButton } from "@/components/ShareButton";
+import DocumentationDrawer from "@/components/DocumentationBrowser/Drawer";
+import { LuCircleAlert, LuInfo, LuOctagonAlert } from "react-icons/lu";
 
 export type FlowDefinition = {
   States: {
@@ -135,7 +138,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <AppShell header={{ height: 50 }}>
-        <AppShell.Header bg="brand">
+        <AppShell.Header bg="brand.9">
           <Flex justify="space-between" align="center" h="100%" px="sm">
             <Group align="center">
               <Title component="h1" c={"white"}>
@@ -153,7 +156,8 @@ export default function Home() {
               </Text>
             </Group>
             <Group>
-              <ClipboardCopyButton />
+              <DocumentationDrawer />
+              <ShareButton />
               <Profile />
             </Group>
           </Flex>
@@ -161,7 +165,7 @@ export default function Home() {
         <AppShell.Main>
           {ENABLE_PANEL && <Panel />}
           <SimpleGrid cols={2} spacing={0} h={APP_SHELL_HEIGHT}>
-            <Tabs defaultValue="definition">
+            <Tabs defaultValue="definition" color="orange">
               <Tabs.List>
                 <Tabs.Tab value="definition">Definition</Tabs.Tab>
                 <Tabs.Tab value="input-schema">Input Schema</Tabs.Tab>
@@ -218,16 +222,19 @@ export default function Home() {
                 />
               </Tabs.Panel>
             </Tabs>
-            <Tabs defaultValue="definition">
+            <Tabs defaultValue="definition" color="orange">
               <Tabs.List>
                 <Tabs.Tab value="definition">Definiton Diagram</Tabs.Tab>
                 <Tabs.Tab value="input-schema">Input Schema UI</Tabs.Tab>
-                <Tabs.Tab value="documentation">Documentation</Tabs.Tab>
               </Tabs.List>
               <Tabs.Panel value="definition">
                 {invalidMarkers.length > 0 && (
                   <Box m={-4} p={"fixed"} w="100%" style={{ zIndex: 1 }}>
-                    <Alert color="red" title="Invalid JSON">
+                    <Alert
+                      color="red"
+                      title="Invalid JSON"
+                      icon={<LuOctagonAlert />}
+                    >
                       Diagram will be disabled until errors are addressed.
                     </Alert>
                     <Stack>
@@ -235,39 +242,42 @@ export default function Home() {
                         <Alert
                           key={i}
                           color="red"
+                          icon={<LuCircleAlert />}
                           title={`${marker.message} at line ${marker.startLineNumber}`}
                         />
                       ))}
                     </Stack>
                   </Box>
                 )}
-                <Box h={APP_SHELL_MAIN_INNER_HEIGHT} w="100%">
+                <Box h={APP_SHELL_MAIN_INNER_HEIGHT} w="100%" bg="white">
                   <Diagram />
                 </Box>
               </Tabs.Panel>
               <Tabs.Panel value="input-schema">
                 {schema ? (
                   <ScrollArea h={APP_SHELL_MAIN_INNER_HEIGHT}>
-                    <Alert>
-                      <Text>
+                    <Alert icon={<LuInfo />} title="Experimental">
+                      <Text size="sm">
                         This is an experimental rendering of your input schema
                         as a form, similar to the Guided Start page in the
                         Globus Web Application.
                       </Text>
                     </Alert>
-                    <FlowsStartForm
-                      schema={schema}
-                      uiSchema={{
-                        "ui:submitButtonOptions": {
-                          norender: true,
-                        },
-                      }}
-                    />
+                    <Paper p="md" m="md" withBorder>
+                      <FlowsStartForm
+                        schema={schema}
+                        uiSchema={{
+                          "ui:submitButtonOptions": {
+                            norender: true,
+                          },
+                        }}
+                      />
+                    </Paper>
                   </ScrollArea>
                 ) : (
                   <Center my="md">
                     <Text c="dimmed">
-                      Start by defining an input schema in the editor.
+                      Start by defining an Input Schema in the editor.
                     </Text>
                   </Center>
                 )}

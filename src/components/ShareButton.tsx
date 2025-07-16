@@ -2,10 +2,10 @@
 
 import { useEditorStore } from "@/stores/editor";
 import { CopyButton, Button } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { compressToEncodedURIComponent } from "lz-string";
-import { LuCheck } from "react-icons/lu";
 
-export function ClipboardCopyButton() {
+export function ShareButton() {
   const definition = useEditorStore((state) => state.definition);
   const schema = useEditorStore((state) => state.schema);
 
@@ -17,16 +17,21 @@ export function ClipboardCopyButton() {
         JSON.stringify(definition),
       )}&s=${compressToEncodedURIComponent(JSON.stringify(schema))}`}
     >
-      {({ copied, copy }) => (
-        <Button
-          leftSection={copied ? <LuCheck /> : undefined}
-          color={copied ? "teal" : "blue"}
-          onClick={copy}
-          size="xs"
-        >
-          {copied ? "Shareable URL Copied to Clipboard" : "Share"}
-        </Button>
-      )}
+      {({ copied, copy }) => {
+        if (copied) {
+          notifications.show({
+            id: "clipboard-copy",
+            message: "Shareable URL copied to clipboard.",
+            color: "green",
+            position: "top-center",
+          });
+        }
+        return (
+          <Button onClick={copy} size="xs">
+            Share
+          </Button>
+        );
+      }}
     </CopyButton>
   );
 }

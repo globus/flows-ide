@@ -3,7 +3,6 @@
 import "reactflow/dist/style.css";
 
 import { useEffect, useMemo, useRef } from "react";
-import { Box } from "@mantine/core";
 import Dagre from "@dagrejs/dagre";
 import ReactFlow, {
   MiniMap,

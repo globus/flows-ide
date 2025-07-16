@@ -31,17 +31,16 @@ const theme = createTheme({
   primaryColor: "brand",
   colors: {
     brand: [
-      "#f5f9fd",
-      "#cddaeb",
-      "#94c9fb",
-      "#1e70b9",
-      "#335b96",
-      "#244b8b",
+      "#eff3fb",
+      "#dde4ef",
+      "#b6c6e1",
+      "#8da7d4",
+      "#6b8dc9",
+      "#557cc3",
+      "#4a74c1",
+      "#3b63ab",
+      "#325799",
       "#214277",
-      "#273866",
-      "#273866",
-      "#273866",
-      "#273866",
     ],
   },
 });
@@ -59,7 +58,7 @@ function FlowsIDE({ Component, pageProps }: AppProps) {
     );
   }
   return (
-    <MantineProvider theme={theme}>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
       <GlobusAuthProvider
         client={CLIENT}
         redirect={REDIRECT}

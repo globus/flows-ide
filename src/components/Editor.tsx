@@ -67,8 +67,8 @@ export default function Editor(
         {isDefinitionMode(props.settings) && (
           <Box
             pos="absolute"
-            bottom={5}
-            right={10}
+            bottom={10}
+            right={20}
             style={{
               zIndex: 9,
             }}

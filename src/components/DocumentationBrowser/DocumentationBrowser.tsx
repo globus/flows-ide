@@ -10,8 +10,16 @@ import {
   Stack,
   Paper,
   Group,
+  ThemeIcon,
+  Flex,
+  Space,
 } from "@mantine/core";
-import { LuExternalLink, LuSquarePlus } from "react-icons/lu";
+import {
+  LuExternalLink,
+  LuPencil,
+  LuSquarePlay,
+  LuSquarePlus,
+} from "react-icons/lu";
 import {
   fetchActionProviders,
   type ActionProviderEntry,
@@ -38,18 +46,27 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
         </Stack>
         <Group justify="space-between">
           <Group gap="xs">
-            <Button component="a" href={ap.url} size={"xs"} variant={"outline"}>
+            <Button
+              component="a"
+              href={ap.url}
+              size={"xs"}
+              variant="subtle"
+              rightSection={<LuExternalLink />}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               Definition
-              <LuExternalLink />
             </Button>
             <Button
               component="a"
               href={ap.documentation}
-              size={"xs"}
-              variant={"outline"}
+              size="xs"
+              variant="subtle"
+              rightSection={<LuExternalLink />}
+              rel="noopener noreferrer"
+              target="_blank"
             >
               Documentation
-              <LuExternalLink />
             </Button>
           </Group>
 
@@ -61,7 +78,7 @@ const ActionProviderItem = ({ ap }: { ap: ActionProviderEntry }) => {
               onClick={() => {
                 editor.addActionProvider(ap);
               }}
-              size={"xs"}
+              size="xs"
             >
               Add State
             </Button>
@@ -106,27 +123,45 @@ export function DocumentationBrowser() {
 
   return (
     <Stack p="md">
-      <Paper component="section" withBorder p="sm">
-        <Title component="h2" size="xs">
-          Guides + Tutorials
-        </Title>
-        <Stack gap="xs" mt="sm">
-          <Anchor
-            href="https://docs.globus.org/guides/tutorials/flow-automation/create-a-flow/"
-            size="sm"
-          >
-            How to Create a Flow
-            <LuExternalLink size={12} />
-          </Anchor>
-          <Anchor
-            href="https://docs.globus.org/guides/tutorials/flow-automation/run-a-flow/"
-            size="sm"
-          >
-            How to Run a Flow
-            <LuExternalLink size={12} />
-          </Anchor>
-        </Stack>
-      </Paper>
+      <Group gap="lg">
+        <Group align="start">
+          <ThemeIcon>
+            <LuPencil size={16} />
+          </ThemeIcon>
+          <Stack gap={2}>
+            Just getting started?
+            <Anchor
+              component="a"
+              href="https://docs.globus.org/guides/tutorials/flow-automation/create-a-flow/"
+              size="sm"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn How to Create a Flow.&nbsp;
+              <LuExternalLink />
+            </Anchor>
+          </Stack>
+        </Group>
+
+        <Group align="start">
+          <ThemeIcon>
+            <LuSquarePlay size={16} />
+          </ThemeIcon>
+          <Stack gap={2}>
+            Ready to Run?
+            <Anchor
+              href="https://docs.globus.org/guides/tutorials/flow-automation/run-a-flow/"
+              size="sm"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Learn How to Run a Flow.&nbsp;
+              <LuExternalLink />
+            </Anchor>
+          </Stack>
+        </Group>
+      </Group>
+
       <Paper component="section" withBorder p="sm">
         <Title component="h2" size="xs">
           Action Providers

@@ -86,7 +86,7 @@ export default function StateNode({
           {...getStylePropsForState({ isStart, isEnd, state })}
         >
           <Stack gap={1}>
-            <Text>{id}</Text>
+            <Text c="black">{id}</Text>
             <TypeBadge type={state?.Type || ""} />
           </Stack>
         </Paper>
