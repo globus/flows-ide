@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.5.0...flows-ide-v2.0.0) (2025-07-16)
+
+
+### ⚠ BREAKING CHANGES
+
+* Flows IDE v2 ([#195](https://github.com/globus/flows-ide/issues/195))
+
+### Features
+
+* Flows IDE v2 ([#195](https://github.com/globus/flows-ide/issues/195)) ([5d3c99a](https://github.com/globus/flows-ide/commit/5d3c99af6be3c211788193f06cf70cef97acd41b))
+
 ## [1.5.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.7...flows-ide-v1.5.0) (2025-07-07)
 
 
