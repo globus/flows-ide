@@ -11,8 +11,6 @@ import {
   Paper,
   Group,
   ThemeIcon,
-  Flex,
-  Space,
 } from "@mantine/core";
 import {
   LuExternalLink,
