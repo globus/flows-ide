@@ -2,34 +2,25 @@ import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
 import {
-  Heading,
-  Text,
+  Alert,
   Box,
   Flex,
-  Spacer,
-  Alert,
-  AlertTitle,
-  AlertDescription,
-  AlertIcon,
-  ListItem,
-  List,
+  Title,
+  Text,
   Code,
-  Image,
-  HStack,
+  Group,
   Tabs,
-  TabList,
-  Tab,
-  TabPanel,
-  TabPanels,
-  IconButton,
-} from "@chakra-ui/react";
-import { CloseIcon, HamburgerIcon } from "@chakra-ui/icons";
+  Stack,
+  Image,
+  AppShell,
+  SimpleGrid,
+  Center,
+  ScrollArea,
+  Paper,
+} from "@mantine/core";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
-import {
-  compressToEncodedURIComponent,
-  decompressFromEncodedURIComponent,
-} from "lz-string";
+import { decompressFromEncodedURIComponent } from "lz-string";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
 import packageJson from "../../package.json" assert { type: "json" };
 
@@ -39,6 +30,10 @@ import Profile from "@/components/Profile";
 
 import { GLOBUS_FLOWS_VALIDATION } from "@/components/Validate";
 import Panel from "@/components/Panel";
+import { FlowsStartForm } from "@globus/react-components";
+import { ShareButton } from "@/components/ShareButton";
+import DocumentationDrawer from "@/components/DocumentationBrowser/Drawer";
+import { LuCircleAlert, LuInfo, LuOctagonAlert } from "react-icons/lu";
 
 export type FlowDefinition = {
   States: {
@@ -60,38 +55,24 @@ export type FlowDefinition = {
   Comment?: string;
 };
 
-const HEADER = {
-  HEIGHT: "50px",
-};
-
-const LAYOUT = {
-  HEADER,
-  PANEL: {
-    WIDTH: "280px",
-  },
-  TAB_PANEL: {
-    /**
-     * The tab panel height accounts for the header and the `<TabList>` height.
-     */
-    HEIGHT: `calc(100vh - (${HEADER.HEIGHT} + 42px))`,
-  },
-};
-
 /**
  * Feature flag to enable/disable the "Panel" component.
  */
 const ENABLE_PANEL = false;
 
+const APP_SHELL_HEIGHT =
+  "calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px))";
+const APP_SHELL_MAIN_INNER_HEIGHT = `calc(${APP_SHELL_HEIGHT} - 36px)`;
+
 export default function Home() {
   const router = useRouter();
 
   const editorStore = useEditorStore();
-  const definition = editorStore.definition;
+  const schema = editorStore.schema;
 
   const bootstrapped = useRef(false);
 
   const [invalidMarkers, setValidity] = useState<any[]>([]);
-  const [showPanel, setShowPanel] = useState(false);
 
   useEffect(() => {
     if (bootstrapped.current) return;
@@ -102,24 +83,39 @@ export default function Home() {
      */
     editorStore.restore();
     /**
-     * Attempt to bootstrap from the initial "d" query parameter.
+     * Attempt to bootstrap from the initial "d" and "s" query parameters.
      */
-    const queryParameterDef = new URLSearchParams(
-      document?.location?.search || {},
-    ).get("d");
+    const queryParams = new URLSearchParams(document?.location?.search || {});
+    const queryParameterDef = queryParams.get("d");
+    const queryParameterSchema = queryParams.get("s");
     if (queryParameterDef) {
       editorStore.replaceDefinitionFromString(
         decompressFromEncodedURIComponent(queryParameterDef),
       );
     }
+    if (queryParameterSchema) {
+      editorStore.replaceSchemaFromString(
+        decompressFromEncodedURIComponent(queryParameterSchema),
+      );
+    }
+    /**
+     * Remove the query parameters so that we don't keep bootstrapping
+     */
+    if (queryParameterDef || queryParameterSchema) {
+      const newQueryParams = new URLSearchParams(
+        document?.location?.search || {},
+      );
+      newQueryParams.delete("d");
+      newQueryParams.delete("s");
+      const qpString = newQueryParams.toString();
+      const newUrl = `${document.location.origin}${document.location.pathname}${qpString ? `?${qpString}` : ""}`;
+      router.replace(newUrl);
+    }
   }, [editorStore]);
 
   useEffect(() => {
-    if (definition) {
-      const v = compressToEncodedURIComponent(JSON.stringify(definition));
-      router.push(`/?d=${v}`);
-    }
-  }, [definition, router]);
+    editorStore.preserve();
+  }, [editorStore.definition, editorStore.schema, editorStore.preserve]);
 
   function handleEditorValidate(markers: any[]) {
     const errors = markers.filter(
@@ -141,115 +137,160 @@ export default function Home() {
         <meta name="description" content="visualize and create flows" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <main>
-        <Box height={LAYOUT.HEADER.HEIGHT}>
-          <Flex bgColor={"brand.800"} px={2} align={"center"}>
-            {ENABLE_PANEL && (
-              <IconButton
-                size="sm"
-                colorScheme="brand"
-                aria-label={showPanel ? "Hide Menu" : "Show Menu"}
-                icon={showPanel ? <CloseIcon /> : <HamburgerIcon />}
-                onClick={() => {
-                  setShowPanel(!showPanel);
-                }}
-              />
-            )}
-            <Heading as="h1" color={"white"}>
-              <Flex align={"center"}>
+      <AppShell header={{ height: 50 }}>
+        <AppShell.Header bg="brand.9">
+          <Flex justify="space-between" align="center" h="100%" px="sm">
+            <Group align="center">
+              <Title component="h1" c={"white"}>
                 <Image
                   src={`${process.env.NEXT_PUBLIC_BASE_PATH}/globus-logo.svg`}
                   alt="Globus Flows IDE"
-                  boxSize={LAYOUT.HEADER.HEIGHT}
-                  objectFit="contain"
-                  p={1}
-                  mx={2}
+                  h={25}
                 />
-              </Flex>
-            </Heading>
-            <Text color="white">
-              <Code mr={1} colorScheme={"red"} variant={"solid"}>
-                v{packageJson.version}-beta
-              </Code>
-              visualize and create flows
-            </Text>
-            <Spacer />
-            <HStack>
+              </Title>
+              <Text c="white">
+                <Code color="red" mr="sm">
+                  v{packageJson.version}-beta
+                </Code>
+                visualize and create flows
+              </Text>
+            </Group>
+            <Group>
+              <DocumentationDrawer />
+              <ShareButton />
               <Profile />
-            </HStack>
+            </Group>
           </Flex>
-        </Box>
+        </AppShell.Header>
+        <AppShell.Main>
+          {ENABLE_PANEL && <Panel />}
+          <SimpleGrid cols={2} spacing={0} h={APP_SHELL_HEIGHT}>
+            <Tabs defaultValue="definition" color="orange">
+              <Tabs.List>
+                <Tabs.Tab value="definition">Definition</Tabs.Tab>
+                <Tabs.Tab value="input-schema">Input Schema</Tabs.Tab>
+              </Tabs.List>
 
-        <Flex h={`calc(100vh - ${LAYOUT.HEADER.HEIGHT})`} w={"100vw"}>
-          {showPanel && <Panel />}
-          <Box h="100%" w="50%">
-            <Editor
-              defaultValue={
-                definition ? JSON.stringify(definition, null, 2) : ""
-              }
-              value={definition ? JSON.stringify(definition, null, 2) : ""}
-              onChange={editorStore.replaceDefinitionFromString}
-              onValidate={handleEditorValidate}
-              theme="vs-dark"
-              settings={{ enableExperimentalValidation: true }}
-            />
-          </Box>
-          <Box
-            h="100%"
-            /**
-             * The "Preview" panel width is dynamic based on whether the "Panel" is shown.
-             */
-            w={`calc(50% - ${showPanel ? LAYOUT.PANEL.WIDTH : "0px"})`}
-          >
-            <Tabs>
-              <TabList>
-                <Tab>Diagram</Tab>
-                <Tab>Documentation</Tab>
-              </TabList>
-              <TabPanels>
-                <TabPanel h={LAYOUT.TAB_PANEL.HEIGHT}>
-                  {invalidMarkers.length > 0 && (
-                    <Box m={-4} position={"fixed"} zIndex={1} w="100%">
-                      <Alert status="error">
-                        <AlertIcon />
-                        <AlertTitle>Invalid JSON</AlertTitle>
-                        <Box>
-                          <AlertDescription>
-                            Diagram will be disabled until errors are addressed.
-                          </AlertDescription>
-                        </Box>
-                      </Alert>
-                      <Box>
-                        <List>
-                          {invalidMarkers.map((marker, i) => (
-                            <ListItem key={i}>
-                              <Alert status="error">
-                                <AlertIcon />
-                                <AlertTitle>
-                                  {marker.message} at line{" "}
-                                  {marker.startLineNumber}
-                                </AlertTitle>
-                              </Alert>
-                            </ListItem>
-                          ))}
-                        </List>
-                      </Box>
-                    </Box>
-                  )}
-                  <Diagram />
-                </TabPanel>
-                <TabPanel
-                  h={LAYOUT.TAB_PANEL.HEIGHT}
-                  maxH={LAYOUT.TAB_PANEL.HEIGHT}
-                  overflow="scroll"
-                >
-                  <DocumentationBrowser />
-                </TabPanel>
-              </TabPanels>
+              <Tabs.Panel value="definition">
+                <Editor
+                  defaultValue={
+                    editorStore.definition
+                      ? JSON.stringify(editorStore.definition, null, 2)
+                      : ""
+                  }
+                  value={
+                    editorStore.definition
+                      ? JSON.stringify(editorStore.definition, null, 2)
+                      : ""
+                  }
+                  onChange={(value) => {
+                    editorStore.replaceDefinitionFromString(value);
+                  }}
+                  onValidate={handleEditorValidate}
+                  theme="vs-dark"
+                  settings={{
+                    enableExperimentalValidation: true,
+                    mode: "DEFINITION",
+                  }}
+                  path={"definition.json"}
+                  height={APP_SHELL_MAIN_INNER_HEIGHT}
+                />
+              </Tabs.Panel>
+              <Tabs.Panel value="input-schema">
+                <Editor
+                  defaultValue={
+                    editorStore.schema
+                      ? JSON.stringify(editorStore.schema, null, 2)
+                      : ""
+                  }
+                  value={
+                    editorStore.schema
+                      ? JSON.stringify(editorStore.schema, null, 2)
+                      : ""
+                  }
+                  onChange={(value) => {
+                    editorStore.replaceSchemaFromString(value);
+                  }}
+                  onValidate={handleEditorValidate}
+                  theme="vs-dark"
+                  settings={{
+                    enableExperimentalValidation: true,
+                    mode: "INPUT_SCHEMA",
+                  }}
+                  path="input-schema.json"
+                  height={APP_SHELL_MAIN_INNER_HEIGHT}
+                />
+              </Tabs.Panel>
             </Tabs>
-          </Box>
-        </Flex>
-      </main>
+            <Tabs defaultValue="definition" color="orange">
+              <Tabs.List>
+                <Tabs.Tab value="definition">Definiton Diagram</Tabs.Tab>
+                <Tabs.Tab value="input-schema">Input Schema UI</Tabs.Tab>
+              </Tabs.List>
+              <Tabs.Panel value="definition">
+                {invalidMarkers.length > 0 && (
+                  <Box m={-4} p={"fixed"} w="100%" style={{ zIndex: 1 }}>
+                    <Alert
+                      color="red"
+                      title="Invalid JSON"
+                      icon={<LuOctagonAlert />}
+                    >
+                      Diagram will be disabled until errors are addressed.
+                    </Alert>
+                    <Stack>
+                      {invalidMarkers.map((marker, i) => (
+                        <Alert
+                          key={i}
+                          color="red"
+                          icon={<LuCircleAlert />}
+                          title={`${marker.message} at line ${marker.startLineNumber}`}
+                        />
+                      ))}
+                    </Stack>
+                  </Box>
+                )}
+                <Box h={APP_SHELL_MAIN_INNER_HEIGHT} w="100%" bg="white">
+                  <Diagram />
+                </Box>
+              </Tabs.Panel>
+              <Tabs.Panel value="input-schema">
+                {schema ? (
+                  <ScrollArea h={APP_SHELL_MAIN_INNER_HEIGHT}>
+                    <Alert icon={<LuInfo />} title="Experimental">
+                      <Text size="sm">
+                        This is an experimental rendering of your input schema
+                        as a form, similar to the Guided Start page in the
+                        Globus Web Application.
+                      </Text>
+                    </Alert>
+                    <Paper p="md" m="md" withBorder>
+                      <FlowsStartForm
+                        schema={schema}
+                        uiSchema={{
+                          "ui:submitButtonOptions": {
+                            norender: true,
+                          },
+                        }}
+                      />
+                    </Paper>
+                  </ScrollArea>
+                ) : (
+                  <Center my="md">
+                    <Text c="dimmed">
+                      Start by defining an Input Schema in the editor.
+                    </Text>
+                  </Center>
+                )}
+              </Tabs.Panel>
+              <Tabs.Panel value="documentation">
+                <ScrollArea h={APP_SHELL_MAIN_INNER_HEIGHT}>
+                  <DocumentationBrowser />
+                </ScrollArea>
+              </Tabs.Panel>
+            </Tabs>
+          </SimpleGrid>
+        </AppShell.Main>
+      </AppShell>
     </>
   );
 }

@@ -1,14 +1,5 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
-import {
-  Button,
-  Text,
-  MenuList,
-  Box,
-  Menu,
-  MenuButton,
-  MenuDivider,
-  MenuItem,
-} from "@chakra-ui/react";
+import { Button, Text, Menu, Stack } from "@mantine/core";
+import { LuChevronDown } from "react-icons/lu";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import router from "next/router";
 
@@ -35,30 +26,28 @@ export default function Profile() {
 
   return (
     <>
-      <Menu placement="bottom-end">
-        <MenuButton
-          colorScheme="gray"
-          size="xs"
-          as={Button}
-          rightIcon={<ChevronDownIcon />}
-        >
-          {user?.preferred_username}
-        </MenuButton>
-        <MenuList>
-          <Box px={2} textAlign="right">
-            <Text>{user?.name}</Text>
-            <Text fontSize="sm">{user?.organization}</Text>
-          </Box>
-          <MenuDivider />
-          <MenuItem
+      <Menu position="bottom-end">
+        <Menu.Target>
+          <Button size="xs" rightSection={<LuChevronDown />}>
+            {user?.preferred_username}
+          </Button>
+        </Menu.Target>
+
+        <Menu.Dropdown>
+          <Stack align="flex-end" px="md" gap="xs">
+            <Text size="sm">{user?.name}</Text>
+            <Text size="xs">{user?.organization}</Text>
+          </Stack>
+          <Menu.Divider />
+          <Menu.Item
             onClick={async () => {
               await auth.authorization?.revoke();
               router.push("/");
             }}
           >
             Log Out
-          </MenuItem>
-        </MenuList>
+          </Menu.Item>
+        </Menu.Dropdown>
       </Menu>
     </>
   );
