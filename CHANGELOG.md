@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.0.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.5.0...flows-ide-v2.0.0) (2025-08-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* Flows IDE v2 ([#195](https://github.com/globus/flows-ide/issues/195))
+
+### Features
+
+* Adds support for encoded, gzipped, query parameters ([#280](https://github.com/globus/flows-ide/issues/280)) ([e71947b](https://github.com/globus/flows-ide/commit/e71947b5cc97d0bc55f8b99b3125cd71e796ce58))
+* Flows IDE v2 ([#195](https://github.com/globus/flows-ide/issues/195)) ([5d3c99a](https://github.com/globus/flows-ide/commit/5d3c99af6be3c211788193f06cf70cef97acd41b))
+
+
+### Bug Fixes
+
+* updates Dependabot configuration to use groups ([5132d83](https://github.com/globus/flows-ide/commit/5132d83b84d1f093c55f9328d8e9911701f2093e))
+
 ## [1.5.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.7...flows-ide-v1.5.0) (2025-07-07)
 
 
