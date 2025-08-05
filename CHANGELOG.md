@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/globus/flows-ide/compare/flows-ide-v2.0.0...flows-ide-v2.0.1) (2025-08-05)
+
+
+### Bug Fixes
+
+* address spelling error ([c6da12e](https://github.com/globus/flows-ide/commit/c6da12ee1c0d17627431bb1ef6b8a89b594dc557))
+
 ## [2.0.0](https://github.com/globus/flows-ide/compare/flows-ide-v1.5.0...flows-ide-v2.0.0) (2025-08-05)
 
 
