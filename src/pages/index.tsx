@@ -21,7 +21,6 @@ import {
 } from "@mantine/core";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
-import { decompressFromEncodedURIComponent } from "lz-string";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
 import packageJson from "../../package.json" assert { type: "json" };
 
@@ -40,6 +39,7 @@ import {
   LuInfo,
   LuOctagonAlert,
 } from "react-icons/lu";
+import { COMPRESSION_METHODS, decode } from "@/utils/compression";
 
 export type FlowDefinition = {
   States: {
@@ -88,35 +88,45 @@ export default function Home() {
      * stored in the storage that we should make sure to use.
      */
     editorStore.restore();
-    /**
-     * Attempt to bootstrap from the initial "d" and "s" query parameters.
-     */
-    const queryParams = new URLSearchParams(document?.location?.search || {});
-    const queryParameterDef = queryParams.get("d");
-    const queryParameterSchema = queryParams.get("s");
-    if (queryParameterDef) {
-      editorStore.replaceDefinitionFromString(
-        decompressFromEncodedURIComponent(queryParameterDef),
-      );
+    async function bootstrap() {
+      /**
+       * Attempt to bootstrap from the initial "d" and "s" query parameters.
+       */
+      const queryParams = new URLSearchParams(document?.location?.search || {});
+      const queryParameterDef = queryParams.get("d");
+      const queryParameterSchema = queryParams.get("s");
+
+      const compression =
+        Object.values(COMPRESSION_METHODS).find(
+          (c) => c === queryParams.get("format"),
+        ) || COMPRESSION_METHODS.LZ;
+
+      if (queryParameterDef) {
+        editorStore.replaceDefinitionFromString(
+          await decode(queryParameterDef, compression),
+        );
+      }
+      if (queryParameterSchema) {
+        editorStore.replaceSchemaFromString(
+          await decode(queryParameterSchema, compression),
+        );
+      }
+      /**
+       * Remove the query parameters so that we don't keep bootstrapping
+       */
+      if (queryParameterDef || queryParameterSchema) {
+        const newQueryParams = new URLSearchParams(
+          document?.location?.search || {},
+        );
+        newQueryParams.delete("d");
+        newQueryParams.delete("s");
+        newQueryParams.delete("format");
+        const qpString = newQueryParams.toString();
+        const newUrl = `${document.location.origin}${document.location.pathname}${qpString ? `?${qpString}` : ""}`;
+        router.replace(newUrl);
+      }
     }
-    if (queryParameterSchema) {
-      editorStore.replaceSchemaFromString(
-        decompressFromEncodedURIComponent(queryParameterSchema),
-      );
-    }
-    /**
-     * Remove the query parameters so that we don't keep bootstrapping
-     */
-    if (queryParameterDef || queryParameterSchema) {
-      const newQueryParams = new URLSearchParams(
-        document?.location?.search || {},
-      );
-      newQueryParams.delete("d");
-      newQueryParams.delete("s");
-      const qpString = newQueryParams.toString();
-      const newUrl = `${document.location.origin}${document.location.pathname}${qpString ? `?${qpString}` : ""}`;
-      router.replace(newUrl);
-    }
+    bootstrap();
   }, [editorStore, router]);
 
   useEffect(() => {
