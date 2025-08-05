@@ -4,6 +4,27 @@ A Web-based IDE for building [Globus Flows](https://docs.globus.org/api/flows/) 
 
 <img width="800" alt="Screenshot of the Globus Flows IDE" src="https://github.com/globus/flows-ide/assets/694253/86406a3c-7b8e-46e1-b4f6-c2b548c71cb9">
 
+## Features
+
+### Sharing Flows IDE State
+
+Your Flows IDE state can be shared with others via a URL using the built-in "Share" button, or by manually constructing a URL with the following query parameters:
+
+- `d=` - The definition to be loaded.
+- `s=` - The input schema to be loaded.
+- `format=` - The compression format (e.g., `gzip`, `lz`, or `none`) used by the `d` and `s` parameters. If not specified, the default is `lz`.
+  - `gzip` - The parameter values are compressed using gzip and base64 encoded.
+  - `lz` - The parameter values are compressed using lz and base64 encoded.
+  - `none` - The parameter values are not compressed, only URL encoded.
+    - Using `none` is not recommended for large definitions or schemas, as it may result in URLs that exceed the maximum length supported by browsers.
+
+Examples
+
+- Basic Example with `format=none`
+  - [`https://globus.github.io/flows-ide?format=none&d={%22States%22:%20{%22HelloWorld%22:%20{}}}`](https://globus.github.io/flows-ide?format=none&d={%22States%22:%20{%22HelloWorld%22:%20{}}})
+- Simple Transfer with `format=gzip`, a definition (`d`) and input schema (`s`)
+  - [`https://globus.github.io/flows-ide?d=H4sIAAAAAAAAE12NPQsCMRBE%2F8tgGaKt2x1oL3hiISLRrBrQ5NjsFXLkv8v5edoNbx4zHZbqRCsFoRYX85EFpofKGdR9YZ9vDYNQHTSkCPMKK7mAcFZtMo3H%2BvKte5TZni5p32ab5PTpYLB2QetwZdB0MjFYOHFXVpbH56yqK9CmQ06tHHjXOD3bEQgj%2ByS2JzDwnDVE1x8NpQF%2BmmVr3lscfZNC1N%2B94P%2FW%2FrThYvAoBvPoQSotl1Luj0LGCEUBAAA%3D&s=H4sIAAAAAAAAE9WPQQ7CMAwE%2F7Ln8IF8Au6IQxq7YBSa4jiHqurfUVGRWlWCM2ePZ3dH2NAzPHJz52hw6DX3rDYclVjhzyi5amQ4EBeTLpjkDhcH5WcVZfrGLDLhAj9%2BKD%2FuQtusj2DwuKbc1HKIOSWOb8s2SGiuGOy2twutzMVUuuvaXKsQpuV5B06TQyCSOTKk00rchlR42i77xwU%2Fzi8%2Bk3CECQIAAA%3D%3D&format=gzip`](https://globus.github.io/flows-ide?d=H4sIAAAAAAAAE12NPQsCMRBE%2F8tgGaKt2x1oL3hiISLRrBrQ5NjsFXLkv8v5edoNbx4zHZbqRCsFoRYX85EFpofKGdR9YZ9vDYNQHTSkCPMKK7mAcFZtMo3H%2BvKte5TZni5p32ab5PTpYLB2QetwZdB0MjFYOHFXVpbH56yqK9CmQ06tHHjXOD3bEQgj%2ByS2JzDwnDVE1x8NpQF%2BmmVr3lscfZNC1N%2B94P%2FW%2FrThYvAoBvPoQSotl1Luj0LGCEUBAAA%3D&s=H4sIAAAAAAAAE9WPQQ7CMAwE%2F7Ln8IF8Au6IQxq7YBSa4jiHqurfUVGRWlWCM2ePZ3dH2NAzPHJz52hw6DX3rDYclVjhzyi5amQ4EBeTLpjkDhcH5WcVZfrGLDLhAj9%2BKD%2FuQtusj2DwuKbc1HKIOSWOb8s2SGiuGOy2twutzMVUuuvaXKsQpuV5B06TQyCSOTKk00rchlR42i77xwU%2Fzi8%2Bk3CECQIAAA%3D%3D&format=gzip)
+
 ## Contributing
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
