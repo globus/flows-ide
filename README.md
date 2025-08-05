@@ -2,7 +2,7 @@
 
 A Web-based IDE for building [Globus Flows](https://docs.globus.org/api/flows/) – [open the Globus Flows IDE](https://globus.github.io/flows-ide/).
 
-<img width="800" alt="Screenshot of the Globus Flows IDE" src="https://github.com/globus/flows-ide/assets/694253/86406a3c-7b8e-46e1-b4f6-c2b548c71cb9">
+<img alt="Screenshot of the Globus Flows IDE" src="https://github.com/user-attachments/assets/aa6e40ac-254f-48d4-bb72-a7824cf7d797" />
 
 ## Features
 
