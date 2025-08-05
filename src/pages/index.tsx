@@ -95,10 +95,11 @@ export default function Home() {
       const queryParams = new URLSearchParams(document?.location?.search || {});
       const queryParameterDef = queryParams.get("d");
       const queryParameterSchema = queryParams.get("s");
+
       const compression =
-        queryParams.get("format") === COMPRESSION_METHODS.GZIP
-          ? COMPRESSION_METHODS.GZIP
-          : COMPRESSION_METHODS.LZ;
+        Object.values(COMPRESSION_METHODS).find(
+          (c) => c === queryParams.get("format"),
+        ) || COMPRESSION_METHODS.LZ;
 
       if (queryParameterDef) {
         editorStore.replaceDefinitionFromString(

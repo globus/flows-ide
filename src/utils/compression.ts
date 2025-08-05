@@ -6,10 +6,14 @@ import {
 export const COMPRESSION_METHODS = {
   LZ: "lz",
   GZIP: "gzip",
+  NONE: "none",
 };
 
 export async function encode(data: unknown, method = COMPRESSION_METHODS.LZ) {
   const jsonStr = JSON.stringify(data);
+  if (method === COMPRESSION_METHODS.NONE) {
+    return encodeURIComponent(jsonStr);
+  }
   if (method === COMPRESSION_METHODS.LZ) {
     return compressToEncodedURIComponent(jsonStr);
   }
@@ -46,6 +50,9 @@ export async function decode(
   encodedStr: string,
   method = COMPRESSION_METHODS.LZ,
 ) {
+  if (method === COMPRESSION_METHODS.NONE) {
+    return decodeURIComponent(encodedStr);
+  }
   if (method === COMPRESSION_METHODS.LZ) {
     return decompressFromEncodedURIComponent(encodedStr);
   }
