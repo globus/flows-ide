@@ -4,6 +4,7 @@ import { useEditorStore } from "@/stores/editor";
 import { CopyButton, Button } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { compressToEncodedURIComponent } from "lz-string";
+import { LuCheck, LuShare } from "react-icons/lu";
 
 export function ShareButton() {
   const definition = useEditorStore((state) => state.definition);
@@ -27,7 +28,11 @@ export function ShareButton() {
           });
         }
         return (
-          <Button onClick={copy} size="xs">
+          <Button
+            onClick={copy}
+            size="xs"
+            rightSection={copied ? <LuCheck /> : <LuShare />}
+          >
             Share
           </Button>
         );

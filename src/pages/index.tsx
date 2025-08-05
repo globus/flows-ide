@@ -17,6 +17,7 @@ import {
   Center,
   ScrollArea,
   Paper,
+  Anchor,
 } from "@mantine/core";
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
@@ -33,7 +34,12 @@ import Panel from "@/components/Panel";
 import { FlowsStartForm } from "@globus/react-components";
 import { ShareButton } from "@/components/ShareButton";
 import DocumentationDrawer from "@/components/DocumentationBrowser/Drawer";
-import { LuCircleAlert, LuInfo, LuOctagonAlert } from "react-icons/lu";
+import {
+  LuCircleAlert,
+  LuExternalLink,
+  LuInfo,
+  LuOctagonAlert,
+} from "react-icons/lu";
 
 export type FlowDefinition = {
   States: {
@@ -264,8 +270,33 @@ export default function Home() {
                     <Alert icon={<LuInfo />} title="Experimental">
                       <Text size="sm">
                         This is an experimental rendering of your input schema
-                        as a form, similar to the Guided Start page in the
-                        Globus Web Application.
+                        as a form &mdash;&nbsp;
+                        <Anchor
+                          href="https://docs.globus.org/api/flows/input-schema/"
+                          c="var(--mantine-primary-color-2)"
+                          underline="always"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          learn more about creating input schemas&nbsp;
+                          <LuExternalLink />
+                        </Anchor>
+                        .
+                      </Text>
+                      <Text size="sm" mt="md">
+                        <Anchor
+                          href="https://docs.globus.org/api/flows/input-schema/#providing_hints_to_the_guided_input_form"
+                          c="var(--mantine-primary-color-2)"
+                          underline="always"
+                          rel="noopener noreferrer"
+                          target="_blank"
+                        >
+                          <Code>formats</Code> recognized by the Globus Web
+                          Application&nbsp;
+                          <LuExternalLink />
+                        </Anchor>
+                        &nbsp;
+                        <strong>will not</strong> be rendered.
                       </Text>
                     </Alert>
                     <Paper p="md" m="md" withBorder>
