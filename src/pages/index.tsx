@@ -245,7 +245,7 @@ export default function Home() {
             </Tabs>
             <Tabs defaultValue="definition" color="orange">
               <Tabs.List>
-                <Tabs.Tab value="definition">Definiton Diagram</Tabs.Tab>
+                <Tabs.Tab value="definition">Definition Diagram</Tabs.Tab>
                 <Tabs.Tab value="input-schema">Input Schema UI</Tabs.Tab>
               </Tabs.List>
               <Tabs.Panel value="definition">
