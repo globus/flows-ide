@@ -14,18 +14,18 @@ export const MODES = {
 
 export type SupportedModes = keyof typeof MODES;
 
-function isDefinitionMode(settings?: InteralSettings) {
+function isDefinitionMode(settings?: InternalSettings) {
   return settings?.mode === MODES.DEFINITION || !settings?.mode;
 }
 
-type InteralSettings = {
+type InternalSettings = {
   mode?: SupportedModes;
   enableExperimentalValidation?: boolean;
 };
 
 function configureEditor(
   monaco: Monaco,
-  settings: InteralSettings = {
+  settings: InternalSettings = {
     mode: MODES.DEFINITION,
     enableExperimentalValidation: true,
   },
@@ -51,7 +51,7 @@ function configureEditor(
 }
 
 export default function Editor(
-  props: { settings?: InteralSettings } & EditorProps,
+  props: { settings?: InternalSettings } & EditorProps,
 ) {
   return (
     <>
