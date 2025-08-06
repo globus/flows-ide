@@ -76,7 +76,7 @@
 
 ### Bug Fixes
 
-* ensure sessions are refereshed on load, prompt for sign in on failure ([#129](https://github.com/globus/flows-ide/issues/129)) ([6fecf78](https://github.com/globus/flows-ide/commit/6fecf78491ab5df67e25912ed773e23893adacd2))
+* ensure sessions are refreshed on load, prompt for sign in on failure ([#129](https://github.com/globus/flows-ide/issues/129)) ([6fecf78](https://github.com/globus/flows-ide/commit/6fecf78491ab5df67e25912ed773e23893adacd2))
 
 ## [1.4.1](https://github.com/globus/flows-ide/compare/flows-ide-v1.4.0...flows-ide-v1.4.1) (2024-09-18)
 
