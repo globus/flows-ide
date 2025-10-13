@@ -12,7 +12,7 @@
     "@dagrejs/dagre": "^1.1.5",
     "@globus/react-auth-context": "^0.3.1",
     "@globus/react-components": "^3.5.0",
-    "@globus/react-query": "^0.6.0",
+    "@globus/react-query": "^0.10.0",
     "@globus/sdk": "^6.1.0",
     "@mantine/core": "^8.3.3",
     "@mantine/hooks": "^8.3.3",
