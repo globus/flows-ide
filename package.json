@@ -20,7 +20,7 @@
     "@monaco-editor/react": "^4.7.0",
     "lodash": "^4.17.21",
     "lz-string": "^1.5.0",
-    "next": "^15.4.5",
+    "next": "^15.4.8",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-icons": "^5.5.0",
