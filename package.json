@@ -9,29 +9,29 @@
     "start": "next start"
   },
   "dependencies": {
-    "@dagrejs/dagre": "^1.1.5",
+    "@dagrejs/dagre": "^1.1.8",
     "@globus/react-auth-context": "^0.3.1",
-    "@globus/react-components": "^3.5.0",
-    "@globus/react-query": "^0.6.0",
-    "@globus/sdk": "^6.1.0",
-    "@mantine/core": "^8.3.8",
-    "@mantine/hooks": "^8.3.8",
-    "@mantine/notifications": "^8.3.8",
+    "@globus/react-components": "^3.7.0",
+    "@globus/react-query": "^0.10.0",
+    "@globus/sdk": "^6.2.0",
+    "@mantine/core": "8.3.3",
+    "@mantine/hooks": "8.3.3",
+    "@mantine/notifications": "8.3.3",
     "@monaco-editor/react": "^4.7.0",
     "lodash": "^4.17.21",
     "lz-string": "^1.5.0",
-    "next": "^15.4.8",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "next": "^15.5.7",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
     "react-icons": "^5.5.0",
     "reactflow": "^11.11.4",
-    "zustand": "^5.0.8"
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.20",
     "@types/node": "^24",
-    "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
     "eslint": "^8",
     "eslint-config-next": "15.5.2",
     "eslint-config-prettier": "^10.1.8",
@@ -39,12 +39,8 @@
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.6.2",
-    "sst": "^3.17.25",
+    "sst": "^3.9.28",
     "typescript": "^5"
   },
-  "packageManager": "npm@11.5.1",
-  "overrides": {
-    "@types/react": "19.0.10",
-    "@types/react-dom": "19.0.4"
-  }
+  "packageManager": "npm@11.5.1"
 }
