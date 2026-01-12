@@ -21,8 +21,8 @@
     "lodash": "^4.17.21",
     "lz-string": "^1.5.0",
     "next": "^15.5.7",
-    "react": "19.2.1",
-    "react-dom": "19.2.1",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
     "reactflow": "^11.11.4",
     "zustand": "^5.0.9"
@@ -30,7 +30,7 @@
   "devDependencies": {
     "@types/lodash": "^4.17.20",
     "@types/node": "^24",
-    "@types/react": "19.2.7",
+    "@types/react": "19.2.8",
     "@types/react-dom": "19.2.3",
     "eslint": "^8",
     "eslint-config-next": "15.5.2",
