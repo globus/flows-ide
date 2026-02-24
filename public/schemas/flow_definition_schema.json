@@ -51,6 +51,47 @@
   "required": ["StartAt", "States"],
   "additionalProperties": false,
   "definitions": {
+    "ActionProviderHandler": {
+      "title": "ActionProviderHandler",
+      "type": "object",
+      "properties": {
+        "Type": {
+          "title": "Type",
+          "enum": ["ActionProvider"],
+          "type": "string"
+        },
+        "Url": {
+          "title": "Url",
+          "pattern": "^https://.+$",
+          "strict": true,
+          "type": "string"
+        },
+        "Scope": {
+          "title": "Scope",
+          "type": "string"
+        }
+      },
+      "required": ["Type", "Url"],
+      "additionalProperties": false
+    },
+    "RegisteredAPIHandler": {
+      "title": "RegisteredAPIHandler",
+      "type": "object",
+      "properties": {
+        "Type": {
+          "title": "Type",
+          "enum": ["RegisteredAPI"],
+          "type": "string"
+        },
+        "Id": {
+          "title": "Id",
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "required": ["Type", "Id"],
+      "additionalProperties": false
+    },
     "Catcher": {
       "title": "Catcher",
       "type": "object",
@@ -101,11 +142,24 @@
         },
         "ActionUrl": {
           "title": "Actionurl",
+          "pattern": "^https://.+$",
+          "strict": true,
           "type": "string"
         },
         "ActionScope": {
           "title": "Actionscope",
           "type": "string"
+        },
+        "Handler": {
+          "title": "Handler",
+          "anyOf": [
+            {
+              "$ref": "#/definitions/ActionProviderHandler"
+            },
+            {
+              "$ref": "#/definitions/RegisteredAPIHandler"
+            }
+          ]
         },
         "InputPath": {
           "title": "Inputpath",
@@ -135,7 +189,7 @@
           "type": "string"
         }
       },
-      "required": ["Type", "ActionUrl"],
+      "required": ["Type"],
       "additionalProperties": false
     },
     "AndChoiceRule": {
@@ -774,7 +828,7 @@
           "type": "string"
         },
         "CausePath": {
-          "title": "CausePath",
+          "title": "Causepath",
           "type": "string"
         },
         "Error": {
@@ -782,22 +836,10 @@
           "type": "string"
         },
         "ErrorPath": {
-          "title": "ErrorPath",
+          "title": "Errorpath",
           "type": "string"
         }
       },
-      "allOf": [
-        {
-          "description": "Cause and CausePath are mutually exclusive",
-          "if": {"required": ["Cause"]},
-          "then": {"not": {"required": ["CausePath"]}}
-        },
-        {
-          "description": "Error and ErrorPath are mutually exclusive",
-          "if": {"required": ["Error"]},
-          "then": {"not": {"required": ["ErrorPath"]}}
-        }
-      ],
       "required": ["Type"],
       "additionalProperties": false
     },
