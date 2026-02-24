@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.5](https://github.com/globus/flows-ide/compare/flows-ide-v2.0.4...flows-ide-v2.0.5) (2026-02-24)
+
+
+### Bug Fixes
+
+* package-lock.json ([6e0ab17](https://github.com/globus/flows-ide/commit/6e0ab17c9465e7dcff52f4699760655ae465d135))
+
 ## [2.0.4](https://github.com/globus/flows-ide/compare/flows-ide-v2.0.3...flows-ide-v2.0.4) (2026-02-24)
 
 
