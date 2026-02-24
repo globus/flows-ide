@@ -1,13 +1,16 @@
 {
   "title": "FlowDefinition",
+  "description": "A Globus Flow definition describing an automated workflow. Flows allow you to create automated, reusable, and shareable workflows that can chain together multiple actions.",
   "type": "object",
   "properties": {
     "StartAt": {
-      "title": "Startat",
+      "title": "StartAt",
+      "description": "The name of the state where flow execution begins. Must match a key in the States object.",
       "type": "string"
     },
     "States": {
       "title": "States",
+      "description": "A mapping of state names to state definitions. Each state performs a task and describes how to transition to the next state. Runs manage a data payload which is passed from each state to the next.",
       "type": "object",
       "additionalProperties": {
         "discriminator": {
@@ -45,6 +48,7 @@
     },
     "Comment": {
       "title": "Comment",
+      "description": "An optional human-readable description of the flow definition.",
       "type": "string"
     }
   },
@@ -53,21 +57,25 @@
   "definitions": {
     "ActionProviderHandler": {
       "title": "ActionProviderHandler",
+      "description": "Configuration for an Action Provider handler, specifying the URL and optional scope for the action provider.",
       "type": "object",
       "properties": {
         "Type": {
           "title": "Type",
+          "description": "Must be \"ActionProvider\" to indicate this handler targets an Action Provider.",
           "enum": ["ActionProvider"],
           "type": "string"
         },
         "Url": {
           "title": "Url",
+          "description": "The HTTPS URL for the Action Provider.",
           "pattern": "^https://.+$",
           "strict": true,
           "type": "string"
         },
         "Scope": {
           "title": "Scope",
+          "description": "The authentication scope required to access the Action Provider.",
           "type": "string"
         }
       },
@@ -76,15 +84,18 @@
     },
     "RegisteredAPIHandler": {
       "title": "RegisteredAPIHandler",
+      "description": "Configuration for a Registered API handler, referencing a registered API by its UUID.",
       "type": "object",
       "properties": {
         "Type": {
           "title": "Type",
+          "description": "Must be \"RegisteredAPI\" to indicate this handler targets a Registered API.",
           "enum": ["RegisteredAPI"],
           "type": "string"
         },
         "Id": {
           "title": "Id",
+          "description": "The UUID of the Registered API.",
           "type": "string",
           "format": "uuid"
         }
@@ -94,10 +105,12 @@
     },
     "Catcher": {
       "title": "Catcher",
+      "description": "An exception handler that matches specific error types and routes execution to a recovery state.",
       "type": "object",
       "properties": {
         "ErrorEquals": {
-          "title": "Errorequals",
+          "title": "ErrorEquals",
+          "description": "An array of error type strings to match (e.g., \"ActionUnableToRun\", \"ActionFailedException\", \"ActionTimeout\").",
           "type": "array",
           "items": {
             "type": "string"
@@ -105,10 +118,12 @@
         },
         "Next": {
           "title": "Next",
+          "description": "The name of the state to transition to when the error is caught.",
           "type": "string"
         },
         "ResultPath": {
-          "title": "Resultpath",
+          "title": "ResultPath",
+          "description": "A JSONPath expression indicating where to place the error output in the flow data.",
           "type": "string"
         }
       },
@@ -117,41 +132,50 @@
     },
     "ActionState": {
       "title": "ActionState",
+      "description": "Submits data to an action provider during flow execution and waits for it to complete. Action states block until reaching completion (SUCCEEDED/FAILED) or WaitTime expiration.",
       "type": "object",
       "properties": {
         "Parameters": {
           "title": "Parameters",
+          "description": "Object forming the input passed to the action's /run operation. Supports constants, JSONPath references (keys ending in \".$\"), and expressions (keys ending in \".=\"). Mutually exclusive with InputPath.",
           "type": "object"
         },
         "Type": {
           "title": "Type",
+          "description": "Must be \"Action\" to indicate this state invokes an action.",
           "enum": ["Action"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
+          "description": "An optional human-readable description of this state.",
           "type": "string"
         },
         "Next": {
           "title": "Next",
+          "description": "The name of the next state to transition to. Mutually exclusive with End.",
           "type": "string"
         },
         "End": {
           "title": "End",
+          "description": "When true, the flow run terminates successfully after this state completes. Mutually exclusive with Next.",
           "type": "boolean"
         },
         "ActionUrl": {
-          "title": "Actionurl",
+          "title": "ActionUrl",
+          "description": "The base URL for the action provider. The system appends methods like /run, /status, /cancel to manage the action lifecycle.",
           "pattern": "^https://.+$",
           "strict": true,
           "type": "string"
         },
         "ActionScope": {
-          "title": "Actionscope",
+          "title": "ActionScope",
+          "description": "Optional authentication scope string for accessing the action. Usually unnecessary as the system queries the action provider for the required scope.",
           "type": "string"
         },
         "Handler": {
           "title": "Handler",
+          "description": "Configuration for the action handler — either an ActionProvider (with a URL) or a RegisteredAPI (with a UUID).",
           "anyOf": [
             {
               "$ref": "#/definitions/ActionProviderHandler"
@@ -162,30 +186,36 @@
           ]
         },
         "InputPath": {
-          "title": "Inputpath",
+          "title": "InputPath",
+          "description": "A JSONPath expression identifying where input values exist in the current flow state. Mutually exclusive with Parameters.",
           "type": "string"
         },
         "ResultPath": {
-          "title": "Resultpath",
+          "title": "ResultPath",
+          "description": "A JSONPath expression indicating where action output is placed in the flow data payload. Defaults to \"$\" (root) if unspecified.",
           "type": "string"
         },
         "WaitTime": {
-          "title": "Waittime",
+          "title": "WaitTime",
+          "description": "Maximum duration in seconds to wait for action completion. Default: 300 (5 minutes). The flow raises an ActionTimeout exception if the action does not complete within this interval.",
           "type": "integer"
         },
         "ExceptionOnActionFailure": {
-          "title": "Exceptiononactionfailure",
+          "title": "ExceptionOnActionFailure",
+          "description": "When true (default), raises an ActionFailedException if the action fails. Set to false to include the FAILED status in the flow state without raising an exception.",
           "type": "boolean"
         },
         "Catch": {
           "title": "Catch",
+          "description": "An array of exception handlers (Catchers). Each handler specifies error types to match and a target state for recovery. Unhandled exceptions abort the flow.",
           "type": "array",
           "items": {
             "$ref": "#/definitions/Catcher"
           }
         },
         "RunAs": {
-          "title": "Runas",
+          "title": "RunAs",
+          "description": "Specifies the identity used to execute the action. \"User\" (default) uses the invoker's credentials, \"Flow\" uses the flow's own credentials, or provide a custom role name.",
           "type": "string"
         }
       },
@@ -194,10 +224,12 @@
     },
     "AndChoiceRule": {
       "title": "AndChoiceRule",
+      "description": "A choice rule that evaluates to true when all nested rules are true.",
       "type": "object",
       "properties": {
         "And": {
           "title": "And",
+          "description": "An array of choice rules that must all evaluate to true for this rule to match.",
           "minItems": 1,
           "type": "array",
           "items": {
@@ -210,10 +242,12 @@
     },
     "OrChoiceRule": {
       "title": "OrChoiceRule",
+      "description": "A choice rule that evaluates to true when any nested rule is true.",
       "type": "object",
       "properties": {
         "Or": {
           "title": "Or",
+          "description": "An array of choice rules where at least one must evaluate to true for this rule to match.",
           "minItems": 1,
           "type": "array",
           "items": {
@@ -226,9 +260,12 @@
     },
     "NotChoiceRule": {
       "title": "NotChoiceRule",
+      "description": "A choice rule that evaluates to true when the nested rule is false.",
       "type": "object",
       "properties": {
         "Not": {
+          "title": "Not",
+          "description": "A single choice rule that is negated — this rule matches when the nested rule does not.",
           "$ref": "#/definitions/ChoiceRule"
         }
       },
@@ -237,46 +274,57 @@
     },
     "VariableChoiceRule": {
       "title": "VariableChoiceRule",
+      "description": "A choice rule that compares a variable from the flow state against a value using a comparison operator.",
       "type": "object",
       "properties": {
         "Variable": {
           "title": "Variable",
+          "description": "A JSONPath expression referencing a value in the flow state to evaluate.",
           "type": "string"
         },
         "BooleanEquals": {
-          "title": "Booleanequals",
+          "title": "BooleanEquals",
+          "description": "Matches if the variable equals the specified boolean value.",
           "type": "boolean"
         },
         "BooleanEqualsPath": {
-          "title": "Booleanequalspath",
+          "title": "BooleanEqualsPath",
+          "description": "A JSONPath expression referencing a boolean value to compare for equality.",
           "type": "string"
         },
         "IsBoolean": {
-          "title": "Isboolean",
+          "title": "IsBoolean",
+          "description": "When true, matches if the variable is a boolean (true or false). When false, matches if it is not a boolean.",
           "type": "boolean"
         },
         "IsNull": {
-          "title": "Isnull",
+          "title": "IsNull",
+          "description": "When true, matches if the variable is null. When false, matches if it is not null.",
           "type": "boolean"
         },
         "IsNumeric": {
-          "title": "Isnumeric",
+          "title": "IsNumeric",
+          "description": "When true, matches if the variable is a number (integer or float). When false, matches if it is not a number.",
           "type": "boolean"
         },
         "IsPresent": {
-          "title": "Ispresent",
+          "title": "IsPresent",
+          "description": "When true, matches if the variable's JSONPath points to a valid location in the flow state. When false, matches if it does not.",
           "type": "boolean"
         },
         "IsString": {
-          "title": "Isstring",
+          "title": "IsString",
+          "description": "When true, matches if the variable is a string. When false, matches if it is not a string.",
           "type": "boolean"
         },
         "IsTimestamp": {
-          "title": "Istimestamp",
+          "title": "IsTimestamp",
+          "description": "When true, matches if the variable is formatted as an RFC 3339 timestamp. When false, matches if it is not.",
           "type": "boolean"
         },
         "NumericEquals": {
-          "title": "Numericequals",
+          "title": "NumericEquals",
+          "description": "Matches if the variable equals the specified numeric value.",
           "anyOf": [
             {
               "type": "integer"
@@ -287,11 +335,13 @@
           ]
         },
         "NumericEqualsPath": {
-          "title": "Numericequalspath",
+          "title": "NumericEqualsPath",
+          "description": "A JSONPath expression referencing a numeric value to compare for equality.",
           "type": "string"
         },
         "NumericGreaterThan": {
-          "title": "Numericgreaterthan",
+          "title": "NumericGreaterThan",
+          "description": "Matches if the variable is greater than the specified numeric value.",
           "anyOf": [
             {
               "type": "integer"
@@ -302,11 +352,13 @@
           ]
         },
         "NumericGreaterThanPath": {
-          "title": "Numericgreaterthanpath",
+          "title": "NumericGreaterThanPath",
+          "description": "A JSONPath expression referencing a numeric value for a greater-than comparison.",
           "type": "string"
         },
         "NumericGreaterThanEquals": {
-          "title": "Numericgreaterthanequals",
+          "title": "NumericGreaterThanEquals",
+          "description": "Matches if the variable is greater than or equal to the specified numeric value.",
           "anyOf": [
             {
               "type": "integer"
@@ -317,11 +369,13 @@
           ]
         },
         "NumericGreaterThanEqualsPath": {
-          "title": "Numericgreaterthanequalspath",
+          "title": "NumericGreaterThanEqualsPath",
+          "description": "A JSONPath expression referencing a numeric value for a greater-than-or-equal comparison.",
           "type": "string"
         },
         "NumericLessThan": {
-          "title": "Numericlessthan",
+          "title": "NumericLessThan",
+          "description": "Matches if the variable is less than the specified numeric value.",
           "anyOf": [
             {
               "type": "integer"
@@ -332,11 +386,13 @@
           ]
         },
         "NumericLessThanPath": {
-          "title": "Numericlessthanpath",
+          "title": "NumericLessThanPath",
+          "description": "A JSONPath expression referencing a numeric value for a less-than comparison.",
           "type": "string"
         },
         "NumericLessThanEquals": {
-          "title": "Numericlessthanequals",
+          "title": "NumericLessThanEquals",
+          "description": "Matches if the variable is less than or equal to the specified numeric value.",
           "anyOf": [
             {
               "type": "integer"
@@ -347,96 +403,118 @@
           ]
         },
         "NumericLessThanEqualsPath": {
-          "title": "Numericlessthanequalspath",
+          "title": "NumericLessThanEqualsPath",
+          "description": "A JSONPath expression referencing a numeric value for a less-than-or-equal comparison.",
           "type": "string"
         },
         "StringEquals": {
-          "title": "Stringequals",
+          "title": "StringEquals",
+          "description": "Matches if the variable equals the specified string.",
           "type": "string"
         },
         "StringEqualsPath": {
-          "title": "Stringequalspath",
+          "title": "StringEqualsPath",
+          "description": "A JSONPath expression referencing a string value to compare for equality.",
           "type": "string"
         },
         "StringGreaterThan": {
-          "title": "Stringgreaterthan",
+          "title": "StringGreaterThan",
+          "description": "Matches if the variable is lexicographically greater than the specified string.",
           "type": "string"
         },
         "StringGreaterThanPath": {
-          "title": "Stringgreaterthanpath",
+          "title": "StringGreaterThanPath",
+          "description": "A JSONPath expression referencing a string value for a lexicographic greater-than comparison.",
           "type": "string"
         },
         "StringGreaterThanEquals": {
-          "title": "Stringgreaterthanequals",
+          "title": "StringGreaterThanEquals",
+          "description": "Matches if the variable is lexicographically greater than or equal to the specified string.",
           "type": "string"
         },
         "StringGreaterThanEqualsPath": {
-          "title": "Stringgreaterthanequalspath",
+          "title": "StringGreaterThanEqualsPath",
+          "description": "A JSONPath expression referencing a string value for a lexicographic greater-than-or-equal comparison.",
           "type": "string"
         },
         "StringLessThan": {
-          "title": "Stringlessthan",
+          "title": "StringLessThan",
+          "description": "Matches if the variable is lexicographically less than the specified string.",
           "type": "string"
         },
         "StringLessThanPath": {
-          "title": "Stringlessthanpath",
+          "title": "StringLessThanPath",
+          "description": "A JSONPath expression referencing a string value for a lexicographic less-than comparison.",
           "type": "string"
         },
         "StringLessThanEquals": {
-          "title": "Stringlessthanequals",
+          "title": "StringLessThanEquals",
+          "description": "Matches if the variable is lexicographically less than or equal to the specified string.",
           "type": "string"
         },
         "StringLessThanEqualsPath": {
-          "title": "Stringlessthanequalspath",
+          "title": "StringLessThanEqualsPath",
+          "description": "A JSONPath expression referencing a string value for a lexicographic less-than-or-equal comparison.",
           "type": "string"
         },
         "StringMatches": {
-          "title": "Stringmatches",
+          "title": "StringMatches",
+          "description": "Matches if the variable matches the specified pattern. Supports wildcard characters (*).",
           "type": "string"
         },
         "TimestampEquals": {
-          "title": "Timestampequals",
+          "title": "TimestampEquals",
+          "description": "Matches if the variable equals the specified RFC 3339 timestamp.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampEqualsPath": {
-          "title": "Timestampequalspath",
+          "title": "TimestampEqualsPath",
+          "description": "A JSONPath expression referencing an RFC 3339 timestamp to compare for equality.",
           "type": "string"
         },
         "TimestampGreaterThan": {
-          "title": "Timestampgreaterthan",
+          "title": "TimestampGreaterThan",
+          "description": "Matches if the variable is later than the specified RFC 3339 timestamp.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampGreaterThanPath": {
-          "title": "Timestampgreaterthanpath",
+          "title": "TimestampGreaterThanPath",
+          "description": "A JSONPath expression referencing an RFC 3339 timestamp for a later-than comparison.",
           "type": "string"
         },
         "TimestampGreaterThanEquals": {
-          "title": "Timestampgreaterthanequals",
+          "title": "TimestampGreaterThanEquals",
+          "description": "Matches if the variable is equal to or later than the specified RFC 3339 timestamp.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampGreaterThanEqualsPath": {
-          "title": "Timestampgreaterthanequalspath",
+          "title": "TimestampGreaterThanEqualsPath",
+          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an equal-to-or-later-than comparison.",
           "type": "string"
         },
         "TimestampLessThan": {
-          "title": "Timestamplessthan",
+          "title": "TimestampLessThan",
+          "description": "Matches if the variable is earlier than the specified RFC 3339 timestamp.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampLessThanPath": {
-          "title": "Timestamplessthanpath",
+          "title": "TimestampLessThanPath",
+          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an earlier-than comparison.",
           "type": "string"
         },
         "TimestampLessThanEquals": {
-          "title": "Timestamplessthanequals",
+          "title": "TimestampLessThanEquals",
+          "description": "Matches if the variable is equal to or earlier than the specified RFC 3339 timestamp.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampLessThanEqualsPath": {
-          "title": "Timestamplessthanequalspath",
+          "title": "TimestampLessThanEqualsPath",
+          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an equal-to-or-earlier-than comparison.",
           "type": "string"
         }
       },
@@ -446,6 +524,7 @@
     },
     "ChoiceRule": {
       "title": "ChoiceRule",
+      "description": "A rule used within Choice state branching logic. Can be a variable comparison, or a logical combination using And, Or, or Not.",
       "anyOf": [
         {
           "$ref": "#/definitions/AndChoiceRule"
@@ -464,10 +543,12 @@
     },
     "AndChoiceRuleRoot": {
       "title": "AndChoiceRuleRoot",
+      "description": "A top-level choice rule requiring all nested rules to be true. Includes a Next property to specify the target state.",
       "type": "object",
       "properties": {
         "And": {
           "title": "And",
+          "description": "An array of choice rules that must all evaluate to true for this rule to match.",
           "minItems": 1,
           "type": "array",
           "items": {
@@ -476,6 +557,7 @@
         },
         "Next": {
           "title": "Next",
+          "description": "The name of the state to transition to if this rule matches.",
           "type": "string"
         }
       },
@@ -484,10 +566,12 @@
     },
     "OrChoiceRuleRoot": {
       "title": "OrChoiceRuleRoot",
+      "description": "A top-level choice rule requiring at least one nested rule to be true. Includes a Next property to specify the target state.",
       "type": "object",
       "properties": {
         "Or": {
           "title": "Or",
+          "description": "An array of choice rules where at least one must evaluate to true for this rule to match.",
           "minItems": 1,
           "type": "array",
           "items": {
@@ -496,6 +580,7 @@
         },
         "Next": {
           "title": "Next",
+          "description": "The name of the state to transition to if this rule matches.",
           "type": "string"
         }
       },
@@ -504,13 +589,17 @@
     },
     "NotChoiceRuleRoot": {
       "title": "NotChoiceRuleRoot",
+      "description": "A top-level choice rule that negates a nested rule. Includes a Next property to specify the target state.",
       "type": "object",
       "properties": {
         "Not": {
+          "title": "Not",
+          "description": "A single choice rule that is negated — this rule matches when the nested rule does not.",
           "$ref": "#/definitions/ChoiceRule"
         },
         "Next": {
           "title": "Next",
+          "description": "The name of the state to transition to if this rule matches.",
           "type": "string"
         }
       },
@@ -519,50 +608,62 @@
     },
     "VariableChoiceRuleRoot": {
       "title": "VariableChoiceRuleRoot",
+      "description": "A top-level choice rule that compares a variable against a value. Includes a Next property to specify the target state.",
       "type": "object",
       "properties": {
         "Next": {
           "title": "Next",
+          "description": "The name of the state to transition to if this rule matches.",
           "type": "string"
         },
         "Variable": {
           "title": "Variable",
+          "description": "A JSONPath expression referencing a value in the flow state to evaluate.",
           "type": "string"
         },
         "BooleanEquals": {
-          "title": "Booleanequals",
+          "title": "BooleanEquals",
+          "description": "Matches if the variable equals the specified boolean value.",
           "type": "boolean"
         },
         "BooleanEqualsPath": {
-          "title": "Booleanequalspath",
+          "title": "BooleanEqualsPath",
+          "description": "A JSONPath expression referencing a boolean value to compare for equality.",
           "type": "string"
         },
         "IsBoolean": {
-          "title": "Isboolean",
+          "title": "IsBoolean",
+          "description": "When true, matches if the variable is a boolean (true or false). When false, matches if it is not a boolean.",
           "type": "boolean"
         },
         "IsNull": {
-          "title": "Isnull",
+          "title": "IsNull",
+          "description": "When true, matches if the variable is null. When false, matches if it is not null.",
           "type": "boolean"
         },
         "IsNumeric": {
-          "title": "Isnumeric",
+          "title": "IsNumeric",
+          "description": "When true, matches if the variable is a number (integer or float). When false, matches if it is not a number.",
           "type": "boolean"
         },
         "IsPresent": {
-          "title": "Ispresent",
+          "title": "IsPresent",
+          "description": "When true, matches if the variable's JSONPath points to a valid location in the flow state. When false, matches if it does not.",
           "type": "boolean"
         },
         "IsString": {
-          "title": "Isstring",
+          "title": "IsString",
+          "description": "When true, matches if the variable is a string. When false, matches if it is not a string.",
           "type": "boolean"
         },
         "IsTimestamp": {
-          "title": "Istimestamp",
+          "title": "IsTimestamp",
+          "description": "When true, matches if the variable is formatted as an RFC 3339 timestamp. When false, matches if it is not.",
           "type": "boolean"
         },
         "NumericEquals": {
-          "title": "Numericequals",
+          "title": "NumericEquals",
+          "description": "Matches if the variable equals the specified numeric value.",
           "anyOf": [
             {
               "type": "integer"
@@ -573,11 +674,13 @@
           ]
         },
         "NumericEqualsPath": {
-          "title": "Numericequalspath",
+          "title": "NumericEqualsPath",
+          "description": "A JSONPath expression referencing a numeric value to compare for equality.",
           "type": "string"
         },
         "NumericGreaterThan": {
-          "title": "Numericgreaterthan",
+          "title": "NumericGreaterThan",
+          "description": "Matches if the variable is greater than the specified numeric value.",
           "anyOf": [
             {
               "type": "integer"
@@ -588,11 +691,13 @@
           ]
         },
         "NumericGreaterThanPath": {
-          "title": "Numericgreaterthanpath",
+          "title": "NumericGreaterThanPath",
+          "description": "A JSONPath expression referencing a numeric value for a greater-than comparison.",
           "type": "string"
         },
         "NumericGreaterThanEquals": {
-          "title": "Numericgreaterthanequals",
+          "title": "NumericGreaterThanEquals",
+          "description": "Matches if the variable is greater than or equal to the specified numeric value.",
           "anyOf": [
             {
               "type": "integer"
@@ -603,11 +708,13 @@
           ]
         },
         "NumericGreaterThanEqualsPath": {
-          "title": "Numericgreaterthanequalspath",
+          "title": "NumericGreaterThanEqualsPath",
+          "description": "A JSONPath expression referencing a numeric value for a greater-than-or-equal comparison.",
           "type": "string"
         },
         "NumericLessThan": {
-          "title": "Numericlessthan",
+          "title": "NumericLessThan",
+          "description": "Matches if the variable is less than the specified numeric value.",
           "anyOf": [
             {
               "type": "integer"
@@ -618,11 +725,13 @@
           ]
         },
         "NumericLessThanPath": {
-          "title": "Numericlessthanpath",
+          "title": "NumericLessThanPath",
+          "description": "A JSONPath expression referencing a numeric value for a less-than comparison.",
           "type": "string"
         },
         "NumericLessThanEquals": {
-          "title": "Numericlessthanequals",
+          "title": "NumericLessThanEquals",
+          "description": "Matches if the variable is less than or equal to the specified numeric value.",
           "anyOf": [
             {
               "type": "integer"
@@ -633,96 +742,118 @@
           ]
         },
         "NumericLessThanEqualsPath": {
-          "title": "Numericlessthanequalspath",
+          "title": "NumericLessThanEqualsPath",
+          "description": "A JSONPath expression referencing a numeric value for a less-than-or-equal comparison.",
           "type": "string"
         },
         "StringEquals": {
-          "title": "Stringequals",
+          "title": "StringEquals",
+          "description": "Matches if the variable equals the specified string.",
           "type": "string"
         },
         "StringEqualsPath": {
-          "title": "Stringequalspath",
+          "title": "StringEqualsPath",
+          "description": "A JSONPath expression referencing a string value to compare for equality.",
           "type": "string"
         },
         "StringGreaterThan": {
-          "title": "Stringgreaterthan",
+          "title": "StringGreaterThan",
+          "description": "Matches if the variable is lexicographically greater than the specified string.",
           "type": "string"
         },
         "StringGreaterThanPath": {
-          "title": "Stringgreaterthanpath",
+          "title": "StringGreaterThanPath",
+          "description": "A JSONPath expression referencing a string value for a lexicographic greater-than comparison.",
           "type": "string"
         },
         "StringGreaterThanEquals": {
-          "title": "Stringgreaterthanequals",
+          "title": "StringGreaterThanEquals",
+          "description": "Matches if the variable is lexicographically greater than or equal to the specified string.",
           "type": "string"
         },
         "StringGreaterThanEqualsPath": {
-          "title": "Stringgreaterthanequalspath",
+          "title": "StringGreaterThanEqualsPath",
+          "description": "A JSONPath expression referencing a string value for a lexicographic greater-than-or-equal comparison.",
           "type": "string"
         },
         "StringLessThan": {
-          "title": "Stringlessthan",
+          "title": "StringLessThan",
+          "description": "Matches if the variable is lexicographically less than the specified string.",
           "type": "string"
         },
         "StringLessThanPath": {
-          "title": "Stringlessthanpath",
+          "title": "StringLessThanPath",
+          "description": "A JSONPath expression referencing a string value for a lexicographic less-than comparison.",
           "type": "string"
         },
         "StringLessThanEquals": {
-          "title": "Stringlessthanequals",
+          "title": "StringLessThanEquals",
+          "description": "Matches if the variable is lexicographically less than or equal to the specified string.",
           "type": "string"
         },
         "StringLessThanEqualsPath": {
-          "title": "Stringlessthanequalspath",
+          "title": "StringLessThanEqualsPath",
+          "description": "A JSONPath expression referencing a string value for a lexicographic less-than-or-equal comparison.",
           "type": "string"
         },
         "StringMatches": {
-          "title": "Stringmatches",
+          "title": "StringMatches",
+          "description": "Matches if the variable matches the specified pattern. Supports wildcard characters (*).",
           "type": "string"
         },
         "TimestampEquals": {
-          "title": "Timestampequals",
+          "title": "TimestampEquals",
+          "description": "Matches if the variable equals the specified RFC 3339 timestamp.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampEqualsPath": {
-          "title": "Timestampequalspath",
+          "title": "TimestampEqualsPath",
+          "description": "A JSONPath expression referencing an RFC 3339 timestamp to compare for equality.",
           "type": "string"
         },
         "TimestampGreaterThan": {
-          "title": "Timestampgreaterthan",
+          "title": "TimestampGreaterThan",
+          "description": "Matches if the variable is later than the specified RFC 3339 timestamp.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampGreaterThanPath": {
-          "title": "Timestampgreaterthanpath",
+          "title": "TimestampGreaterThanPath",
+          "description": "A JSONPath expression referencing an RFC 3339 timestamp for a later-than comparison.",
           "type": "string"
         },
         "TimestampGreaterThanEquals": {
-          "title": "Timestampgreaterthanequals",
+          "title": "TimestampGreaterThanEquals",
+          "description": "Matches if the variable is equal to or later than the specified RFC 3339 timestamp.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampGreaterThanEqualsPath": {
-          "title": "Timestampgreaterthanequalspath",
+          "title": "TimestampGreaterThanEqualsPath",
+          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an equal-to-or-later-than comparison.",
           "type": "string"
         },
         "TimestampLessThan": {
-          "title": "Timestamplessthan",
+          "title": "TimestampLessThan",
+          "description": "Matches if the variable is earlier than the specified RFC 3339 timestamp.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampLessThanPath": {
-          "title": "Timestamplessthanpath",
+          "title": "TimestampLessThanPath",
+          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an earlier-than comparison.",
           "type": "string"
         },
         "TimestampLessThanEquals": {
-          "title": "Timestamplessthanequals",
+          "title": "TimestampLessThanEquals",
+          "description": "Matches if the variable is equal to or earlier than the specified RFC 3339 timestamp.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampLessThanEqualsPath": {
-          "title": "Timestamplessthanequalspath",
+          "title": "TimestampLessThanEqualsPath",
+          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an equal-to-or-earlier-than comparison.",
           "type": "string"
         }
       },
@@ -732,6 +863,7 @@
     },
     "ChoiceRuleRoot": {
       "title": "ChoiceRuleRoot",
+      "description": "A top-level choice rule within the Choices array. Must include a Next property to specify the target state on match.",
       "anyOf": [
         {
           "$ref": "#/definitions/AndChoiceRuleRoot"
@@ -750,19 +882,23 @@
     },
     "ChoiceState": {
       "title": "ChoiceState",
+      "description": "Adds branching logic to a flow. Evaluates an array of choice rules sequentially and transitions to the state specified by the first matching rule.",
       "type": "object",
       "properties": {
         "Type": {
           "title": "Type",
+          "description": "Must be \"Choice\" to indicate this state provides branching logic.",
           "enum": ["Choice"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
+          "description": "An optional human-readable description of this state.",
           "type": "string"
         },
         "Choices": {
           "title": "Choices",
+          "description": "An array of choice rules evaluated sequentially. The first matching rule determines the next state.",
           "minItems": 1,
           "type": "array",
           "items": {
@@ -771,6 +907,7 @@
         },
         "Default": {
           "title": "Default",
+          "description": "The state to transition to if no rule in Choices matches. If unset and no rules match, the run terminates with an error.",
           "type": "string"
         }
       },
@@ -779,31 +916,38 @@
     },
     "ExpressionEvalState": {
       "title": "ExpressionEvalState",
+      "description": "Evaluates expressions and stores results in the flow state without invoking an external action. Supports constants, JSONPath references (keys ending in \".$\"), and expressions (keys ending in \".=\").",
       "type": "object",
       "properties": {
         "Parameters": {
           "title": "Parameters",
+          "description": "Object containing constants, JSONPath references (keys ending in \".$\"), or expressions (keys ending in \".=\") to evaluate.",
           "type": "object"
         },
         "Type": {
           "title": "Type",
+          "description": "Must be \"ExpressionEval\" to indicate this state evaluates expressions.",
           "enum": ["ExpressionEval"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
+          "description": "An optional human-readable description of this state.",
           "type": "string"
         },
         "Next": {
           "title": "Next",
+          "description": "The name of the next state to transition to. Mutually exclusive with End.",
           "type": "string"
         },
         "End": {
           "title": "End",
+          "description": "When true, the flow run terminates successfully after this state completes. Mutually exclusive with Next.",
           "type": "boolean"
         },
         "ResultPath": {
-          "title": "Resultpath",
+          "title": "ResultPath",
+          "description": "A JSONPath expression specifying where computed values are stored in the flow state.",
           "type": "string"
         }
       },
@@ -812,31 +956,38 @@
     },
     "FailState": {
       "title": "FailState",
+      "description": "Terminates the flow run and marks it as a failure. The Error and Cause fields provide informative details for users reviewing the failure.",
       "type": "object",
       "properties": {
         "Type": {
           "title": "Type",
+          "description": "Must be \"Fail\" to indicate this state terminates the run with a failure.",
           "enum": ["Fail"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
+          "description": "An optional human-readable description of this state.",
           "type": "string"
         },
         "Cause": {
           "title": "Cause",
+          "description": "A descriptive explanation of the failure. Mutually exclusive with CausePath.",
           "type": "string"
         },
         "CausePath": {
-          "title": "Causepath",
+          "title": "CausePath",
+          "description": "A JSONPath expression to extract the failure cause from the current flow data. Mutually exclusive with Cause.",
           "type": "string"
         },
         "Error": {
           "title": "Error",
+          "description": "An error code or short identifier for the failure. Mutually exclusive with ErrorPath.",
           "type": "string"
         },
         "ErrorPath": {
-          "title": "Errorpath",
+          "title": "ErrorPath",
+          "description": "A JSONPath expression to extract the error identifier from the current flow data. Mutually exclusive with Error.",
           "type": "string"
         }
       },
@@ -845,39 +996,48 @@
     },
     "PassState": {
       "title": "PassState",
+      "description": "Passes input to output, optionally transforming data, without executing any external work. Useful for data manipulation, restructuring run state, or serving as a terminal success state.",
       "type": "object",
       "properties": {
         "Parameters": {
           "title": "Parameters",
+          "description": "Object containing constants, JSONPath references (keys ending in \".$\"), or expressions (keys ending in \".=\") for output.",
           "type": "object"
         },
         "Type": {
           "title": "Type",
+          "description": "Must be \"Pass\" to indicate this state passes input to output without performing work.",
           "enum": ["Pass"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
+          "description": "An optional human-readable description of this state.",
           "type": "string"
         },
         "Next": {
           "title": "Next",
+          "description": "The name of the next state to transition to. Mutually exclusive with End.",
           "type": "string"
         },
         "End": {
           "title": "End",
+          "description": "When true, the flow run terminates successfully after this state completes. Mutually exclusive with Next.",
           "type": "boolean"
         },
         "InputPath": {
-          "title": "Inputpath",
+          "title": "InputPath",
+          "description": "A JSONPath expression selecting source data from the current run state. Most useful when combined with ResultPath for data relocation.",
           "type": "string"
         },
         "ResultPath": {
-          "title": "Resultpath",
+          "title": "ResultPath",
+          "description": "A JSONPath expression designating where processed data is placed in the output.",
           "type": "string"
         },
         "Result": {
           "title": "Result",
+          "description": "Static payload data to use as the state's output, allowing you to inject fixed values into the flow state.",
           "type": "object"
         }
       },
@@ -886,40 +1046,49 @@
     },
     "WaitState": {
       "title": "WaitState",
+      "description": "Pauses flow execution for a specified duration or until a deadline. Exactly one of Seconds, Timestamp, SecondsPath, or TimestampPath must be provided.",
       "type": "object",
       "properties": {
         "Type": {
           "title": "Type",
+          "description": "Must be \"Wait\" to indicate this state pauses flow execution.",
           "enum": ["Wait"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
+          "description": "An optional human-readable description of this state.",
           "type": "string"
         },
         "Next": {
           "title": "Next",
+          "description": "The name of the next state to transition to after waiting. Mutually exclusive with End.",
           "type": "string"
         },
         "End": {
           "title": "End",
+          "description": "When true, the flow run terminates successfully after waiting. Mutually exclusive with Next.",
           "type": "boolean"
         },
         "Timestamp": {
           "title": "Timestamp",
+          "description": "An RFC 3339 timestamp deadline, after which the run should resume.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampPath": {
-          "title": "Timestamppath",
+          "title": "TimestampPath",
+          "description": "A JSONPath expression referencing a deadline timestamp from the current flow data.",
           "type": "string"
         },
         "Seconds": {
           "title": "Seconds",
+          "description": "The number of seconds to wait before resuming.",
           "type": "integer"
         },
         "SecondsPath": {
-          "title": "Secondspath",
+          "title": "SecondsPath",
+          "description": "A JSONPath expression referencing the number of seconds to wait from the current flow data.",
           "type": "string"
         }
       },
