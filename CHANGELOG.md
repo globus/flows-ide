@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.3](https://github.com/globus/flows-ide/compare/flows-ide-v2.0.2...flows-ide-v2.0.3) (2026-02-24)
+
+
+### Bug Fixes
+
+* Allow `CausePath` and `ErrorPath` in `Fail` states ([#330](https://github.com/globus/flows-ide/issues/330)) ([825ed8f](https://github.com/globus/flows-ide/commit/825ed8f1545c4b19979001a7dd71795a71a00849))
+* Ensure message and detail are rendered in validation error messages ([ba1aa14](https://github.com/globus/flows-ide/commit/ba1aa143047ec5f2020af1b17e7846741be5846f))
+* Updates FlowDefinition from service export ([#332](https://github.com/globus/flows-ide/issues/332)) ([cdb8bf9](https://github.com/globus/flows-ide/commit/cdb8bf982c135cdd0e99792fc9cbf5989bc85dbd))
+
 ## [2.0.2](https://github.com/globus/flows-ide/compare/flows-ide-v2.0.1...flows-ide-v2.0.2) (2025-12-08)
 
 
