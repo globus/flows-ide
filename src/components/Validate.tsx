@@ -1,4 +1,4 @@
-import { Button, Tooltip, Text } from "@mantine/core";
+import { Button, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
