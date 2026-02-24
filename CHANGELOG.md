@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.4](https://github.com/globus/flows-ide/compare/flows-ide-v2.0.3...flows-ide-v2.0.4) (2026-02-24)
+
+
+### Bug Fixes
+
+* dependency updates ([15cfa05](https://github.com/globus/flows-ide/commit/15cfa05559dd787e8a9e0aef0320d4e7ff9dba25))
+
 ## [2.0.3](https://github.com/globus/flows-ide/compare/flows-ide-v2.0.2...flows-ide-v2.0.3) (2026-02-24)
 
 
