@@ -773,11 +773,31 @@
           "title": "Cause",
           "type": "string"
         },
+        "CausePath": {
+          "title": "CausePath",
+          "type": "string"
+        },
         "Error": {
           "title": "Error",
           "type": "string"
+        },
+        "ErrorPath": {
+          "title": "ErrorPath",
+          "type": "string"
         }
       },
+      "allOf": [
+        {
+          "description": "Cause and CausePath are mutually exclusive",
+          "if": {"required": ["Cause"]},
+          "then": {"not": {"required": ["CausePath"]}}
+        },
+        {
+          "description": "Error and ErrorPath are mutually exclusive",
+          "if": {"required": ["Error"]},
+          "then": {"not": {"required": ["ErrorPath"]}}
+        }
+      ],
       "required": ["Type"],
       "additionalProperties": false
     },
