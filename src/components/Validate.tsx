@@ -1,4 +1,4 @@
-import { Button, Tooltip } from "@mantine/core";
+import { Button, Tooltip, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
@@ -76,20 +76,20 @@ export function ValidateButton() {
       ? json.error.detail
       : null;
     /**
-     * In the toast description, if we have "location errors", we'll just display the number of errors (since they will render as markers in the editor).
+     * In the toast message, if we have "location errors", we'll just display the number of errors (since they will render as markers in the editor).
      * Otherwise, we'll display the error `message` or `detail`.
      */
-    const description = locationErrors
+    const message = locationErrors
       ? `${json.error.detail.length} error${json.error.detail.length > 1 ? "s" : ""} found – see editor for details.`
-      : (json.error.message ?? json.error.detail);
+      : [json.error.message, json.error.detail].filter(Boolean).join("\n");
 
     notifications.show({
       title: `Invalid Definition (${json.error.code})`,
       color: "red",
-      message:
-        typeof description === "string" ? description : description.join(", "),
+      message,
       position: "bottom-right",
       withCloseButton: true,
+      autoClose: false,
     });
     /**
      * When Monaco is ready, and we have location errors, we'll add markers to the editor.
