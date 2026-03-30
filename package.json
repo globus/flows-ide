@@ -39,7 +39,7 @@
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.8.1",
-    "sst": "^3.9.28",
+    "sst": "^4.5.12",
     "typescript": "^5"
   },
   "packageManager": "npm@11.5.1"
