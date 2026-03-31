@@ -293,21 +293,6 @@ export default function Home() {
                         </Anchor>
                         .
                       </Text>
-                      <Text size="sm" mt="md">
-                        <Anchor
-                          href="https://docs.globus.org/api/flows/input-schema/#providing_hints_to_the_guided_input_form"
-                          c="var(--mantine-primary-color-2)"
-                          underline="always"
-                          rel="noopener noreferrer"
-                          target="_blank"
-                        >
-                          <Code>formats</Code> recognized by the Globus Web
-                          Application&nbsp;
-                          <LuExternalLink />
-                        </Anchor>
-                        &nbsp;
-                        <strong>will not</strong> be rendered.
-                      </Text>
                     </Alert>
                     <Paper p="md" m="md" withBorder>
                       <FlowsStartForm

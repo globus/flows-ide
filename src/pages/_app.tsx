@@ -2,6 +2,7 @@ import "../styles.css";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 
+import GlobusQueryProvider from "@globus/react-query/provider";
 import { Provider as GlobusAuthProvider } from "@globus/react-auth-context";
 import { info } from "@globus/sdk";
 
@@ -59,7 +60,7 @@ function FlowsIDE({ Component, pageProps }: AppProps) {
   }
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
-      <GlobusAuthProvider
+      <GlobusQueryProvider
         client={CLIENT}
         redirect={REDIRECT}
         scopes={SCOPES}
@@ -69,7 +70,7 @@ function FlowsIDE({ Component, pageProps }: AppProps) {
         <SessionManager />
         <Component {...pageProps} />
         <Notifications />
-      </GlobusAuthProvider>
+      </GlobusQueryProvider>
     </MantineProvider>
   );
 }
