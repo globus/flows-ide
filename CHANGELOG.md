@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.1.0](https://github.com/globus/flows-ide/compare/flows-ide-v2.0.5...flows-ide-v2.1.0) (2026-07-22)
+
+
+### Features
+
+* Manually adds new Flow Definition Schema properties (Web Inputs support) ([#364](https://github.com/globus/flows-ide/issues/364)) ([5d4a711](https://github.com/globus/flows-ide/commit/5d4a71151db99b6ab7946c7a0c91a972ada04015))
+
+
+### Bug Fixes
+
+* Upgrade Dependencies + Use `@globus/react-query` provider ([#344](https://github.com/globus/flows-ide/issues/344)) ([8bac5c5](https://github.com/globus/flows-ide/commit/8bac5c532251f351ce71b8a95689a14922fe8a5a))
+
 ## [2.0.5](https://github.com/globus/flows-ide/compare/flows-ide-v2.0.4...flows-ide-v2.0.5) (2026-02-24)
 
 
