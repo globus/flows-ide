@@ -3,7 +3,7 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
 import { useEffect, useState } from "react";
 
-import { FlowDefinition } from "@/pages";
+import { FlowDefinition } from "@/flow";
 import { useEditorStore } from "@/stores/editor";
 import { LuBookOpenCheck, LuFolderTree } from "react-icons/lu";
 

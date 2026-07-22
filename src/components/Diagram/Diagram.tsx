@@ -1,5 +1,3 @@
-"use client";
-
 import "reactflow/dist/style.css";
 
 import { useEffect, useMemo, useRef } from "react";
@@ -16,7 +14,7 @@ import ReactFlow, {
 import { useEditorStore } from "@/stores/editor";
 import StateNode from "./StateNode";
 
-import type { FlowDefinition } from "@/pages/index";
+import type { FlowDefinition } from "@/flow";
 
 const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
 
