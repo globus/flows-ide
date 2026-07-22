@@ -17,6 +17,8 @@
           "propertyName": "Type",
           "mapping": {
             "Action": "#/definitions/ActionState",
+            "AwaitWebInput": "#/definitions/AwaitWebInputState",
+            "CreateWebInput": "#/definitions/CreateWebInputState",
             "Choice": "#/definitions/ChoiceState",
             "ExpressionEval": "#/definitions/ExpressionEvalState",
             "Fail": "#/definitions/FailState",
@@ -27,6 +29,12 @@
         "oneOf": [
           {
             "$ref": "#/definitions/ActionState"
+          },
+          {
+            "$ref": "#/definitions/AwaitWebInputState"
+          },
+          {
+            "$ref": "#/definitions/CreateWebInputState"
           },
           {
             "$ref": "#/definitions/ChoiceState"
@@ -178,10 +186,17 @@
           "description": "Configuration for the action handler — either an ActionProvider (with a URL) or a RegisteredAPI (with a UUID). See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "anyOf": [
             {
-              "$ref": "#/definitions/ActionProviderHandler"
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/ActionProviderHandler"
+                },
+                {
+                  "$ref": "#/definitions/RegisteredAPIHandler"
+                }
+              ]
             },
             {
-              "$ref": "#/definitions/RegisteredAPIHandler"
+              "type": "string"
             }
           ]
         },
@@ -217,6 +232,96 @@
           "title": "RunAs",
           "description": "Specifies the identity used to execute the action. \"User\" (default) uses the invoker's credentials, \"Flow\" uses the flow's own credentials, or provide a custom role name. See https://docs.globus.org/api/flows/authoring-flows/roles for more information.",
           "type": "string"
+        }
+      },
+      "required": ["Type"],
+      "additionalProperties": false
+    },
+    "AwaitWebInputState": {
+      "title": "AwaitWebInputState",
+      "description": "State that waits for a web input response.\n\n:param type: Must be \"AwaitWebInput\"\n:param parameters: Dictionary containing WebInputId",
+      "type": "object",
+      "properties": {
+        "Parameters": {
+          "title": "Parameters",
+          "type": "object"
+        },
+        "Type": {
+          "title": "Type",
+          "enum": ["AwaitWebInput"],
+          "type": "string"
+        },
+        "Comment": {
+          "title": "Comment",
+          "type": "string"
+        },
+        "Next": {
+          "title": "Next",
+          "type": "string"
+        },
+        "End": {
+          "title": "End",
+          "type": "boolean"
+        },
+        "InputPath": {
+          "title": "InputPath",
+          "type": "string"
+        },
+        "ResultPath": {
+          "title": "ResultPath",
+          "type": "string"
+        },
+        "Catch": {
+          "title": "Catch",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Catcher"
+          }
+        }
+      },
+      "required": ["Type"],
+      "additionalProperties": false
+    },
+    "CreateWebInputState": {
+      "title": "CreateWebInputState",
+      "description": "State that creates a web input for user interaction.\n\n:param type: Must be \"CreateWebInput\"\n:param parameters: Web input configuration dict",
+      "type": "object",
+      "properties": {
+        "Parameters": {
+          "title": "Parameters",
+          "type": "object"
+        },
+        "Type": {
+          "title": "Type",
+          "enum": ["CreateWebInput"],
+          "type": "string"
+        },
+        "Comment": {
+          "title": "Comment",
+          "type": "string"
+        },
+        "Next": {
+          "title": "Next",
+          "type": "string"
+        },
+        "End": {
+          "title": "End",
+          "type": "boolean"
+        },
+        "InputPath": {
+          "title": "InputPath",
+          "type": "string"
+        },
+        "ResultPath": {
+          "title": "ResultPath",
+          "type": "string"
+        },
+        "Catch": {
+          "title": "Catch",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Catcher"
+          }
         }
       },
       "required": ["Type"],
