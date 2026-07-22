@@ -6,7 +6,7 @@ import GlobusQueryProvider from "@globus/react-query/provider";
 import { Provider as GlobusAuthProvider } from "@globus/react-auth-context";
 import { info } from "@globus/sdk";
 
-import { version } from "../../package.json" assert { type: "json" };
+import { version } from "../../package.json" with { type: "json" };
 
 import { createTheme, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";

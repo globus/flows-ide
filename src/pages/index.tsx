@@ -22,7 +22,7 @@ import {
 import Editor from "../components/Editor";
 import Diagram from "../components/Diagram/Diagram";
 import { DocumentationBrowser } from "@/components/DocumentationBrowser/DocumentationBrowser";
-import packageJson from "../../package.json" assert { type: "json" };
+import packageJson from "../../package.json" with { type: "json" };
 
 import { useEditorStore } from "@/stores/editor";
 
