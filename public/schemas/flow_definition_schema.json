@@ -1,22 +1,21 @@
 {
   "title": "FlowDefinition",
-  "description": "A Globus Flow definition describing an automated workflow. Flows allow you to create automated, reusable, and shareable workflows that can chain together multiple actions. See https://docs.globus.org/api/flows/authoring-flows/ for more information.",
   "type": "object",
   "properties": {
     "StartAt": {
-      "title": "StartAt",
-      "description": "The name of the state where flow execution begins. Must match a key in the States object. See https://docs.globus.org/api/flows/authoring-flows/introduction for more information.",
+      "title": "Startat",
       "type": "string"
     },
     "States": {
       "title": "States",
-      "description": "A mapping of state names to state definitions. Each state performs a task and describes how to transition to the next state. Runs manage a data payload which is passed from each state to the next. See https://docs.globus.org/api/flows/authoring-flows/introduction for more information.",
       "type": "object",
       "additionalProperties": {
         "discriminator": {
           "propertyName": "Type",
           "mapping": {
             "Action": "#/definitions/ActionState",
+            "AwaitWebInput": "#/definitions/AwaitWebInputState",
+            "CreateWebInput": "#/definitions/CreateWebInputState",
             "Choice": "#/definitions/ChoiceState",
             "ExpressionEval": "#/definitions/ExpressionEvalState",
             "Fail": "#/definitions/FailState",
@@ -27,6 +26,12 @@
         "oneOf": [
           {
             "$ref": "#/definitions/ActionState"
+          },
+          {
+            "$ref": "#/definitions/AwaitWebInputState"
+          },
+          {
+            "$ref": "#/definitions/CreateWebInputState"
           },
           {
             "$ref": "#/definitions/ChoiceState"
@@ -48,7 +53,6 @@
     },
     "Comment": {
       "title": "Comment",
-      "description": "An optional human-readable description of the flow definition. See https://docs.globus.org/api/flows/authoring-flows/introduction for more information.",
       "type": "string"
     }
   },
@@ -57,25 +61,21 @@
   "definitions": {
     "ActionProviderHandler": {
       "title": "ActionProviderHandler",
-      "description": "Configuration for an Action Provider handler, specifying the URL and optional scope for the action provider. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
       "type": "object",
       "properties": {
         "Type": {
           "title": "Type",
-          "description": "Must be \"ActionProvider\" to indicate this handler targets an Action Provider. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "enum": ["ActionProvider"],
           "type": "string"
         },
         "Url": {
           "title": "Url",
-          "description": "The HTTPS URL for the Action Provider. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "pattern": "^https://.+$",
           "strict": true,
           "type": "string"
         },
         "Scope": {
           "title": "Scope",
-          "description": "The authentication scope required to access the Action Provider. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "type": "string"
         }
       },
@@ -84,18 +84,15 @@
     },
     "RegisteredAPIHandler": {
       "title": "RegisteredAPIHandler",
-      "description": "Configuration for a Registered API handler, referencing a registered API by its UUID. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
       "type": "object",
       "properties": {
         "Type": {
           "title": "Type",
-          "description": "Must be \"RegisteredAPI\" to indicate this handler targets a Registered API. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "enum": ["RegisteredAPI"],
           "type": "string"
         },
         "Id": {
           "title": "Id",
-          "description": "The UUID of the Registered API. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "type": "string",
           "format": "uuid"
         }
@@ -105,12 +102,10 @@
     },
     "Catcher": {
       "title": "Catcher",
-      "description": "An exception handler that matches specific error types and routes execution to a recovery state. See https://docs.globus.org/api/flows/authoring-flows/exceptions for more information.",
       "type": "object",
       "properties": {
         "ErrorEquals": {
-          "title": "ErrorEquals",
-          "description": "An array of error type strings to match (e.g., \"ActionUnableToRun\", \"ActionFailedException\", \"ActionTimeout\"). See https://docs.globus.org/api/flows/authoring-flows/exceptions for more information.",
+          "title": "Errorequals",
           "type": "array",
           "items": {
             "type": "string"
@@ -118,12 +113,10 @@
         },
         "Next": {
           "title": "Next",
-          "description": "The name of the state to transition to when the error is caught. See https://docs.globus.org/api/flows/authoring-flows/exceptions for more information.",
           "type": "string"
         },
         "ResultPath": {
-          "title": "ResultPath",
-          "description": "A JSONPath expression indicating where to place the error output in the flow data. See https://docs.globus.org/api/flows/authoring-flows/exceptions for more information.",
+          "title": "Resultpath",
           "type": "string"
         }
       },
@@ -132,91 +125,173 @@
     },
     "ActionState": {
       "title": "ActionState",
-      "description": "Submits data to an action provider during flow execution and waits for it to complete. Action states block until reaching completion (SUCCEEDED/FAILED) or WaitTime expiration. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
       "type": "object",
       "properties": {
         "Parameters": {
           "title": "Parameters",
-          "description": "Object forming the input passed to the action's /run operation. Supports constants, JSONPath references (keys ending in \".$\"), and expressions (keys ending in \".=\"). Mutually exclusive with InputPath. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "type": "object"
         },
         "Type": {
           "title": "Type",
-          "description": "Must be \"Action\" to indicate this state invokes an action. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "enum": ["Action"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
-          "description": "An optional human-readable description of this state. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "type": "string"
         },
         "Next": {
           "title": "Next",
-          "description": "The name of the next state to transition to. Mutually exclusive with End. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "type": "string"
         },
         "End": {
           "title": "End",
-          "description": "When true, the flow run terminates successfully after this state completes. Mutually exclusive with Next. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "type": "boolean"
         },
         "ActionUrl": {
-          "title": "ActionUrl",
-          "description": "The base URL for the action provider. The system appends methods like /run, /status, /cancel to manage the action lifecycle. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
+          "title": "Actionurl",
           "pattern": "^https://.+$",
           "strict": true,
           "type": "string"
         },
         "ActionScope": {
-          "title": "ActionScope",
-          "description": "Optional authentication scope string for accessing the action. Usually unnecessary as the system queries the action provider for the required scope. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
+          "title": "Actionscope",
           "type": "string"
         },
         "Handler": {
           "title": "Handler",
-          "description": "Configuration for the action handler — either an ActionProvider (with a URL) or a RegisteredAPI (with a UUID). See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
           "anyOf": [
             {
-              "$ref": "#/definitions/ActionProviderHandler"
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/ActionProviderHandler"
+                },
+                {
+                  "$ref": "#/definitions/RegisteredAPIHandler"
+                }
+              ]
             },
             {
-              "$ref": "#/definitions/RegisteredAPIHandler"
+              "type": "string"
             }
           ]
         },
         "InputPath": {
-          "title": "InputPath",
-          "description": "A JSONPath expression identifying where input values exist in the current flow state. Mutually exclusive with Parameters. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
+          "title": "Inputpath",
           "type": "string"
         },
         "ResultPath": {
-          "title": "ResultPath",
-          "description": "A JSONPath expression indicating where action output is placed in the flow data payload. Defaults to \"$\" (root) if unspecified. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
+          "title": "Resultpath",
           "type": "string"
         },
         "WaitTime": {
-          "title": "WaitTime",
-          "description": "Maximum duration in seconds to wait for action completion. Default: 300 (5 minutes). The flow raises an ActionTimeout exception if the action does not complete within this interval. See https://docs.globus.org/api/flows/authoring-flows/actions for more information.",
+          "title": "Waittime",
           "type": "integer"
         },
         "ExceptionOnActionFailure": {
-          "title": "ExceptionOnActionFailure",
-          "description": "When true (default), raises an ActionFailedException if the action fails. Set to false to include the FAILED status in the flow state without raising an exception. See https://docs.globus.org/api/flows/authoring-flows/exceptions for more information.",
+          "title": "Exceptiononactionfailure",
           "type": "boolean"
         },
         "Catch": {
           "title": "Catch",
-          "description": "An array of exception handlers (Catchers). Each handler specifies error types to match and a target state for recovery. Unhandled exceptions abort the flow. See https://docs.globus.org/api/flows/authoring-flows/exceptions for more information.",
           "type": "array",
           "items": {
             "$ref": "#/definitions/Catcher"
           }
         },
         "RunAs": {
-          "title": "RunAs",
-          "description": "Specifies the identity used to execute the action. \"User\" (default) uses the invoker's credentials, \"Flow\" uses the flow's own credentials, or provide a custom role name. See https://docs.globus.org/api/flows/authoring-flows/roles for more information.",
+          "title": "Runas",
           "type": "string"
+        }
+      },
+      "required": ["Type"],
+      "additionalProperties": false
+    },
+    "AwaitWebInputState": {
+      "title": "AwaitWebInputState",
+      "description": "State that waits for a web input response.\n\n:param type: Must be \"AwaitWebInput\"\n:param parameters: Dictionary containing WebInputId",
+      "type": "object",
+      "properties": {
+        "Parameters": {
+          "title": "Parameters",
+          "type": "object"
+        },
+        "Type": {
+          "title": "Type",
+          "enum": ["AwaitWebInput"],
+          "type": "string"
+        },
+        "Comment": {
+          "title": "Comment",
+          "type": "string"
+        },
+        "Next": {
+          "title": "Next",
+          "type": "string"
+        },
+        "End": {
+          "title": "End",
+          "type": "boolean"
+        },
+        "InputPath": {
+          "title": "Inputpath",
+          "type": "string"
+        },
+        "ResultPath": {
+          "title": "Resultpath",
+          "type": "string"
+        },
+        "Catch": {
+          "title": "Catch",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Catcher"
+          }
+        }
+      },
+      "required": ["Type"],
+      "additionalProperties": false
+    },
+    "CreateWebInputState": {
+      "title": "CreateWebInputState",
+      "description": "State that creates a web input for user interaction.\n\n:param type: Must be \"CreateWebInput\"\n:param parameters: Web input configuration dict",
+      "type": "object",
+      "properties": {
+        "Parameters": {
+          "title": "Parameters",
+          "type": "object"
+        },
+        "Type": {
+          "title": "Type",
+          "enum": ["CreateWebInput"],
+          "type": "string"
+        },
+        "Comment": {
+          "title": "Comment",
+          "type": "string"
+        },
+        "Next": {
+          "title": "Next",
+          "type": "string"
+        },
+        "End": {
+          "title": "End",
+          "type": "boolean"
+        },
+        "InputPath": {
+          "title": "Inputpath",
+          "type": "string"
+        },
+        "ResultPath": {
+          "title": "Resultpath",
+          "type": "string"
+        },
+        "Catch": {
+          "title": "Catch",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Catcher"
+          }
         }
       },
       "required": ["Type"],
@@ -224,12 +299,10 @@
     },
     "AndChoiceRule": {
       "title": "AndChoiceRule",
-      "description": "A choice rule that evaluates to true when all nested rules are true. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "type": "object",
       "properties": {
         "And": {
           "title": "And",
-          "description": "An array of choice rules that must all evaluate to true for this rule to match. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "minItems": 1,
           "type": "array",
           "items": {
@@ -242,12 +315,10 @@
     },
     "OrChoiceRule": {
       "title": "OrChoiceRule",
-      "description": "A choice rule that evaluates to true when any nested rule is true. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "type": "object",
       "properties": {
         "Or": {
           "title": "Or",
-          "description": "An array of choice rules where at least one must evaluate to true for this rule to match. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "minItems": 1,
           "type": "array",
           "items": {
@@ -260,12 +331,9 @@
     },
     "NotChoiceRule": {
       "title": "NotChoiceRule",
-      "description": "A choice rule that evaluates to true when the nested rule is false. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "type": "object",
       "properties": {
         "Not": {
-          "title": "Not",
-          "description": "A single choice rule that is negated — this rule matches when the nested rule does not. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "$ref": "#/definitions/ChoiceRule"
         }
       },
@@ -274,57 +342,46 @@
     },
     "VariableChoiceRule": {
       "title": "VariableChoiceRule",
-      "description": "A choice rule that compares a variable from the flow state against a value using a comparison operator. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "type": "object",
       "properties": {
         "Variable": {
           "title": "Variable",
-          "description": "A JSONPath expression referencing a value in the flow state to evaluate. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "type": "string"
         },
         "BooleanEquals": {
-          "title": "BooleanEquals",
-          "description": "Matches if the variable equals the specified boolean value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Booleanequals",
           "type": "boolean"
         },
         "BooleanEqualsPath": {
-          "title": "BooleanEqualsPath",
-          "description": "A JSONPath expression referencing a boolean value to compare for equality. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Booleanequalspath",
           "type": "string"
         },
         "IsBoolean": {
-          "title": "IsBoolean",
-          "description": "When true, matches if the variable is a boolean (true or false). When false, matches if it is not a boolean. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Isboolean",
           "type": "boolean"
         },
         "IsNull": {
-          "title": "IsNull",
-          "description": "When true, matches if the variable is null. When false, matches if it is not null. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Isnull",
           "type": "boolean"
         },
         "IsNumeric": {
-          "title": "IsNumeric",
-          "description": "When true, matches if the variable is a number (integer or float). When false, matches if it is not a number. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Isnumeric",
           "type": "boolean"
         },
         "IsPresent": {
-          "title": "IsPresent",
-          "description": "When true, matches if the variable's JSONPath points to a valid location in the flow state. When false, matches if it does not. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Ispresent",
           "type": "boolean"
         },
         "IsString": {
-          "title": "IsString",
-          "description": "When true, matches if the variable is a string. When false, matches if it is not a string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Isstring",
           "type": "boolean"
         },
         "IsTimestamp": {
-          "title": "IsTimestamp",
-          "description": "When true, matches if the variable is formatted as an RFC 3339 timestamp. When false, matches if it is not. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Istimestamp",
           "type": "boolean"
         },
         "NumericEquals": {
-          "title": "NumericEquals",
-          "description": "Matches if the variable equals the specified numeric value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericequals",
           "anyOf": [
             {
               "type": "integer"
@@ -335,13 +392,11 @@
           ]
         },
         "NumericEqualsPath": {
-          "title": "NumericEqualsPath",
-          "description": "A JSONPath expression referencing a numeric value to compare for equality. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericequalspath",
           "type": "string"
         },
         "NumericGreaterThan": {
-          "title": "NumericGreaterThan",
-          "description": "Matches if the variable is greater than the specified numeric value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericgreaterthan",
           "anyOf": [
             {
               "type": "integer"
@@ -352,13 +407,11 @@
           ]
         },
         "NumericGreaterThanPath": {
-          "title": "NumericGreaterThanPath",
-          "description": "A JSONPath expression referencing a numeric value for a greater-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericgreaterthanpath",
           "type": "string"
         },
         "NumericGreaterThanEquals": {
-          "title": "NumericGreaterThanEquals",
-          "description": "Matches if the variable is greater than or equal to the specified numeric value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericgreaterthanequals",
           "anyOf": [
             {
               "type": "integer"
@@ -369,13 +422,11 @@
           ]
         },
         "NumericGreaterThanEqualsPath": {
-          "title": "NumericGreaterThanEqualsPath",
-          "description": "A JSONPath expression referencing a numeric value for a greater-than-or-equal comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericgreaterthanequalspath",
           "type": "string"
         },
         "NumericLessThan": {
-          "title": "NumericLessThan",
-          "description": "Matches if the variable is less than the specified numeric value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericlessthan",
           "anyOf": [
             {
               "type": "integer"
@@ -386,13 +437,11 @@
           ]
         },
         "NumericLessThanPath": {
-          "title": "NumericLessThanPath",
-          "description": "A JSONPath expression referencing a numeric value for a less-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericlessthanpath",
           "type": "string"
         },
         "NumericLessThanEquals": {
-          "title": "NumericLessThanEquals",
-          "description": "Matches if the variable is less than or equal to the specified numeric value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericlessthanequals",
           "anyOf": [
             {
               "type": "integer"
@@ -403,118 +452,96 @@
           ]
         },
         "NumericLessThanEqualsPath": {
-          "title": "NumericLessThanEqualsPath",
-          "description": "A JSONPath expression referencing a numeric value for a less-than-or-equal comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericlessthanequalspath",
           "type": "string"
         },
         "StringEquals": {
-          "title": "StringEquals",
-          "description": "Matches if the variable equals the specified string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringequals",
           "type": "string"
         },
         "StringEqualsPath": {
-          "title": "StringEqualsPath",
-          "description": "A JSONPath expression referencing a string value to compare for equality. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringequalspath",
           "type": "string"
         },
         "StringGreaterThan": {
-          "title": "StringGreaterThan",
-          "description": "Matches if the variable is lexicographically greater than the specified string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringgreaterthan",
           "type": "string"
         },
         "StringGreaterThanPath": {
-          "title": "StringGreaterThanPath",
-          "description": "A JSONPath expression referencing a string value for a lexicographic greater-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringgreaterthanpath",
           "type": "string"
         },
         "StringGreaterThanEquals": {
-          "title": "StringGreaterThanEquals",
-          "description": "Matches if the variable is lexicographically greater than or equal to the specified string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringgreaterthanequals",
           "type": "string"
         },
         "StringGreaterThanEqualsPath": {
-          "title": "StringGreaterThanEqualsPath",
-          "description": "A JSONPath expression referencing a string value for a lexicographic greater-than-or-equal comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringgreaterthanequalspath",
           "type": "string"
         },
         "StringLessThan": {
-          "title": "StringLessThan",
-          "description": "Matches if the variable is lexicographically less than the specified string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringlessthan",
           "type": "string"
         },
         "StringLessThanPath": {
-          "title": "StringLessThanPath",
-          "description": "A JSONPath expression referencing a string value for a lexicographic less-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringlessthanpath",
           "type": "string"
         },
         "StringLessThanEquals": {
-          "title": "StringLessThanEquals",
-          "description": "Matches if the variable is lexicographically less than or equal to the specified string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringlessthanequals",
           "type": "string"
         },
         "StringLessThanEqualsPath": {
-          "title": "StringLessThanEqualsPath",
-          "description": "A JSONPath expression referencing a string value for a lexicographic less-than-or-equal comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringlessthanequalspath",
           "type": "string"
         },
         "StringMatches": {
-          "title": "StringMatches",
-          "description": "Matches if the variable matches the specified pattern. Supports wildcard characters (*). See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringmatches",
           "type": "string"
         },
         "TimestampEquals": {
-          "title": "TimestampEquals",
-          "description": "Matches if the variable equals the specified RFC 3339 timestamp. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampequals",
           "type": "string",
           "format": "date-time"
         },
         "TimestampEqualsPath": {
-          "title": "TimestampEqualsPath",
-          "description": "A JSONPath expression referencing an RFC 3339 timestamp to compare for equality. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampequalspath",
           "type": "string"
         },
         "TimestampGreaterThan": {
-          "title": "TimestampGreaterThan",
-          "description": "Matches if the variable is later than the specified RFC 3339 timestamp. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampgreaterthan",
           "type": "string",
           "format": "date-time"
         },
         "TimestampGreaterThanPath": {
-          "title": "TimestampGreaterThanPath",
-          "description": "A JSONPath expression referencing an RFC 3339 timestamp for a later-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampgreaterthanpath",
           "type": "string"
         },
         "TimestampGreaterThanEquals": {
-          "title": "TimestampGreaterThanEquals",
-          "description": "Matches if the variable is equal to or later than the specified RFC 3339 timestamp. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampgreaterthanequals",
           "type": "string",
           "format": "date-time"
         },
         "TimestampGreaterThanEqualsPath": {
-          "title": "TimestampGreaterThanEqualsPath",
-          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an equal-to-or-later-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampgreaterthanequalspath",
           "type": "string"
         },
         "TimestampLessThan": {
-          "title": "TimestampLessThan",
-          "description": "Matches if the variable is earlier than the specified RFC 3339 timestamp. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestamplessthan",
           "type": "string",
           "format": "date-time"
         },
         "TimestampLessThanPath": {
-          "title": "TimestampLessThanPath",
-          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an earlier-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestamplessthanpath",
           "type": "string"
         },
         "TimestampLessThanEquals": {
-          "title": "TimestampLessThanEquals",
-          "description": "Matches if the variable is equal to or earlier than the specified RFC 3339 timestamp. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestamplessthanequals",
           "type": "string",
           "format": "date-time"
         },
         "TimestampLessThanEqualsPath": {
-          "title": "TimestampLessThanEqualsPath",
-          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an equal-to-or-earlier-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestamplessthanequalspath",
           "type": "string"
         }
       },
@@ -524,7 +551,6 @@
     },
     "ChoiceRule": {
       "title": "ChoiceRule",
-      "description": "A rule used within Choice state branching logic. Can be a variable comparison, or a logical combination using And, Or, or Not. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "anyOf": [
         {
           "$ref": "#/definitions/AndChoiceRule"
@@ -543,12 +569,10 @@
     },
     "AndChoiceRuleRoot": {
       "title": "AndChoiceRuleRoot",
-      "description": "A top-level choice rule requiring all nested rules to be true. Includes a Next property to specify the target state. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "type": "object",
       "properties": {
         "And": {
           "title": "And",
-          "description": "An array of choice rules that must all evaluate to true for this rule to match. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "minItems": 1,
           "type": "array",
           "items": {
@@ -557,7 +581,6 @@
         },
         "Next": {
           "title": "Next",
-          "description": "The name of the state to transition to if this rule matches. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "type": "string"
         }
       },
@@ -566,12 +589,10 @@
     },
     "OrChoiceRuleRoot": {
       "title": "OrChoiceRuleRoot",
-      "description": "A top-level choice rule requiring at least one nested rule to be true. Includes a Next property to specify the target state. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "type": "object",
       "properties": {
         "Or": {
           "title": "Or",
-          "description": "An array of choice rules where at least one must evaluate to true for this rule to match. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "minItems": 1,
           "type": "array",
           "items": {
@@ -580,7 +601,6 @@
         },
         "Next": {
           "title": "Next",
-          "description": "The name of the state to transition to if this rule matches. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "type": "string"
         }
       },
@@ -589,17 +609,13 @@
     },
     "NotChoiceRuleRoot": {
       "title": "NotChoiceRuleRoot",
-      "description": "A top-level choice rule that negates a nested rule. Includes a Next property to specify the target state. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "type": "object",
       "properties": {
         "Not": {
-          "title": "Not",
-          "description": "A single choice rule that is negated — this rule matches when the nested rule does not. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "$ref": "#/definitions/ChoiceRule"
         },
         "Next": {
           "title": "Next",
-          "description": "The name of the state to transition to if this rule matches. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "type": "string"
         }
       },
@@ -608,62 +624,50 @@
     },
     "VariableChoiceRuleRoot": {
       "title": "VariableChoiceRuleRoot",
-      "description": "A top-level choice rule that compares a variable against a value. Includes a Next property to specify the target state. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "type": "object",
       "properties": {
         "Next": {
           "title": "Next",
-          "description": "The name of the state to transition to if this rule matches. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "type": "string"
         },
         "Variable": {
           "title": "Variable",
-          "description": "A JSONPath expression referencing a value in the flow state to evaluate. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "type": "string"
         },
         "BooleanEquals": {
-          "title": "BooleanEquals",
-          "description": "Matches if the variable equals the specified boolean value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Booleanequals",
           "type": "boolean"
         },
         "BooleanEqualsPath": {
-          "title": "BooleanEqualsPath",
-          "description": "A JSONPath expression referencing a boolean value to compare for equality. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Booleanequalspath",
           "type": "string"
         },
         "IsBoolean": {
-          "title": "IsBoolean",
-          "description": "When true, matches if the variable is a boolean (true or false). When false, matches if it is not a boolean. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Isboolean",
           "type": "boolean"
         },
         "IsNull": {
-          "title": "IsNull",
-          "description": "When true, matches if the variable is null. When false, matches if it is not null. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Isnull",
           "type": "boolean"
         },
         "IsNumeric": {
-          "title": "IsNumeric",
-          "description": "When true, matches if the variable is a number (integer or float). When false, matches if it is not a number. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Isnumeric",
           "type": "boolean"
         },
         "IsPresent": {
-          "title": "IsPresent",
-          "description": "When true, matches if the variable's JSONPath points to a valid location in the flow state. When false, matches if it does not. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Ispresent",
           "type": "boolean"
         },
         "IsString": {
-          "title": "IsString",
-          "description": "When true, matches if the variable is a string. When false, matches if it is not a string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Isstring",
           "type": "boolean"
         },
         "IsTimestamp": {
-          "title": "IsTimestamp",
-          "description": "When true, matches if the variable is formatted as an RFC 3339 timestamp. When false, matches if it is not. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Istimestamp",
           "type": "boolean"
         },
         "NumericEquals": {
-          "title": "NumericEquals",
-          "description": "Matches if the variable equals the specified numeric value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericequals",
           "anyOf": [
             {
               "type": "integer"
@@ -674,13 +678,11 @@
           ]
         },
         "NumericEqualsPath": {
-          "title": "NumericEqualsPath",
-          "description": "A JSONPath expression referencing a numeric value to compare for equality. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericequalspath",
           "type": "string"
         },
         "NumericGreaterThan": {
-          "title": "NumericGreaterThan",
-          "description": "Matches if the variable is greater than the specified numeric value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericgreaterthan",
           "anyOf": [
             {
               "type": "integer"
@@ -691,13 +693,11 @@
           ]
         },
         "NumericGreaterThanPath": {
-          "title": "NumericGreaterThanPath",
-          "description": "A JSONPath expression referencing a numeric value for a greater-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericgreaterthanpath",
           "type": "string"
         },
         "NumericGreaterThanEquals": {
-          "title": "NumericGreaterThanEquals",
-          "description": "Matches if the variable is greater than or equal to the specified numeric value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericgreaterthanequals",
           "anyOf": [
             {
               "type": "integer"
@@ -708,13 +708,11 @@
           ]
         },
         "NumericGreaterThanEqualsPath": {
-          "title": "NumericGreaterThanEqualsPath",
-          "description": "A JSONPath expression referencing a numeric value for a greater-than-or-equal comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericgreaterthanequalspath",
           "type": "string"
         },
         "NumericLessThan": {
-          "title": "NumericLessThan",
-          "description": "Matches if the variable is less than the specified numeric value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericlessthan",
           "anyOf": [
             {
               "type": "integer"
@@ -725,13 +723,11 @@
           ]
         },
         "NumericLessThanPath": {
-          "title": "NumericLessThanPath",
-          "description": "A JSONPath expression referencing a numeric value for a less-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericlessthanpath",
           "type": "string"
         },
         "NumericLessThanEquals": {
-          "title": "NumericLessThanEquals",
-          "description": "Matches if the variable is less than or equal to the specified numeric value. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericlessthanequals",
           "anyOf": [
             {
               "type": "integer"
@@ -742,118 +738,96 @@
           ]
         },
         "NumericLessThanEqualsPath": {
-          "title": "NumericLessThanEqualsPath",
-          "description": "A JSONPath expression referencing a numeric value for a less-than-or-equal comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Numericlessthanequalspath",
           "type": "string"
         },
         "StringEquals": {
-          "title": "StringEquals",
-          "description": "Matches if the variable equals the specified string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringequals",
           "type": "string"
         },
         "StringEqualsPath": {
-          "title": "StringEqualsPath",
-          "description": "A JSONPath expression referencing a string value to compare for equality. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringequalspath",
           "type": "string"
         },
         "StringGreaterThan": {
-          "title": "StringGreaterThan",
-          "description": "Matches if the variable is lexicographically greater than the specified string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringgreaterthan",
           "type": "string"
         },
         "StringGreaterThanPath": {
-          "title": "StringGreaterThanPath",
-          "description": "A JSONPath expression referencing a string value for a lexicographic greater-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringgreaterthanpath",
           "type": "string"
         },
         "StringGreaterThanEquals": {
-          "title": "StringGreaterThanEquals",
-          "description": "Matches if the variable is lexicographically greater than or equal to the specified string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringgreaterthanequals",
           "type": "string"
         },
         "StringGreaterThanEqualsPath": {
-          "title": "StringGreaterThanEqualsPath",
-          "description": "A JSONPath expression referencing a string value for a lexicographic greater-than-or-equal comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringgreaterthanequalspath",
           "type": "string"
         },
         "StringLessThan": {
-          "title": "StringLessThan",
-          "description": "Matches if the variable is lexicographically less than the specified string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringlessthan",
           "type": "string"
         },
         "StringLessThanPath": {
-          "title": "StringLessThanPath",
-          "description": "A JSONPath expression referencing a string value for a lexicographic less-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringlessthanpath",
           "type": "string"
         },
         "StringLessThanEquals": {
-          "title": "StringLessThanEquals",
-          "description": "Matches if the variable is lexicographically less than or equal to the specified string. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringlessthanequals",
           "type": "string"
         },
         "StringLessThanEqualsPath": {
-          "title": "StringLessThanEqualsPath",
-          "description": "A JSONPath expression referencing a string value for a lexicographic less-than-or-equal comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringlessthanequalspath",
           "type": "string"
         },
         "StringMatches": {
-          "title": "StringMatches",
-          "description": "Matches if the variable matches the specified pattern. Supports wildcard characters (*). See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Stringmatches",
           "type": "string"
         },
         "TimestampEquals": {
-          "title": "TimestampEquals",
-          "description": "Matches if the variable equals the specified RFC 3339 timestamp. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampequals",
           "type": "string",
           "format": "date-time"
         },
         "TimestampEqualsPath": {
-          "title": "TimestampEqualsPath",
-          "description": "A JSONPath expression referencing an RFC 3339 timestamp to compare for equality. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampequalspath",
           "type": "string"
         },
         "TimestampGreaterThan": {
-          "title": "TimestampGreaterThan",
-          "description": "Matches if the variable is later than the specified RFC 3339 timestamp. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampgreaterthan",
           "type": "string",
           "format": "date-time"
         },
         "TimestampGreaterThanPath": {
-          "title": "TimestampGreaterThanPath",
-          "description": "A JSONPath expression referencing an RFC 3339 timestamp for a later-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampgreaterthanpath",
           "type": "string"
         },
         "TimestampGreaterThanEquals": {
-          "title": "TimestampGreaterThanEquals",
-          "description": "Matches if the variable is equal to or later than the specified RFC 3339 timestamp. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampgreaterthanequals",
           "type": "string",
           "format": "date-time"
         },
         "TimestampGreaterThanEqualsPath": {
-          "title": "TimestampGreaterThanEqualsPath",
-          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an equal-to-or-later-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestampgreaterthanequalspath",
           "type": "string"
         },
         "TimestampLessThan": {
-          "title": "TimestampLessThan",
-          "description": "Matches if the variable is earlier than the specified RFC 3339 timestamp. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestamplessthan",
           "type": "string",
           "format": "date-time"
         },
         "TimestampLessThanPath": {
-          "title": "TimestampLessThanPath",
-          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an earlier-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestamplessthanpath",
           "type": "string"
         },
         "TimestampLessThanEquals": {
-          "title": "TimestampLessThanEquals",
-          "description": "Matches if the variable is equal to or earlier than the specified RFC 3339 timestamp. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestamplessthanequals",
           "type": "string",
           "format": "date-time"
         },
         "TimestampLessThanEqualsPath": {
-          "title": "TimestampLessThanEqualsPath",
-          "description": "A JSONPath expression referencing an RFC 3339 timestamp for an equal-to-or-earlier-than comparison. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
+          "title": "Timestamplessthanequalspath",
           "type": "string"
         }
       },
@@ -863,7 +837,6 @@
     },
     "ChoiceRuleRoot": {
       "title": "ChoiceRuleRoot",
-      "description": "A top-level choice rule within the Choices array. Must include a Next property to specify the target state on match. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "anyOf": [
         {
           "$ref": "#/definitions/AndChoiceRuleRoot"
@@ -882,23 +855,19 @@
     },
     "ChoiceState": {
       "title": "ChoiceState",
-      "description": "Adds branching logic to a flow. Evaluates an array of choice rules sequentially and transitions to the state specified by the first matching rule. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
       "type": "object",
       "properties": {
         "Type": {
           "title": "Type",
-          "description": "Must be \"Choice\" to indicate this state provides branching logic. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "enum": ["Choice"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
-          "description": "An optional human-readable description of this state. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "type": "string"
         },
         "Choices": {
           "title": "Choices",
-          "description": "An array of choice rules evaluated sequentially. The first matching rule determines the next state. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "minItems": 1,
           "type": "array",
           "items": {
@@ -907,7 +876,6 @@
         },
         "Default": {
           "title": "Default",
-          "description": "The state to transition to if no rule in Choices matches. If unset and no rules match, the run terminates with an error. See https://docs.globus.org/api/flows/authoring-flows/choice_state for more information.",
           "type": "string"
         }
       },
@@ -916,38 +884,31 @@
     },
     "ExpressionEvalState": {
       "title": "ExpressionEvalState",
-      "description": "Evaluates expressions and stores results in the flow state without invoking an external action. Supports constants, JSONPath references (keys ending in \".$\"), and expressions (keys ending in \".=\"). See https://docs.globus.org/api/flows/authoring-flows/expressions for more information.",
       "type": "object",
       "properties": {
         "Parameters": {
           "title": "Parameters",
-          "description": "Object containing constants, JSONPath references (keys ending in \".$\"), or expressions (keys ending in \".=\") to evaluate. See https://docs.globus.org/api/flows/authoring-flows/expressions for more information.",
           "type": "object"
         },
         "Type": {
           "title": "Type",
-          "description": "Must be \"ExpressionEval\" to indicate this state evaluates expressions. See https://docs.globus.org/api/flows/authoring-flows/expressions for more information.",
           "enum": ["ExpressionEval"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
-          "description": "An optional human-readable description of this state. See https://docs.globus.org/api/flows/authoring-flows/expressions for more information.",
           "type": "string"
         },
         "Next": {
           "title": "Next",
-          "description": "The name of the next state to transition to. Mutually exclusive with End. See https://docs.globus.org/api/flows/authoring-flows/expressions for more information.",
           "type": "string"
         },
         "End": {
           "title": "End",
-          "description": "When true, the flow run terminates successfully after this state completes. Mutually exclusive with Next. See https://docs.globus.org/api/flows/authoring-flows/expressions for more information.",
           "type": "boolean"
         },
         "ResultPath": {
-          "title": "ResultPath",
-          "description": "A JSONPath expression specifying where computed values are stored in the flow state. See https://docs.globus.org/api/flows/authoring-flows/expressions for more information.",
+          "title": "Resultpath",
           "type": "string"
         }
       },
@@ -956,38 +917,31 @@
     },
     "FailState": {
       "title": "FailState",
-      "description": "Terminates the flow run and marks it as a failure. The Error and Cause fields provide informative details for users reviewing the failure. See https://docs.globus.org/api/flows/authoring-flows/fail_state for more information.",
       "type": "object",
       "properties": {
         "Type": {
           "title": "Type",
-          "description": "Must be \"Fail\" to indicate this state terminates the run with a failure. See https://docs.globus.org/api/flows/authoring-flows/fail_state for more information.",
           "enum": ["Fail"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
-          "description": "An optional human-readable description of this state. See https://docs.globus.org/api/flows/authoring-flows/fail_state for more information.",
           "type": "string"
         },
         "Cause": {
           "title": "Cause",
-          "description": "A descriptive explanation of the failure. Mutually exclusive with CausePath. See https://docs.globus.org/api/flows/authoring-flows/fail_state for more information.",
           "type": "string"
         },
         "CausePath": {
-          "title": "CausePath",
-          "description": "A JSONPath expression to extract the failure cause from the current flow data. Mutually exclusive with Cause. See https://docs.globus.org/api/flows/authoring-flows/fail_state for more information.",
+          "title": "Causepath",
           "type": "string"
         },
         "Error": {
           "title": "Error",
-          "description": "An error code or short identifier for the failure. Mutually exclusive with ErrorPath. See https://docs.globus.org/api/flows/authoring-flows/fail_state for more information.",
           "type": "string"
         },
         "ErrorPath": {
-          "title": "ErrorPath",
-          "description": "A JSONPath expression to extract the error identifier from the current flow data. Mutually exclusive with Error. See https://docs.globus.org/api/flows/authoring-flows/fail_state for more information.",
+          "title": "Errorpath",
           "type": "string"
         }
       },
@@ -996,48 +950,39 @@
     },
     "PassState": {
       "title": "PassState",
-      "description": "Passes input to output, optionally transforming data, without executing any external work. Useful for data manipulation, restructuring run state, or serving as a terminal success state. See https://docs.globus.org/api/flows/authoring-flows/pass_state for more information.",
       "type": "object",
       "properties": {
         "Parameters": {
           "title": "Parameters",
-          "description": "Object containing constants, JSONPath references (keys ending in \".$\"), or expressions (keys ending in \".=\") for output. See https://docs.globus.org/api/flows/authoring-flows/pass_state for more information.",
           "type": "object"
         },
         "Type": {
           "title": "Type",
-          "description": "Must be \"Pass\" to indicate this state passes input to output without performing work. See https://docs.globus.org/api/flows/authoring-flows/pass_state for more information.",
           "enum": ["Pass"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
-          "description": "An optional human-readable description of this state. See https://docs.globus.org/api/flows/authoring-flows/pass_state for more information.",
           "type": "string"
         },
         "Next": {
           "title": "Next",
-          "description": "The name of the next state to transition to. Mutually exclusive with End. See https://docs.globus.org/api/flows/authoring-flows/pass_state for more information.",
           "type": "string"
         },
         "End": {
           "title": "End",
-          "description": "When true, the flow run terminates successfully after this state completes. Mutually exclusive with Next. See https://docs.globus.org/api/flows/authoring-flows/pass_state for more information.",
           "type": "boolean"
         },
         "InputPath": {
-          "title": "InputPath",
-          "description": "A JSONPath expression selecting source data from the current run state. Most useful when combined with ResultPath for data relocation. See https://docs.globus.org/api/flows/authoring-flows/pass_state for more information.",
+          "title": "Inputpath",
           "type": "string"
         },
         "ResultPath": {
-          "title": "ResultPath",
-          "description": "A JSONPath expression designating where processed data is placed in the output. See https://docs.globus.org/api/flows/authoring-flows/pass_state for more information.",
+          "title": "Resultpath",
           "type": "string"
         },
         "Result": {
           "title": "Result",
-          "description": "Static payload data to use as the state's output, allowing you to inject fixed values into the flow state. See https://docs.globus.org/api/flows/authoring-flows/pass_state for more information.",
           "type": "object"
         }
       },
@@ -1046,49 +991,40 @@
     },
     "WaitState": {
       "title": "WaitState",
-      "description": "Pauses flow execution for a specified duration or until a deadline. Exactly one of Seconds, Timestamp, SecondsPath, or TimestampPath must be provided. See https://docs.globus.org/api/flows/authoring-flows/wait_state for more information.",
       "type": "object",
       "properties": {
         "Type": {
           "title": "Type",
-          "description": "Must be \"Wait\" to indicate this state pauses flow execution. See https://docs.globus.org/api/flows/authoring-flows/wait_state for more information.",
           "enum": ["Wait"],
           "type": "string"
         },
         "Comment": {
           "title": "Comment",
-          "description": "An optional human-readable description of this state. See https://docs.globus.org/api/flows/authoring-flows/wait_state for more information.",
           "type": "string"
         },
         "Next": {
           "title": "Next",
-          "description": "The name of the next state to transition to after waiting. Mutually exclusive with End. See https://docs.globus.org/api/flows/authoring-flows/wait_state for more information.",
           "type": "string"
         },
         "End": {
           "title": "End",
-          "description": "When true, the flow run terminates successfully after waiting. Mutually exclusive with Next. See https://docs.globus.org/api/flows/authoring-flows/wait_state for more information.",
           "type": "boolean"
         },
         "Timestamp": {
           "title": "Timestamp",
-          "description": "An RFC 3339 timestamp deadline, after which the run should resume. See https://docs.globus.org/api/flows/authoring-flows/wait_state for more information.",
           "type": "string",
           "format": "date-time"
         },
         "TimestampPath": {
-          "title": "TimestampPath",
-          "description": "A JSONPath expression referencing a deadline timestamp from the current flow data. See https://docs.globus.org/api/flows/authoring-flows/wait_state for more information.",
+          "title": "Timestamppath",
           "type": "string"
         },
         "Seconds": {
           "title": "Seconds",
-          "description": "The number of seconds to wait before resuming. See https://docs.globus.org/api/flows/authoring-flows/wait_state for more information.",
           "type": "integer"
         },
         "SecondsPath": {
-          "title": "SecondsPath",
-          "description": "A JSONPath expression referencing the number of seconds to wait from the current flow data. See https://docs.globus.org/api/flows/authoring-flows/wait_state for more information.",
+          "title": "Secondspath",
           "type": "string"
         }
       },
