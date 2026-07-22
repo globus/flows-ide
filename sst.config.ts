@@ -13,7 +13,7 @@ export default $config({
     new sst.aws.StaticSite("FlowsIDE", {
       environment: {
         // Served from the CloudFront distribution root, so no base path.
-        VITE_BASE_PATH: "/",
+        VITE_BASE_PATH: "",
       },
       build: {
         command: "npm run build",

@@ -8,13 +8,13 @@ export default defineConfig(({ mode }) => {
 
   /**
    * The public base path the app is served from. On GitHub Pages this is
-   * `/flows-ide/` (see `.env`); deployments that serve from the root (e.g. the
-   * SST/CloudFront `sandbox` stage) override it to `/` via `VITE_BASE_PATH`.
+   * `/flows-ide` (see `.env`); deployments that serve from the root (e.g. the
+   * SST/CloudFront `sandbox` stage) override it to `""` via `VITE_BASE_PATH`.
    *
    * `process.env` takes precedence so deploy tooling can override the committed
    * `.env` value; `loadEnv` only reads `.env*` files.
    */
-  const base = process.env.VITE_BASE_PATH ?? env.VITE_BASE_PATH ?? "/";
+  const base = process.env.VITE_BASE_PATH ?? env.VITE_BASE_PATH ?? "";
 
   return {
     base,
