@@ -37,11 +37,11 @@ function configureEditor(
       : "ignore",
     schemas: [
       {
-        uri: `${window.location.origin}${import.meta.env.BASE_URL}schemas/flow_definition_schema.json`,
+        uri: `${window.location.origin}${import.meta.env.BASE_URL}/schemas/flow_definition_schema.json`,
         fileMatch: ["definition.json"],
       },
       {
-        uri: `${window.location.origin}${import.meta.env.BASE_URL}schemas/input_schema_schema.json`,
+        uri: `${window.location.origin}${import.meta.env.BASE_URL}/schemas/input_schema_schema.json`,
         fileMatch: ["input-schema.json"],
       },
     ],
