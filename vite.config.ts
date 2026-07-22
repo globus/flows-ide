@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       outDir: "dist",
-      rollupOptions: {
+      rolldownOptions: {
         input: {
           main: resolve(__dirname, "index.html"),
           // Dedicated entry for the OAuth2 redirect route. GitHub Pages serves
