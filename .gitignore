@@ -9,11 +9,9 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
-# production
+# build output
+/dist
+/out
 /build
 
 # misc
@@ -33,10 +31,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+
+# vite
+vite.config.ts.timestamp-*
 
 # sst
 .sst
-
-# open-next
-.open-next

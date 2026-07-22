@@ -1,14 +1,12 @@
-import React, { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { Center, Text, Loader } from "@mantine/core";
 
 /**
  * This route is used exclusively for handling the OAuth2 redirect.
  */
-export default function Authenticate() {
+export default function AuthenticateRoute() {
   const auth = useGlobusAuth();
-  const router = useRouter();
   const instance = auth.authorization;
 
   /**
@@ -38,17 +36,15 @@ export default function Authenticate() {
         return;
       }
       await instance.refreshTokens();
-      return router.replace("/");
+      window.location.replace(import.meta.env.BASE_URL);
     }
     redirect();
-  }, [router, instance, auth.isAuthenticated]);
+  }, [instance, auth.isAuthenticated]);
 
   return (
-    <>
-      <Center mt="xl">
-        <Loader mr="xs" size="sm" />
-        <Text>Attempting to validate credentials...</Text>
-      </Center>
-    </>
+    <Center mt="xl">
+      <Loader mr="xs" size="sm" />
+      <Text>Attempting to validate credentials...</Text>
+    </Center>
   );
 }

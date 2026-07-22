@@ -126,7 +126,7 @@ export const ACTION_PROVIDERS: ActionProviderEntry[] = [
   },
 ];
 
-let providers: ActionProviderEntry[] = [...ACTION_PROVIDERS];
+const providers: ActionProviderEntry[] = [...ACTION_PROVIDERS];
 
 export async function fetchActionProviders() {
   if (BOOTSTRAPPED) {

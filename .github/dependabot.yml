@@ -19,7 +19,14 @@ updates:
           - "react-dom"
           - "@types/react"
           - "@types/react-dom"
-      next:
+      vite:
         patterns:
-          - "next"
-          - "eslint-config-next"
+          - "vite"
+          - "@vitejs/*"
+      eslint:
+        patterns:
+          - "eslint"
+          - "@eslint/*"
+          - "typescript-eslint"
+          - "eslint-plugin-*"
+          - "eslint-config-*"

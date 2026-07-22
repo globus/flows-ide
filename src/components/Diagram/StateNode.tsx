@@ -1,8 +1,7 @@
-"use client";
 import { Badge, Paper, Flex, Stack, Text } from "@mantine/core";
 import { Handle, Position } from "reactflow";
 
-import type { FlowDefinition } from "@/pages";
+import type { FlowDefinition } from "@/flow";
 import { useMonaco } from "@monaco-editor/react";
 type State = FlowDefinition["States"][string];
 

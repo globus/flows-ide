@@ -3,9 +3,10 @@ import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
 import { useEffect, useState } from "react";
 
-import { FlowDefinition } from "@/pages";
 import { useEditorStore } from "@/stores/editor";
 import { LuBookOpenCheck, LuFolderTree } from "react-icons/lu";
+
+import type { FlowDefinition } from "@/flow";
 
 type Flows = Awaited<
   ReturnType<Awaited<ReturnType<typeof flows.flows.getAll>>["json"]>

@@ -27,12 +27,13 @@ Examples
 
 ## Contributing
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This is a [React](https://react.dev/) project built with [Vite](https://vite.dev/).
 
 ## Important Architecture Details
 
-- This project uses a `.env` file to [configure environment variables](https://nextjs.org/docs/pages/building-your-application/configuring/environment-variables)
-- The Next.js configuration (and feature set) should be limited to [Static Site Generation](https://nextjs.org/docs/pages/building-your-application/rendering/static-site-generation) to ensure compatibility with GitHub Pages.
+- This project uses a `.env` file to [configure environment variables](https://vite.dev/guide/env-and-mode). Variables exposed to the client must be prefixed with `VITE_`.
+- The app is a fully static [multi-page build](https://vite.dev/guide/build#multi-page-app) (`index.html` and `authenticate.html`) to ensure compatibility with GitHub Pages. The `authenticate.html` entry handles the OAuth2 redirect.
+- The public base path is controlled by `VITE_BASE_PATH` (see `.env`), which maps to Vite's [`base`](https://vite.dev/config/shared-options#base) option. It defaults to `/flows-ide` for GitHub Pages; deployments served from the root (e.g. the SST `sandbox` stage) override it to `/`.
 
 ### Running the Development Server
 
@@ -40,7 +41,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 npm run dev
 ```
 
-The application will be available on the Next.js host – since the application assumes the default GitHub Pages run-time, the basepath is configured to `/flows-ide` (requests to `/` will result in a `404`).
+The application will be available on the Vite dev server host. Since the application assumes the default GitHub Pages run-time, the basepath is configured to `/flows-ide` (requests to `/` will result in a `404`).
 
 ## Deployment
 
