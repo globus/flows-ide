@@ -39,6 +39,8 @@ import {
 } from "react-icons/lu";
 import { COMPRESSION_METHODS, decode } from "@/utils/compression";
 
+import logoUrl from "./assets/globus-logo.svg";
+
 /**
  * Feature flag to enable/disable the "Panel" component.
  */
@@ -133,11 +135,7 @@ export default function Home() {
         <Flex justify="space-between" align="center" h="100%" px="sm">
           <Group align="center">
             <Title component="h1" c={"white"}>
-              <Image
-                src={`${import.meta.env.BASE_URL}globus-logo.svg`}
-                alt="Globus Flows IDE"
-                h={25}
-              />
+              <Image src={logoUrl} alt="Globus Flows IDE" h={25} />
             </Title>
             <Text c="white">
               <Code color="red" mr="sm">

@@ -53,7 +53,7 @@ const baseURL = globalThis.location
  * The OAuth2 redirect URI. `import.meta.env.BASE_URL` reflects Vite's `base`
  * (e.g. `/flows-ide/`), so this resolves to `<origin>/flows-ide/authenticate`.
  */
-const REDIRECT = `${baseURL}${import.meta.env.BASE_URL}authenticate`;
+const REDIRECT = `${baseURL}${import.meta.env.BASE_URL}/authenticate`;
 
 export default function Providers({ children }: { children: ReactNode }) {
   if (!CLIENT) {
