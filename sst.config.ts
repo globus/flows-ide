@@ -12,11 +12,12 @@ export default $config({
   async run() {
     new sst.aws.StaticSite("FlowsIDE", {
       environment: {
-        NEXT_PUBLIC_BASE_PATH: "",
+        // Served from the CloudFront distribution root, so no base path.
+        VITE_BASE_PATH: "/",
       },
       build: {
         command: "npm run build",
-        output: "out",
+        output: "dist",
       },
     });
   },

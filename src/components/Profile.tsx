@@ -1,7 +1,6 @@
 import { Button, Text, Menu, Stack } from "@mantine/core";
 import { LuChevronDown } from "react-icons/lu";
 import { useGlobusAuth } from "@globus/react-auth-context";
-import router from "next/router";
 
 import { useEditorStore } from "@/stores/editor";
 
@@ -42,7 +41,7 @@ export default function Profile() {
           <Menu.Item
             onClick={async () => {
               await auth.authorization?.revoke();
-              router.push("/");
+              window.location.assign(import.meta.env.BASE_URL);
             }}
           >
             Log Out

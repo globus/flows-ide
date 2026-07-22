@@ -1,5 +1,3 @@
-"use client";
-
 import { useEditorStore } from "@/stores/editor";
 import { COMPRESSION_METHODS, encode } from "@/utils/compression";
 import { Button } from "@mantine/core";

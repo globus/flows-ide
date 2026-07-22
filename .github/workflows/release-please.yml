@@ -25,4 +25,4 @@ jobs:
   deploy:
     if: ${{ needs.release-please.outputs.releases_created == 'true' }}
     needs: release-please
-    uses: ./.github/workflows/nextjs.yml
+    uses: ./.github/workflows/pages.yml

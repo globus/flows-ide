@@ -1,24 +1,23 @@
-import "../styles.css";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
+import "./styles.css";
+
+import type { ReactNode } from "react";
 
 import GlobusQueryProvider from "@globus/react-query/provider";
-import { Provider as GlobusAuthProvider } from "@globus/react-auth-context";
 import { info } from "@globus/sdk";
 
-import { version } from "../../package.json" with { type: "json" };
+import { version } from "../package.json";
 
 import { createTheme, MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 
 import SessionManager from "@/components/SessionManager";
 
-import type { AppProps } from "next/app";
-
 const GLOBUS_ENVIRONMENT =
-  process.env.NEXT_PUBLIC_GLOBUS_ENVIRONMENT || "production";
-const CLIENT = process.env.NEXT_PUBLIC_GLOBUS_CLIENT_ID;
-const SCOPES = process.env.NEXT_PUBLIC_GLOBUS_SCOPES;
+  import.meta.env.VITE_GLOBUS_ENVIRONMENT || "production";
+const CLIENT = import.meta.env.VITE_GLOBUS_CLIENT_ID;
+const SCOPES = import.meta.env.VITE_GLOBUS_SCOPES;
 
 // @ts-ignore
 globalThis.GLOBUS_SDK_ENVIRONMENT = GLOBUS_ENVIRONMENT;
@@ -50,12 +49,16 @@ const baseURL = globalThis.location
   ? `${globalThis.location.protocol}//${globalThis.location.host}`
   : "";
 
-const REDIRECT = `${baseURL}/flows-ide/authenticate`;
+/**
+ * The OAuth2 redirect URI. `import.meta.env.BASE_URL` reflects Vite's `base`
+ * (e.g. `/flows-ide/`), so this resolves to `<origin>/flows-ide/authenticate`.
+ */
+const REDIRECT = `${baseURL}${import.meta.env.BASE_URL}authenticate`;
 
-function FlowsIDE({ Component, pageProps }: AppProps) {
+export default function Providers({ children }: { children: ReactNode }) {
   if (!CLIENT) {
     throw new Error(
-      "Missing GLOBUS_CLIENT_ID environment variable. Please set it in your .env file.",
+      "Missing VITE_GLOBUS_CLIENT_ID environment variable. Please set it in your .env file.",
     );
   }
   return (
@@ -68,11 +71,9 @@ function FlowsIDE({ Component, pageProps }: AppProps) {
         environment={GLOBUS_ENVIRONMENT}
       >
         <SessionManager />
-        <Component {...pageProps} />
+        {children}
         <Notifications />
       </GlobusQueryProvider>
     </MantineProvider>
   );
 }
-
-export default FlowsIDE;

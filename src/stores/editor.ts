@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 import { toPascalCase } from "@/components/DocumentationBrowser/library";
 
-import type { FlowDefinition } from "@/pages";
+import type { FlowDefinition } from "@/flow";
 import type { ActionProviderEntry } from "@/components/DocumentationBrowser/library";
 
 type EditorState = {
