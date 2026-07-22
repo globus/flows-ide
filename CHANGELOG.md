@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.1](https://github.com/globus/flows-ide/compare/flows-ide-v2.1.0...flows-ide-v2.1.1) (2026-07-22)
+
+
+### Bug Fixes
+
+* package-lock.json missing dependency ([0169526](https://github.com/globus/flows-ide/commit/0169526b345fb6b1bd9e987932aa8c8426bdc356))
+
 ## [2.1.0](https://github.com/globus/flows-ide/compare/flows-ide-v2.0.5...flows-ide-v2.1.0) (2026-07-22)
 
 
