@@ -4,55 +4,68 @@ import {
   Flex,
   Stack,
   Text,
+  Tooltip,
   Group,
   type BadgeProps,
 } from "@mantine/core";
 import { Handle, Position } from "reactflow";
+import {
+  LuCheck,
+  LuCircleDot,
+  LuCode,
+  LuHourglass,
+  LuListTodo,
+  LuRegex,
+  LuX,
+} from "react-icons/lu";
+import { useMonaco } from "@monaco-editor/react";
 
 import type { FlowDefinition } from "@/flow";
-import { useMonaco } from "@monaco-editor/react";
-import { LuListTodo } from "react-icons/lu";
 type State = FlowDefinition["States"][string];
 
-function Icon({ type }: { type: string }) {
-  return type === "AwaitWebInput" ? <LuListTodo size="1em" /> : null;
+const TYPE_COLORS: Record<string, string> = {
+  Action: "blue",
+  Choice: "blue",
+  ExpressionEval: "violet",
+  Fail: "red",
+  Pass: "green",
+  Wait: "cyan",
+  AwaitWebInput: "blue",
+  CreateWebInput: "blue",
+};
+
+const TYPE_ICONS: Record<string, React.ReactNode> = {
+  Action: <LuCode size="1em" />,
+  Choice: <LuCircleDot size="1em" />,
+  ExpressionEval: <LuRegex size="1em" />,
+  Fail: <LuX size="1em" />,
+  Pass: <LuCheck size="1em" />,
+  Wait: <LuHourglass size="1em" />,
+  AwaitWebInput: <LuListTodo size="1em" />,
+  CreateWebInput: <LuListTodo size="1em" />,
+};
+
+function TypeIcon({ type }: { type: string }) {
+  if (!type) return null;
+  return TYPE_ICONS[type] ?? null;
 }
 
-function TypeBadge({ type, ...rest }: { type: string } & BadgeProps) {
+function TypeBadge({ type }: { type: string } & BadgeProps) {
   if (!type) return null;
-  const props = {
-    Fail: { color: "red" },
-    Pass: { color: "green" },
-    Choice: { color: "blue" },
-    ExpressionEval: { color: "purple" },
-  }[type];
   return (
-    <Badge tt="none" variant="outline" {...props} {...rest} ff="monospace">
-      <Group gap={2}>
-        <Icon type={type} />
+    <Badge
+      tt="none"
+      ff="monospace"
+      variant="outline"
+      radius="sm"
+      color={TYPE_COLORS[type]}
+    >
+      <Group gap={4}>
+        <TypeIcon type={type} />
         {type}
       </Group>
     </Badge>
   );
-}
-
-function getStylePropsForState({
-  isStart,
-  isEnd,
-  state,
-}: {
-  isStart: boolean;
-  isEnd: boolean;
-  state?: State;
-}) {
-  if (isStart) return { bg: "green.1" };
-  if (isEnd) return { bg: "green.1" };
-
-  if (state?.Type === "Fail") return { bg: "red.1" };
-
-  return {
-    bg: "white",
-  };
 }
 
 export default function StateNode({
@@ -89,28 +102,52 @@ export default function StateNode({
 
   const isStart = id === definition.StartAt;
   const isEnd = state?.End === true;
+  const isTerminal = isEnd || state?.Type === "Fail";
+
   return (
-    <>
-      <Flex onClick={goToState}>
-        {!isStart && (
-          <Handle type="target" isConnectable={false} position={Position.Top} />
-        )}
-        <Paper
-          withBorder
-          p="xs"
-          {...getStylePropsForState({ isStart, isEnd, state })}
-        >
+    <Flex onClick={goToState}>
+      {!isStart && (
+        <Handle type="target" isConnectable={false} position={Position.Top} />
+      )}
+      <Tooltip
+        label={state?.Comment}
+        disabled={!state?.Comment}
+        position="right"
+        withArrow
+      >
+        <Paper withBorder p="xs" bg="white" miw={200}>
           <Stack gap={1}>
-            <Text c="black">{id}</Text>
-            <TypeBadge type={state?.Type || ""} size="xs" />
+            <Group justify="space-between" align="center">
+              <Text c="black" size="xs" fw={500}>
+                {id}
+              </Text>
+              {isStart && (
+                <Badge color="green" size="xs">
+                  Start
+                </Badge>
+              )}
+              {isEnd && (
+                <Badge color="blue" size="xs">
+                  End
+                </Badge>
+              )}
+              {state?.Type === "Fail" && (
+                <Badge color="red" size="xs">
+                  Fail
+                </Badge>
+              )}
+            </Group>
+            <TypeBadge type={state?.Type || ""} size="compact-xs" />
           </Stack>
         </Paper>
+      </Tooltip>
+      {!isTerminal && (
         <Handle
           type="source"
           isConnectable={false}
           position={Position.Bottom}
         />
-      </Flex>
-    </>
+      )}
+    </Flex>
   );
 }
