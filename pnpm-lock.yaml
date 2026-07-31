@@ -68,8 +68,8 @@ importers:
         specifier: ^4.17.24
         version: 4.17.24
       '@types/node':
-        specifier: ^24.13.3
-        version: 24.13.3
+        specifier: ^26
+        version: 26.1.2
       '@types/react':
         specifier: 19.2.14
         version: 19.2.14
@@ -78,7 +78,7 @@ importers:
         version: 19.2.3(@types/react@19.2.14)
       '@vitejs/plugin-react':
         specifier: ^6.0.5
-        version: 6.0.5(vite@8.2.0(@types/node@24.13.3)(sugarss@5.0.1(postcss@8.5.25)))
+        version: 6.0.5(vite@8.2.0(@types/node@26.1.2)(sugarss@5.0.1(postcss@8.5.25)))
       eslint:
         specifier: ^10
         version: 10.8.0(supports-color@7.2.0)
@@ -117,7 +117,7 @@ importers:
         version: 8.65.0(eslint@10.8.0(supports-color@7.2.0))(supports-color@7.2.0)(typescript@6.0.3)
       vite:
         specifier: ^8.2.0
-        version: 8.2.0(@types/node@24.13.3)(sugarss@5.0.1(postcss@8.5.25))
+        version: 8.2.0(@types/node@26.1.2)(sugarss@5.0.1(postcss@8.5.25))
 
 packages:
 
@@ -837,8 +837,8 @@ packages:
   '@types/lodash@4.17.24':
     resolution: {integrity: sha512-gIW7lQLZbue7lRSWEFql49QJJWThrTFFeIMJdp3eH4tKoxm1OvEPg02rm4wCCSHS0cL3/Fizimb35b7k8atwsQ==}
 
-  '@types/node@24.13.3':
-    resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
+  '@types/node@26.1.2':
+    resolution: {integrity: sha512-Vu4a5UFA9rIIFJ7rB/Vaafh9lrCQszopTCx6KjFboXTGQbPNasehVR5TEiithSDGyd1DEiUByggTZsg8jukeIg==}
 
   '@types/react-dom@19.2.3':
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
@@ -1774,8 +1774,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  undici-types@7.18.2:
-    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
+  undici-types@8.3.0:
+    resolution: {integrity: sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ==}
 
   update-browserslist-db@1.2.3:
     resolution: {integrity: sha512-Js0m9cx+qOgDxo0eMiFGEueWztz+d4+M3rGlmKPT+T4IS/jP4ylw3Nwpu6cpTTP8R1MAC1kF4VbdLt3ARf209w==}
@@ -2873,9 +2873,9 @@ snapshots:
 
   '@types/lodash@4.17.24': {}
 
-  '@types/node@24.13.3':
+  '@types/node@26.1.2':
     dependencies:
-      undici-types: 7.18.2
+      undici-types: 8.3.0
 
   '@types/react-dom@19.2.3(@types/react@19.2.14)':
     dependencies:
@@ -3006,10 +3006,10 @@ snapshots:
       - '@codemirror/lint'
       - '@codemirror/search'
 
-  '@vitejs/plugin-react@6.0.5(vite@8.2.0(@types/node@24.13.3)(sugarss@5.0.1(postcss@8.5.25)))':
+  '@vitejs/plugin-react@6.0.5(vite@8.2.0(@types/node@26.1.2)(sugarss@5.0.1(postcss@8.5.25)))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.2.0(@types/node@24.13.3)(sugarss@5.0.1(postcss@8.5.25))
+      vite: 8.2.0(@types/node@26.1.2)(sugarss@5.0.1(postcss@8.5.25))
 
   '@x0k/json-schema-merge@1.0.4':
     dependencies:
@@ -3735,7 +3735,7 @@ snapshots:
 
   typescript@6.0.3: {}
 
-  undici-types@7.18.2: {}
+  undici-types@8.3.0: {}
 
   update-browserslist-db@1.2.3(browserslist@4.28.7):
     dependencies:
@@ -3768,7 +3768,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@8.2.0(@types/node@24.13.3)(sugarss@5.0.1(postcss@8.5.25)):
+  vite@8.2.0(@types/node@26.1.2)(sugarss@5.0.1(postcss@8.5.25)):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.5
@@ -3776,7 +3776,7 @@ snapshots:
       rolldown: 1.2.1
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 24.13.3
+      '@types/node': 26.1.2
       fsevents: 2.3.3
       sugarss: 5.0.1(postcss@8.5.25)
 
