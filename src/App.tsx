@@ -264,6 +264,7 @@ export default function Home() {
                   </Alert>
                   <Paper p="md" m="md" withBorder>
                     <FlowsStartForm
+                      flowId="preview"
                       schema={schema}
                       uiSchema={{
                         "ui:submitButtonOptions": {
