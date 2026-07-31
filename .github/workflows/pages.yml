@@ -22,21 +22,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      - name: Setup Node
-        uses: actions/setup-node@v6
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@8912a9102ac27614460f54aedde9e1e7f9aec20d # v6.0.5
+      - uses: actions/setup-node@v6
         with:
-          node-version: lts/krypton
-          cache: "npm"
-      - name: Setup Pages
-        uses: actions/configure-pages@v6
-      - name: Install dependencies
-        run: npm ci
-      - name: Build with Vite
-        run: npm run build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+          node-version: 26
+          cache: "pnpm"
+      - uses: actions/configure-pages@v6
+      - run: pnpm install
+      - run: pnpm run build
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
 
