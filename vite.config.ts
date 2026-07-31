@@ -21,17 +21,17 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     resolve: {
       alias: {
-        "@": resolve(__dirname, "src"),
+        "@": resolve(import.meta.dirname, "src"),
       },
     },
     build: {
       outDir: "dist",
       rolldownOptions: {
         input: {
-          main: resolve(__dirname, "index.html"),
+          main: resolve(import.meta.dirname, "index.html"),
           // Dedicated entry for the OAuth2 redirect route. GitHub Pages serves
           // `authenticate.html` at `/authenticate`, matching the redirect URI.
-          authenticate: resolve(__dirname, "authenticate.html"),
+          authenticate: resolve(import.meta.dirname, "authenticate.html"),
         },
       },
     },
