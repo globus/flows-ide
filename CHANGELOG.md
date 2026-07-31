@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.0.0](https://github.com/globus/flows-ide/compare/flows-ide-v2.1.1...flows-ide-v3.0.0) (2026-07-31)
+
+
+### ⚠ BREAKING CHANGES
+
+* migrate from Next.js to Vite ([#363](https://github.com/globus/flows-ide/issues/363))
+
+### Features
+
+* Improved Definition Diagram Rendering ([#373](https://github.com/globus/flows-ide/issues/373)) ([46fae60](https://github.com/globus/flows-ide/commit/46fae60ef3b6a5b4fce8966e83417583890e2c14))
+* migrate from Next.js to Vite ([#363](https://github.com/globus/flows-ide/issues/363)) ([17b4c0e](https://github.com/globus/flows-ide/commit/17b4c0e6fb91c3a8834155d35498c8fd49a89708))
+* Update to latest/stable Flows Input Schema UI renderer ([#371](https://github.com/globus/flows-ide/issues/371)) ([b611b0d](https://github.com/globus/flows-ide/commit/b611b0dab2dd0bf431529a4885969bde31203dda))
+
+
+### Bug Fixes
+
+* add flowId prop to Input Schema UI preview ([cc595ff](https://github.com/globus/flows-ide/commit/cc595ff9397e8f78939611ffb784dbc0a980aea1))
+
 ## [2.1.1](https://github.com/globus/flows-ide/compare/flows-ide-v2.1.0...flows-ide-v2.1.1) (2026-07-22)
 
 
