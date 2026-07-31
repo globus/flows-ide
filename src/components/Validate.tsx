@@ -2,7 +2,7 @@ import { Button, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
-import { Fragment, PropsWithChildren, useState } from "react";
+import { Fragment, type PropsWithChildren, useState } from "react";
 import { useMonaco } from "@monaco-editor/react";
 
 import { useEditorStore } from "@/stores/editor";

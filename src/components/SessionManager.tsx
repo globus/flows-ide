@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Anchor, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 
