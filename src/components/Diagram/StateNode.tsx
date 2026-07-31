@@ -1,11 +1,24 @@
-import { Badge, Paper, Flex, Stack, Text } from "@mantine/core";
+import {
+  Badge,
+  Paper,
+  Flex,
+  Stack,
+  Text,
+  Group,
+  type BadgeProps,
+} from "@mantine/core";
 import { Handle, Position } from "reactflow";
 
 import type { FlowDefinition } from "@/flow";
 import { useMonaco } from "@monaco-editor/react";
+import { LuListTodo } from "react-icons/lu";
 type State = FlowDefinition["States"][string];
 
-function TypeBadge({ type, ...rest }: { type: string }) {
+function Icon({ type }: { type: string }) {
+  return type === "AwaitWebInput" ? <LuListTodo size="1em" /> : null;
+}
+
+function TypeBadge({ type, ...rest }: { type: string } & BadgeProps) {
   if (!type) return null;
   const props = {
     Fail: { color: "red" },
@@ -14,8 +27,11 @@ function TypeBadge({ type, ...rest }: { type: string }) {
     ExpressionEval: { color: "purple" },
   }[type];
   return (
-    <Badge variant={"outline"} {...props} {...rest}>
-      {type}
+    <Badge tt="none" variant="outline" {...props} {...rest} ff="monospace">
+      <Group gap={2}>
+        <Icon type={type} />
+        {type}
+      </Group>
     </Badge>
   );
 }
@@ -86,7 +102,7 @@ export default function StateNode({
         >
           <Stack gap={1}>
             <Text c="black">{id}</Text>
-            <TypeBadge type={state?.Type || ""} />
+            <TypeBadge type={state?.Type || ""} size="xs" />
           </Stack>
         </Paper>
         <Handle
