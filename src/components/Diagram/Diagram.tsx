@@ -16,8 +16,6 @@ import StateNode from "./StateNode";
 
 import type { FlowDefinition } from "@/flow";
 
-const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
-
 const getLayoutedElements = (
   nodes: { id: string; [key: string]: any }[],
   edges: Record<string, any>[],
@@ -25,6 +23,7 @@ const getLayoutedElements = (
     direction: "TB" | "LR";
   },
 ) => {
+  const g = new Dagre.graphlib.Graph().setDefaultEdgeLabel(() => ({}));
   g.setGraph({
     rankdir: options.direction,
     nodesep: 200,
@@ -85,75 +84,89 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
   const edges = [];
 
   for (const [id, state] of Object.entries(States)) {
-    if (state.Next) {
+    // Guard against undefined/null state during live editing.
+    if (!state) continue;
+
+    // "Basic" transition between states.
+    if (state.Next && States[state.Next]) {
       edges.push({
-        id: `${id}-${state.Next}`,
+        id: `${id}::next::${state.Next}`,
         source: id,
         target: state.Next,
         type: "smoothstep",
-        markerEnd: {
-          type: MarkerType.Arrow,
-        },
-        style: {
-          strokeWidth: 2,
-        },
+        markerEnd: { type: MarkerType.Arrow },
+        style: { strokeWidth: 2 },
       });
     }
-    if (state.Default) {
-      edges.push({
-        id: `${id}-${state.Default}`,
-        source: id,
-        target: state.Default,
-        animated: true,
-        type: "straight",
-        label: "Default",
-        labelStyle: {
-          fontFamily: "monospace",
-        },
-        style: {
-          strokeWidth: 2,
-        },
-      });
-    }
-    if (state.Catch) {
-      for (const [catchId, catchState] of Object.entries(state.Catch)) {
+
+    // Catch: Group multiple catchers targeting the same state into a single edge to avoid overlapping edges on the diagram.
+    if (Array.isArray(state.Catch)) {
+      const catchByTarget = new Map<string, string[]>();
+      for (const catcher of state.Catch) {
+        if (!catcher.Next || !States[catcher.Next]) continue;
+        const errors = catchByTarget.get(catcher.Next) ?? [];
+        errors.push(...(catcher.ErrorEquals ?? []));
+        catchByTarget.set(catcher.Next, errors);
+      }
+      for (const [target, errors] of catchByTarget) {
+        const label =
+          errors.length === 0
+            ? "Catch"
+            : errors.length === 1
+              ? errors[0]
+              : `${errors[0]}, +${errors.length - 1} more`;
         edges.push({
-          id: `${id}-${catchId}`,
+          id: `${id}::catch::${target}`,
           source: id,
-          target: catchState.Next,
-          type: "straight",
+          target,
+          type: "smoothstep",
           animated: true,
-          label: "Catch",
-          labelStyle: {
-            fontFamily: "monospace",
-          },
-          style: {
-            strokeWidth: 2,
-            stroke: "red",
-          },
+          label,
+          labelStyle: { fontFamily: "monospace" },
+          style: { strokeWidth: 2, stroke: "red" },
+          markerEnd: { type: MarkerType.Arrow, color: "red" },
         });
       }
     }
 
-    if (state.Type === "Choice" && state.Choices) {
-      for (const [choiceId, choice] of Object.entries(state.Choices)) {
+    // Choice: "Default" transition
+    if (state.Type === "Choice" && state.Default && States[state.Default]) {
+      edges.push({
+        id: `${id}::default::${state.Default}`,
+        source: id,
+        target: state.Default,
+        animated: true,
+        type: "smoothstep",
+        label: "Default",
+        labelStyle: { fontFamily: "monospace" },
+        style: { strokeWidth: 2 },
+      });
+    }
+
+    // Choice: Groups multiple rules targeting the same state into a single edge labelled with the rule indices.
+    if (state.Type === "Choice" && Array.isArray(state.Choices)) {
+      const choiceByTarget = new Map<string, number[]>();
+      for (let i = 0; i < state.Choices.length; i++) {
+        const choice = state.Choices[i];
+        if (!choice.Next || !States[choice.Next]) continue;
+        const indices = choiceByTarget.get(choice.Next) ?? [];
+        indices.push(i + 1);
+        choiceByTarget.set(choice.Next, indices);
+      }
+      for (const [target, indices] of choiceByTarget) {
+        const isFail = States[target]?.Type === "Fail";
         edges.push({
-          id: `${id}-${choiceId}`,
+          id: `${id}::choice::${target}`,
           source: id,
-          target: choice.Next,
-          type: "straight",
+          target,
+          type: "smoothstep",
           animated: true,
-          label: "Choice",
-          labelStyle: {
-            fontFamily: "monospace",
-          },
-          style: {
-            strokeWidth: 2,
-            stroke:
-              choice.Next && States[choice.Next]?.Type === "Fail"
-                ? "red"
-                : "black",
-          },
+          label: `Choice ${indices.join(", ")}`,
+          labelStyle: { fontFamily: "monospace" },
+          style: { strokeWidth: 2, stroke: isFail ? "red" : undefined },
+          markerEnd: isFail
+            ? { type: MarkerType.Arrow, color: "red" }
+            : { type: MarkerType.Arrow },
         });
       }
     }
