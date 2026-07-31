@@ -28,7 +28,6 @@ function configureEditor(
     enableExperimentalValidation: true,
   },
 ) {
-  console.log("Configuring editor with settings", settings);
   monaco.languages.json.jsonDefaults.setDiagnosticsOptions({
     enableSchemaRequest: true,
     validate: true,

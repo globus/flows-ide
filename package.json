@@ -10,25 +10,25 @@
     "lint": "eslint ."
   },
   "overrides": {
-    "@globus/sdk": "6.2.0-canary.85.ba009d1"
+    "@globus/sdk": "6.3.1-canary.28.39064da"
   },
   "dependencies": {
     "@dagrejs/dagre": "^3.0.0",
     "@globus/react-auth-context": "^0.4.0",
-    "@globus/react-components": "^4.2.2",
-    "@globus/react-query": "^1.4.1",
-    "@globus/sdk": "6.2.0-canary.85.ba009d1",
-    "@mantine/core": "8.3.18",
-    "@mantine/hooks": "8.3.18",
-    "@mantine/notifications": "8.3.18",
+    "@globus/react-components": "^6.0.1",
+    "@globus/react-query": "^1.6.0",
+    "@globus/sdk": "6.3.1-canary.28.39064da",
+    "@mantine/core": "9.5.0",
+    "@mantine/hooks": "9.5.0",
+    "@mantine/notifications": "9.5.0",
     "@monaco-editor/react": "^4.7.0",
     "lodash": "^4.18.1",
     "lz-string": "^1.5.0",
-    "react": "19.2.5",
-    "react-dom": "19.2.5",
-    "react-icons": "^5.6.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-icons": "^5.7.0",
     "reactflow": "^11.11.4",
-    "zustand": "^5.0.12"
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

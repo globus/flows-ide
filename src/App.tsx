@@ -154,7 +154,7 @@ export default function Home() {
       <AppShell.Main>
         {ENABLE_PANEL && <Panel />}
         <SimpleGrid cols={2} spacing={0} h={APP_SHELL_HEIGHT}>
-          <Tabs defaultValue="definition" color="orange">
+          <Tabs defaultValue="definition" color="orange" keepMounted={false}>
             <Tabs.List>
               <Tabs.Tab value="definition">Definition</Tabs.Tab>
               <Tabs.Tab value="input-schema">Input Schema</Tabs.Tab>

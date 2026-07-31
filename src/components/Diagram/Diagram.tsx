@@ -1,6 +1,6 @@
 import "reactflow/dist/style.css";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import Dagre from "@dagrejs/dagre";
 import ReactFlow, {
   MiniMap,
@@ -162,10 +162,10 @@ function toNodesAndEdges(definition: FlowDefinition | undefined) {
   return getLayoutedElements(nodes, edges, { direction: "TB" });
 }
 
+const nodeTypes = { StateNode: StateNode };
+
 export default function Diagram() {
   const definition = useEditorStore((state) => state.definition);
-
-  const nodeTypes = useMemo(() => ({ StateNode: StateNode }), []);
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const previousNodes = useRef(nodes);
