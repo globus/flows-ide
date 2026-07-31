@@ -22,21 +22,21 @@ export default function Panel() {
   const [userFlows, setFlows] = useState<Flows>([]);
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
-      setFlows([]);
-      return;
-    }
     async function fetchFlows() {
+      if (!auth.authorization) {
+        return;
+      }
       const res = await (
         await flows.flows.getAll({}, { manager: auth.authorization })
       ).json();
-
       setFlows(res?.flows || []);
     }
-
     fetchFlows();
   }, [auth.authorization, auth.isAuthenticated]);
 
+  if (!auth.isAuthenticated) {
+    setFlows([]);
+  }
   return (
     <Group>
       <Box h="100%" bg={"brand.8"} w={"50px"}>

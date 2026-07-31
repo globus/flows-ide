@@ -2,7 +2,7 @@ import { Button, Tooltip } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useGlobusAuth } from "@globus/react-auth-context";
 import { flows } from "@globus/sdk";
-import { Fragment, type PropsWithChildren, useState } from "react";
+import { type PropsWithChildren, useState } from "react";
 import { useMonaco } from "@monaco-editor/react";
 
 import { useEditorStore } from "@/stores/editor";
@@ -10,6 +10,21 @@ import { useEditorStore } from "@/stores/editor";
 export const GLOBUS_FLOWS_VALIDATION = {
   OWNER: "flows",
   SOURCE: "Globus Flows Validation",
+};
+
+const Wrapper = ({ children }: PropsWithChildren) => {
+  const auth = useGlobusAuth();
+  if (auth.isAuthenticated === false) {
+    return (
+      <Tooltip
+        withArrow
+        label="You must sign in in order to validate using the Globus Flows service."
+      >
+        {children}
+      </Tooltip>
+    );
+  }
+  return <>{children}</>;
 };
 
 export function ValidateButton() {
@@ -138,18 +153,6 @@ export function ValidateButton() {
 
     setValidating(false);
   }
-
-  const Wrapper =
-    auth.isAuthenticated === false
-      ? ({ children }: PropsWithChildren) => (
-          <Tooltip
-            withArrow
-            label="You must sign in in order to validate using the Globus Flows service."
-          >
-            {children}
-          </Tooltip>
-        )
-      : Fragment;
   return (
     <Wrapper>
       <Button

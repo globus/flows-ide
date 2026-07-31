@@ -106,15 +106,17 @@ export function DocumentationBrowser() {
   }, [bootstrapped]);
 
   useEffect(() => {
+    async function update() {
+      setActionProvidersMenu({
+        main,
+        transfer,
+      });
+    }
     const transfer = actionProviders.filter((ap) =>
       ap.url.includes("transfer"),
     );
     const main = actionProviders.filter((ap) => !ap.url.includes("transfer"));
-
-    setActionProvidersMenu({
-      main,
-      transfer,
-    });
+    update();
   }, [actionProviders]);
 
   return (

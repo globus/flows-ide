@@ -31,25 +31,25 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@eslint/js": "^9.0.0",
+    "@eslint/js": "^10",
     "@types/lodash": "^4.17.24",
-    "@types/node": "^24",
+    "@types/node": "^26",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
-    "eslint": "^9.0.0",
+    "@vitejs/plugin-react": "^6.0.5",
+    "eslint": "^10",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.0",
-    "globals": "^16.0.0",
-    "postcss": "^8.5.10",
+    "eslint-plugin-react-hooks": "^7",
+    "eslint-plugin-react-refresh": "^0.5.3",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.25",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
-    "prettier": "^3.8.3",
-    "sst": "^4.12.2",
+    "prettier": "^3.9.6",
+    "sst": "^4.17.1",
     "typescript": "~6.0.3",
-    "typescript-eslint": "^8.0.0",
-    "vite": "^8.1.5"
+    "typescript-eslint": "^8.65.0",
+    "vite": "^8.2.0"
   },
-  "packageManager": "npm@11.5.1"
+  "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c"
 }
