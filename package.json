@@ -10,14 +10,14 @@
     "lint": "eslint ."
   },
   "overrides": {
-    "@globus/sdk": "6.3.1-canary.28.39064da"
+    "@globus/sdk": "6.3.1"
   },
   "dependencies": {
     "@dagrejs/dagre": "^3.0.0",
     "@globus/react-auth-context": "^0.4.0",
     "@globus/react-components": "^6.0.1",
     "@globus/react-query": "^1.6.0",
-    "@globus/sdk": "6.3.1-canary.28.39064da",
+    "@globus/sdk": "6.3.1",
     "@mantine/core": "9.5.0",
     "@mantine/hooks": "9.5.0",
     "@mantine/notifications": "9.5.0",

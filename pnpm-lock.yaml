@@ -17,16 +17,16 @@ importers:
         version: 3.0.0
       '@globus/react-auth-context':
         specifier: ^0.4.0
-        version: 0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@globus/react-components':
         specifier: ^6.0.1
-        version: 6.0.1(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/search@6.7.1)(@codemirror/state@6.7.1)(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/react-query@1.6.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1-canary.28.39064da)(@tanstack/react-query@5.101.4(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1-canary.28.39064da)(@mantine/core@9.5.0(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
+        version: 6.0.1(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/search@6.7.1)(@codemirror/state@6.7.1)(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/react-query@1.6.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1)(@tanstack/react-query@5.101.4(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1)(@mantine/core@9.5.0(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
       '@globus/react-query':
         specifier: ^1.6.0
-        version: 1.6.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1-canary.28.39064da)(@tanstack/react-query@5.101.4(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 1.6.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1)(@tanstack/react-query@5.101.4(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@globus/sdk':
-        specifier: 6.3.1-canary.28.39064da
-        version: 6.3.1-canary.28.39064da
+        specifier: 6.3.1
+        version: 6.3.1
       '@mantine/core':
         specifier: 9.5.0
         version: 9.5.0(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -128,6 +128,9 @@ packages:
   '@aws-sdk/core@3.977.3':
     resolution: {integrity: sha512-6YZTpF5Zzl0KdSrztM0l6ErKdnXrnnodIDYfayHE9SFfZU8Ubxls7H2XnfWT121jgwiG+WP1z5kyfVDsH5V4qA==}
     engines: {node: '>=20.0.0'}
+    deprecated: |-
+      Deprecated due to Document number parsing bug in JSON, see
+        https://github.com/aws/aws-sdk-js-v3/issues/8246. Newer version available.
 
   '@aws-sdk/credential-provider-env@3.972.64':
     resolution: {integrity: sha512-14kkR5aj1c7D+cYCrEcG2W3xw87wMYAEUeB/tMiQ2j0RVKzzdewd4mJw1+Q0JVLr4IFU1JHGDCyj0WqLrtIixg==}
@@ -411,8 +414,8 @@ packages:
       react-dom:
         optional: true
 
-  '@globus/sdk@6.3.1-canary.28.39064da':
-    resolution: {integrity: sha512-2oyjnPzdWBLJiuJX5j3tMkQ/I3FUjNvNnp7p+RVlo7mOTjaODzzG6ZS7dLukgcTMP/vtHGqo0PPja557/JkALA==}
+  '@globus/sdk@6.3.1':
+    resolution: {integrity: sha512-4KmR98zRFvDLV2MKQO1xDGrYziolOPsVz2tKio1SUau+drZAiQoL2ncTdy+gHTjclptQJG3XI34EGkYb1mLLCA==}
     engines: {node: '>=20'}
 
   '@humanfs/core@0.19.2':
@@ -2340,13 +2343,13 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
-  '@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@globus/sdk': 6.3.1-canary.28.39064da
+      '@globus/sdk': 6.3.1
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  '@globus/react-components@6.0.1(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/search@6.7.1)(@codemirror/state@6.7.1)(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/react-query@1.6.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1-canary.28.39064da)(@tanstack/react-query@5.101.4(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1-canary.28.39064da)(@mantine/core@9.5.0(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))':
+  '@globus/react-components@6.0.1(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/search@6.7.1)(@codemirror/state@6.7.1)(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/react-query@1.6.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1)(@tanstack/react-query@5.101.4(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1)(@mantine/core@9.5.0(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))':
     dependencies:
       '@codemirror/lang-json': 6.0.2
       '@codemirror/lang-yaml': 6.1.3
@@ -2355,7 +2358,7 @@ snapshots:
       '@codemirror/lint': 6.9.7
       '@codemirror/theme-one-dark': 6.1.3
       '@codemirror/view': 6.43.6
-      '@globus/sdk': 6.3.1-canary.28.39064da
+      '@globus/sdk': 6.3.1
       '@mantine/core': 9.5.0(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@mantine/dates': 9.4.2(@mantine/core@9.5.0(@mantine/hooks@9.5.0(react@19.2.8))(@types/react@19.2.14)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@mantine/hooks@9.5.0(react@19.2.8))(dayjs@1.11.21)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@mantine/form': 9.4.2(react@19.2.8)
@@ -2373,8 +2376,8 @@ snapshots:
       zod: 4.4.3
       zustand: 5.0.14(@types/react@19.2.14)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
     optionalDependencies:
-      '@globus/react-auth-context': 0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@globus/react-query': 1.6.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1-canary.28.39064da)(@tanstack/react-query@5.101.4(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@globus/react-auth-context': 0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@globus/react-query': 1.6.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1)(@tanstack/react-query@5.101.4(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
     transitivePeerDependencies:
       - '@babel/runtime'
       - '@codemirror/autocomplete'
@@ -2387,16 +2390,16 @@ snapshots:
       - use-sync-external-store
       - vue
 
-  '@globus/react-query@1.6.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1-canary.28.39064da)(@tanstack/react-query@5.101.4(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@globus/react-query@1.6.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@globus/sdk@6.3.1)(@tanstack/react-query@5.101.4(react@19.2.8))(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@globus/sdk': 6.3.1-canary.28.39064da
+      '@globus/sdk': 6.3.1
       '@tanstack/react-query': 5.101.4(react@19.2.8)
       react: 19.2.8
     optionalDependencies:
-      '@globus/react-auth-context': 0.4.0(@globus/sdk@6.3.1-canary.28.39064da)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@globus/react-auth-context': 0.4.0(@globus/sdk@6.3.1)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       react-dom: 19.2.8(react@19.2.8)
 
-  '@globus/sdk@6.3.1-canary.28.39064da':
+  '@globus/sdk@6.3.1':
     dependencies:
       cross-fetch: 4.1.0
       jwt-decode: 4.0.0
