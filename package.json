@@ -13,7 +13,7 @@
     "@globus/sdk": "6.3.1-canary.28.39064da"
   },
   "dependencies": {
-    "@dagrejs/dagre": "^3.0.0",
+    "@dagrejs/dagre": "^3.1.1",
     "@globus/react-auth-context": "^0.4.0",
     "@globus/react-components": "^6.0.1",
     "@globus/react-query": "^1.6.0",
