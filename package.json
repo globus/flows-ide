@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "overrides": {
-    "@globus/sdk": "6.3.1-canary.28.39064da"
+    "@globus/sdk": "6.4.0-canary.10.a0e762c"
   },
   "dependencies": {
     "@dagrejs/dagre": "^3.1.1",
@@ -51,5 +51,5 @@
     "typescript-eslint": "^8.70.0",
     "vite": "^8.3.0"
   },
-  "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c"
+  "packageManager": "pnpm@12.5.1+sha512.e3f305bc784a2bc89f5ad3b6138889470fae8d2af5f36b61216ec91c2c3d64089775f9de38aac331044ea40f245cb0d5666392dfdf65824e1907ef6a2c62de5f"
 }
