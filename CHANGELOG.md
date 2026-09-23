@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/globus/flows-ide/compare/flows-ide-v3.0.0...flows-ide-v3.1.0) (2026-09-23)
+
+
+### Features
+
+* Update to latest [@globus](https://github.com/globus) packages, including latest Flows Start Form ([#397](https://github.com/globus/flows-ide/issues/397)) ([a166348](https://github.com/globus/flows-ide/commit/a1663489a10699d91d92c0d431f99b92040d0548))
+
 ## [3.0.0](https://github.com/globus/flows-ide/compare/flows-ide-v2.1.1...flows-ide-v3.0.0) (2026-07-31)
 
 
