@@ -14,10 +14,11 @@
   },
   "dependencies": {
     "@dagrejs/dagre": "^3.1.1",
+    "@globus/i18n": "^0.1.0",
     "@globus/react-auth-context": "^0.4.0",
-    "@globus/react-components": "^6.0.1",
-    "@globus/react-query": "^1.6.0",
-    "@globus/sdk": "6.3.1-canary.28.39064da",
+    "@globus/react-components": "^6.4.2",
+    "@globus/react-query": "^1.8.1",
+    "@globus/sdk": "6.4.0-canary.10.a0e762c",
     "@mantine/core": "9.6.1",
     "@mantine/hooks": "9.6.1",
     "@mantine/notifications": "9.6.1",
@@ -27,6 +28,7 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-icons": "^5.7.0",
+    "react-intl": "^12.1.2",
     "reactflow": "^11.11.4",
     "zustand": "^5.0.15"
   },
