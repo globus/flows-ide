@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.1](https://github.com/globus/flows-ide/compare/flows-ide-v3.1.0...flows-ide-v3.1.1) (2026-09-23)
+
+
+### Bug Fixes
+
+* add @mantine/dates ([c7ed866](https://github.com/globus/flows-ide/commit/c7ed866e1ba795934937d29f5f6e663524ecfb86))
+* Update Providers.tsx to include Mantine Date styles. ([#399](https://github.com/globus/flows-ide/issues/399)) ([7df0a78](https://github.com/globus/flows-ide/commit/7df0a7895b5003b9a38136e50f2426749dd1870f))
+
 ## [3.1.0](https://github.com/globus/flows-ide/compare/flows-ide-v3.0.0...flows-ide-v3.1.0) (2026-09-23)
 
 
