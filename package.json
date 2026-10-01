@@ -48,7 +48,7 @@
     "postcss": "^8.5.28",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
-    "prettier": "^3.9.6",
+    "prettier": "^3.9.9",
     "sst": "^4.17.1",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.70.0",
