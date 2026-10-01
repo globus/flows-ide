@@ -245,7 +245,7 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       '@vitejs/plugin-react':
         specifier: ^6.1.1
-        version: 6.1.1(vite@8.3.0(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28)))
+        version: 6.1.1(vite@8.3.1(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28)))
       eslint:
         specifier: ^10
         version: 10.11.0
@@ -283,8 +283,8 @@ importers:
         specifier: ^8.70.1
         version: 8.70.1(eslint@10.11.0)(typescript@6.0.3)
       vite:
-        specifier: ^8.3.0
-        version: 8.3.0(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28))
+        specifier: ^8.3.1
+        version: 8.3.1(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28))
 
 packages:
 
@@ -2124,8 +2124,8 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  vite@8.3.0:
-    resolution: {integrity: sha512-lhZBVvEHefgE+HQZC9O7EBJgCU/nVzFNl7vkS4RE0APtWLP02/8QVIkQtzBxPquh7lq5/78NHipTj7ODQ6XuyQ==}
+  vite@8.3.1:
+    resolution: {integrity: sha512-/bvH9E9tmCXRGp2uXY3WbOldqpTwFkbha/8ANaEQ6VkxhH60KyqLwgZq6lG2y+4uT55x9+9eUHMpQ7uGnOCKjA==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -3381,10 +3381,10 @@ snapshots:
       - '@codemirror/lint'
       - '@codemirror/search'
 
-  '@vitejs/plugin-react@6.1.1(vite@8.3.0(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28)))':
+  '@vitejs/plugin-react@6.1.1(vite@8.3.1(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28)))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.3.0(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28))
+      vite: 8.3.1(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28))
 
   '@x0k/json-schema-merge@1.0.6':
     dependencies:
@@ -4252,7 +4252,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@8.3.0(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28)):
+  vite@8.3.1(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28)):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
