@@ -236,7 +236,7 @@ importers:
         version: 4.17.25
       '@types/node':
         specifier: ^26
-        version: 26.6.3
+        version: 26.6.4
       '@types/react':
         specifier: 19.3.0
         version: 19.3.0
@@ -245,7 +245,7 @@ importers:
         version: 19.3.0(@types/react@19.3.0)
       '@vitejs/plugin-react':
         specifier: ^6.1.1
-        version: 6.1.1(vite@8.3.0(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28)))
+        version: 6.1.1(vite@8.3.0(@types/node@26.6.4)(sugarss@5.0.1(postcss@8.5.28)))
       eslint:
         specifier: ^10
         version: 10.11.0
@@ -259,8 +259,8 @@ importers:
         specifier: ^0.5.6
         version: 0.5.7(eslint@10.11.0)
       globals:
-        specifier: ^17.12.0
-        version: 17.12.0
+        specifier: ^17.13.0
+        version: 17.13.0
       postcss:
         specifier: ^8.5.28
         version: 8.5.28
@@ -284,7 +284,7 @@ importers:
         version: 8.70.1(eslint@10.11.0)(typescript@6.0.3)
       vite:
         specifier: ^8.3.0
-        version: 8.3.0(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28))
+        version: 8.3.0(@types/node@26.6.4)(sugarss@5.0.1(postcss@8.5.28))
 
 packages:
 
@@ -1059,8 +1059,8 @@ packages:
   '@types/lodash@4.17.25':
     resolution: {integrity: sha512-+K1NIO8I+F9/wNulfVvu23QYd0Pe9/OCqRrim4NoYIf1VoEDL90Ve4ClzpyqBLc7NpGGWRvYNCKZ1BE/Jpf8dQ==}
 
-  '@types/node@26.6.3':
-    resolution: {integrity: sha512-dsqMQQoeTLqu9wynDD00q573mNzso3IdQOAfHRJqLCcmCFPoGo9A1bDpUcv/9tnKpErQWv9uKeGfl37EIS02Yg==}
+  '@types/node@26.6.4':
+    resolution: {integrity: sha512-ldVPDCzj7fsaGZrLB0NuHuTvJcsNasysBAqMolr/cgxrLd1xbqxIr3XJiPnHHJUCxj5sNF1vnRj9aWnrVh5Jcg==}
 
   '@types/react-dom@19.3.0':
     resolution: {integrity: sha512-ZI7bU42mZXXKHn/qNLEw2IrbiINU7X5+vfgdixBHkCNpYWXjKgfQ/P+uyGb5CjOLB9UcnTeg3rylQtV2hym44Q==}
@@ -1491,8 +1491,8 @@ packages:
     resolution: {integrity: sha512-XxwI8EOhVQgWp6iDL+3b0r86f4d6AX6zSU55HfB4ydCEuXLXc5FcYeOu+nnGftS4TEju/11rt4KJPTMgbfmv4A==}
     engines: {node: '>=10.13.0'}
 
-  globals@17.12.0:
-    resolution: {integrity: sha512-cezEd/DTyyht9cvSSURyygXPfy04GtWO/5e6ZPvH7fCtjKz9PYOmuawphw1Ctd1f6C+5JypXfGD7ahNMXvevBA==}
+  globals@17.13.0:
+    resolution: {integrity: sha512-RwMTC61u7hrG3ZJMkZQOK4JLJrKS8QtoTii63EmWvFXHqycY9FObBJQCbsLxSO8kjKhWE5kV1GC+Vb1g3RI0Zg==}
     engines: {node: '>=18'}
 
   gopd@1.2.0:
@@ -3248,7 +3248,7 @@ snapshots:
 
   '@types/lodash@4.17.25': {}
 
-  '@types/node@26.6.3':
+  '@types/node@26.6.4':
     dependencies:
       undici-types: 8.9.0
 
@@ -3381,10 +3381,10 @@ snapshots:
       - '@codemirror/lint'
       - '@codemirror/search'
 
-  '@vitejs/plugin-react@6.1.1(vite@8.3.0(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28)))':
+  '@vitejs/plugin-react@6.1.1(vite@8.3.0(@types/node@26.6.4)(sugarss@5.0.1(postcss@8.5.28)))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.3.0(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28))
+      vite: 8.3.0(@types/node@26.6.4)(sugarss@5.0.1(postcss@8.5.28))
 
   '@x0k/json-schema-merge@1.0.6':
     dependencies:
@@ -3714,7 +3714,7 @@ snapshots:
     dependencies:
       is-glob: 4.0.3
 
-  globals@17.12.0: {}
+  globals@17.13.0: {}
 
   gopd@1.2.0: {}
 
@@ -4252,7 +4252,7 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@8.3.0(@types/node@26.6.3)(sugarss@5.0.1(postcss@8.5.28)):
+  vite@8.3.0(@types/node@26.6.4)(sugarss@5.0.1(postcss@8.5.28)):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -4260,7 +4260,7 @@ snapshots:
       rolldown: 1.2.9
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.6.3
+      '@types/node': 26.6.4
       fsevents: 2.3.3
       sugarss: 5.0.1(postcss@8.5.28)
 
