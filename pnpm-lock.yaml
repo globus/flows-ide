@@ -244,8 +244,8 @@ importers:
         specifier: 19.3.0
         version: 19.3.0(@types/react@19.3.0)
       '@vitejs/plugin-react':
-        specifier: ^6.1.1
-        version: 6.1.1(vite@8.3.5(@types/node@26.6.5)(sugarss@5.0.1(postcss@8.5.29))(yaml@2.9.1))
+        specifier: ^6.1.2
+        version: 6.1.2(vite@8.3.5(@types/node@26.6.5)(sugarss@5.0.1(postcss@8.5.29))(yaml@2.9.1))
       eslint:
         specifier: ^10
         version: 10.11.0
@@ -1169,13 +1169,13 @@ packages:
       react: '>=17.0.0'
       react-dom: '>=17.0.0'
 
-  '@vitejs/plugin-react@6.1.1':
-    resolution: {integrity: sha512-yxLaQV9gkhS8ezJqCM6+ndU7mDY6gqAg75NQ+0IjwEI8IYOmQCgkRwHKVSfWXW076DsqMo0Dk+0FK1U+M5RgFw==}
+  '@vitejs/plugin-react@6.1.2':
+    resolution: {integrity: sha512-fhJNGUdscQa4HkI0xFxwonWyhnVReCPDbXI7FH7jmzpnVCrFQI7PRrhWecO263610vOrs9tr2Y4xcf8uAdFxbw==}
     engines: {node: ^20.19.0 || >=22.12.0}
     peerDependencies:
       '@rolldown/plugin-babel': ^0.1.7 || ^0.2.0
       babel-plugin-react-compiler: ^1.0.0
-      oxc-transform-react: ^0.145.0
+      oxc-transform-react: ^0.152.0
       vite: ^8.0.0
     peerDependenciesMeta:
       '@rolldown/plugin-babel':
@@ -2554,9 +2554,9 @@ snapshots:
 
   '@codemirror/autocomplete@6.20.3':
     dependencies:
-      '@codemirror/language': 6.12.4
-      '@codemirror/state': 6.7.5
-      '@codemirror/view': 6.43.12
+      '@codemirror/language': 6.13.1
+      '@codemirror/state': 6.7.6
+      '@codemirror/view': 6.43.14
       '@lezer/common': 1.5.2
 
   '@codemirror/commands@6.11.1':
@@ -2633,9 +2633,9 @@ snapshots:
 
   '@codemirror/language@6.13.1':
     dependencies:
-      '@codemirror/state': 6.7.5
+      '@codemirror/state': 6.7.6
       '@codemirror/streamparser': 6.0.0
-      '@codemirror/view': 6.43.12
+      '@codemirror/view': 6.43.14
       '@lezer/common': 1.5.2
       '@lezer/highlight': 1.2.3
       '@lezer/lr': 1.4.10
@@ -2649,8 +2649,8 @@ snapshots:
 
   '@codemirror/search@6.7.2':
     dependencies:
-      '@codemirror/state': 6.7.5
-      '@codemirror/view': 6.43.12
+      '@codemirror/state': 6.7.6
+      '@codemirror/view': 6.43.14
       crelt: 1.0.7
 
   '@codemirror/state@6.7.5':
@@ -2679,7 +2679,7 @@ snapshots:
 
   '@codemirror/view@6.43.14':
     dependencies:
-      '@codemirror/state': 6.7.5
+      '@codemirror/state': 6.7.6
       crelt: 1.0.7
       style-mod: 4.1.4
       w3c-keyname: 2.2.8
@@ -3455,7 +3455,7 @@ snapshots:
       - '@codemirror/lint'
       - '@codemirror/search'
 
-  '@vitejs/plugin-react@6.1.1(vite@8.3.5(@types/node@26.6.5)(sugarss@5.0.1(postcss@8.5.29))(yaml@2.9.1))':
+  '@vitejs/plugin-react@6.1.2(vite@8.3.5(@types/node@26.6.5)(sugarss@5.0.1(postcss@8.5.29))(yaml@2.9.1))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
       vite: 8.3.5(@types/node@26.6.5)(sugarss@5.0.1(postcss@8.5.29))(yaml@2.9.1)
