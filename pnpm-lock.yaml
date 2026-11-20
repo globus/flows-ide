@@ -175,16 +175,16 @@ importers:
         version: 3.1.3
       '@globus/i18n':
         specifier: ^0.1.0
-        version: 0.1.0(react-intl@12.1.6(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)
+        version: 0.1.0(react-intl@12.1.8(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)
       '@globus/react-auth-context':
         specifier: ^0.4.0
         version: 0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@globus/react-components':
         specifier: 6.8.0
-        version: 6.8.0(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/search@6.7.2)(@globus/i18n@0.1.0(react-intl@12.1.6(@types/react@19.3.0)(react@19.3.1))(react@19.3.1))(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/react-query@1.9.1(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@tanstack/react-query@5.103.2(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@mantine/core@9.7.5(@mantine/hooks@9.7.5(react@19.3.1))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@mantine/hooks@9.7.5(react@19.3.1))(@types/react@19.3.0)(dayjs@1.11.23)(react-dom@19.3.1(react@19.3.1))(react-intl@12.1.6(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1))
+        version: 6.8.0(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/search@6.7.2)(@globus/i18n@0.1.0(react-intl@12.1.8(@types/react@19.3.0)(react@19.3.1))(react@19.3.1))(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/react-query@1.11.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@tanstack/react-query@5.103.2(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@mantine/core@9.7.5(@mantine/hooks@9.7.5(react@19.3.1))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@mantine/hooks@9.7.5(react@19.3.1))(@types/react@19.3.0)(dayjs@1.11.23)(react-dom@19.3.1(react@19.3.1))(react-intl@12.1.8(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1))
       '@globus/react-query':
-        specifier: ^1.9.1
-        version: 1.9.1(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@tanstack/react-query@5.103.2(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        specifier: ^1.11.0
+        version: 1.11.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@tanstack/react-query@5.103.2(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@globus/sdk':
         specifier: 6.5.0
         version: 6.5.0
@@ -219,14 +219,14 @@ importers:
         specifier: ^5.7.0
         version: 5.7.0(react@19.3.1)
       react-intl:
-        specifier: ^12.1.6
-        version: 12.1.6(@types/react@19.3.0)(react@19.3.1)
+        specifier: ^12.1.8
+        version: 12.1.8(@types/react@19.3.0)(react@19.3.1)
       reactflow:
         specifier: ^11.11.4
         version: 11.11.4(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       zustand:
-        specifier: ^5.0.16
-        version: 5.0.16(@types/react@19.3.0)(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1))
+        specifier: ^5.1.0
+        version: 5.1.0(@types/react@19.3.0)(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1))
     devDependencies:
       '@eslint/js':
         specifier: ^10
@@ -556,14 +556,14 @@ packages:
   '@formatjs/fast-memoize@3.1.7':
     resolution: {integrity: sha512-zXfhLpvA6T7+efdt9JLbBwZ00tT7NsBMDVnDu8rpHeNNv8KfRZAMo2gkG0k9lK/Nzc//3kJ9pImsfuJxk3KhUA==}
 
-  '@formatjs/icu-messageformat-parser@3.5.22':
-    resolution: {integrity: sha512-YuwN+dDKgssfuYwtOyGQD0CSn7K46g9cv1Fp0VgKpjZDDFvv8b8crzP990IcJhRPWHhKzCGsbUSJVIguyyFA5A==}
+  '@formatjs/icu-messageformat-parser@3.5.23':
+    resolution: {integrity: sha512-iB1fYfhtSGd8uH9A8b1m01Ujcv6QtQnJasefP3jPApmz72L/zNipzf3BdoinTMd1xuviVChjUJWL60iTwjUQ+w==}
 
-  '@formatjs/icu-skeleton-parser@2.1.12':
-    resolution: {integrity: sha512-ca7tZMLpfHX3sUD7hP6gE/qr6Iq89EDd3ZLeRhbsB7r0UD55DGJq+tmFLzrGrnx5StahUevQmQQVtbDRHsfDHA==}
+  '@formatjs/icu-skeleton-parser@2.1.13':
+    resolution: {integrity: sha512-IdAJ9NrHn7AF0zqncD9UpxQozTYyJtbwwrZnJMEKVxTcOOXtVkUb2XYTpNOGTAv58NCsk0rjRB9G+i2SvBmGAQ==}
 
-  '@formatjs/intl@6.1.4':
-    resolution: {integrity: sha512-udBTb6Heg/sleurLkUdPq+T9B7FvhiZ+8EyauSpqkqKPF+S5TUplO/tZmok7JC86Zk+OKhP8rIGi8bYRF9WJaA==}
+  '@formatjs/intl@6.1.6':
+    resolution: {integrity: sha512-82puHaUuaqw9kuy2URLXW1PrIRxlUwPAWp15ERGKY0C2ReE6g17Ul2w02D4KJVaebU8jAUzP3Y8F6LVpT6Y6Ow==}
 
   '@globus/i18n@0.1.0':
     resolution: {integrity: sha512-lkslu4lCukNppz8JVZwtyJJszgzxNonJa1ZzZ4Q7isBCLWCHb3XLflIUyIwjHJlLrW6WMejBb7MIpifg1bd3dQ==}
@@ -608,11 +608,11 @@ packages:
       react-intl:
         optional: true
 
-  '@globus/react-query@1.9.1':
-    resolution: {integrity: sha512-Wl7DxcWhIiXoi22+QGPUU0AG7ck75t0L+ZNCeJrBqS9hQ5WVUVK7mfi0W9Q4e/iLRDpteTRnGBuNsjcDlSLrzA==}
+  '@globus/react-query@1.11.0':
+    resolution: {integrity: sha512-+lkrsneggW2dTnyG65afGAJi/mVbreZbaCSJwdsD5s8Y4yRxGx185CW7uJhIeMQI6UjmP8+KLl0SNCRkENwEJg==}
     peerDependencies:
       '@globus/react-auth-context': '>=0.4.0'
-      '@globus/sdk': 6.4.0-canary.20.5c768e8
+      '@globus/sdk': 6.5.0-canary.2.484a514
       '@globus/types': '*'
       '@tanstack/react-query': ^5
       react: ^19.2
@@ -1550,8 +1550,8 @@ packages:
     resolution: {integrity: sha512-JmXMZ6wuvDmLiHEml9ykzqO6lwFbof0GG4IkcGaENdCRDDmMVnny7s5HsIgHCbaq0w2MyPhDqkhTUgS2LU2PHA==}
     engines: {node: '>=0.8.19'}
 
-  intl-messageformat@12.1.4:
-    resolution: {integrity: sha512-JUkmv3cAEyijN3oiRiV3ctel7yVMuUCgfh7Pu8pj1/z6L1DSEPRyhuMaLjVw3pGmGJ5RDH54WVFxfMHZWTwyHw==}
+  intl-messageformat@12.2.0:
+    resolution: {integrity: sha512-zFzW80iYSSJm4V185g3ItJQ96lBZ2RDO8O8qmRiPAAVKYXJeHfDQN2ITdtLlV+CjSi9Lo7zVW9xGt9CPCx7J6A==}
 
   is-extglob@2.1.1:
     resolution: {integrity: sha512-SbKbANkN603Vi4jEZv49LeVJMn4yGwsbzZworEoyEiutsN3nJYdbO36zfhGJ6QEDpOZIFkDtnq5JRxmvl3jsoQ==}
@@ -1887,8 +1887,8 @@ packages:
     peerDependencies:
       react: '*'
 
-  react-intl@12.1.6:
-    resolution: {integrity: sha512-cxiqHlRK/JdDW/hMzusEv+LAqhfjUCL1YZAlazE39gT6jT3UrrNi3H50cgsveyUaASW14kNM2izIYMPYsYDCgA==}
+  react-intl@12.1.8:
+    resolution: {integrity: sha512-Wl8m/zodiXPuhOEUWBZZ+CI4TapngapRdRGjJhFTArSnGw6Wpqfrn0kTGiI6UgBkHEtDYk9viMmb9eq8IMxE6g==}
     peerDependencies:
       '@types/react': '>=18.0.0'
       react: '>=18.0.0'
@@ -2242,8 +2242,8 @@ packages:
       react:
         optional: true
 
-  zustand@5.0.16:
-    resolution: {integrity: sha512-Uv7e327ihlCfayfja3hDc0M64Upev1LWBKpRobdK4NyovDDPeeX4imWXc/wzC1yc6fkYPoAY/ncKVPAs2jrtQw==}
+  zustand@5.1.0:
+    resolution: {integrity: sha512-ciJZlP48M1PTQbVQq81CGVFxHTLpZNrFjKqwjtCU34AWuXTZT/jrF3p9+fI84Cf1eSCMLapxqBy/SNTfwOBuqA==}
     engines: {node: '>=12.20.0'}
     peerDependencies:
       '@types/react': '>=18.0.0'
@@ -2724,24 +2724,24 @@ snapshots:
 
   '@formatjs/fast-memoize@3.1.7': {}
 
-  '@formatjs/icu-messageformat-parser@3.5.22':
+  '@formatjs/icu-messageformat-parser@3.5.23':
     dependencies:
-      '@formatjs/icu-skeleton-parser': 2.1.12
+      '@formatjs/icu-skeleton-parser': 2.1.13
 
-  '@formatjs/icu-skeleton-parser@2.1.12': {}
+  '@formatjs/icu-skeleton-parser@2.1.13': {}
 
-  '@formatjs/intl@6.1.4':
+  '@formatjs/intl@6.1.6':
     dependencies:
       '@formatjs/fast-memoize': 3.1.7
-      '@formatjs/icu-messageformat-parser': 3.5.22
-      intl-messageformat: 12.1.4
+      '@formatjs/icu-messageformat-parser': 3.5.23
+      intl-messageformat: 12.2.0
 
-  '@globus/i18n@0.1.0(react-intl@12.1.6(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)':
+  '@globus/i18n@0.1.0(react-intl@12.1.8(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)':
     dependencies:
       '@globus/translations': 1.0.0
     optionalDependencies:
       react: 19.3.1
-      react-intl: 12.1.6(@types/react@19.3.0)(react@19.3.1)
+      react-intl: 12.1.8(@types/react@19.3.0)(react@19.3.1)
 
   '@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
@@ -2749,7 +2749,7 @@ snapshots:
       react: 19.3.1
       react-dom: 19.3.1(react@19.3.1)
 
-  '@globus/react-components@6.8.0(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/search@6.7.2)(@globus/i18n@0.1.0(react-intl@12.1.6(@types/react@19.3.0)(react@19.3.1))(react@19.3.1))(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/react-query@1.9.1(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@tanstack/react-query@5.103.2(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@mantine/core@9.7.5(@mantine/hooks@9.7.5(react@19.3.1))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@mantine/hooks@9.7.5(react@19.3.1))(@types/react@19.3.0)(dayjs@1.11.23)(react-dom@19.3.1(react@19.3.1))(react-intl@12.1.6(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1))':
+  '@globus/react-components@6.8.0(@babel/runtime@7.29.7)(@codemirror/autocomplete@6.20.3)(@codemirror/search@6.7.2)(@globus/i18n@0.1.0(react-intl@12.1.8(@types/react@19.3.0)(react@19.3.1))(react@19.3.1))(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/react-query@1.11.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@tanstack/react-query@5.103.2(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@mantine/core@9.7.5(@mantine/hooks@9.7.5(react@19.3.1))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@mantine/hooks@9.7.5(react@19.3.1))(@types/react@19.3.0)(dayjs@1.11.23)(react-dom@19.3.1(react@19.3.1))(react-intl@12.1.8(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1))':
     dependencies:
       '@codemirror/lang-jinja': 6.0.1
       '@codemirror/lang-json': 6.0.2
@@ -2777,13 +2777,13 @@ snapshots:
       react-dom: 19.3.1(react@19.3.1)
       yaml: 2.9.1
       zod: 4.6.7
-      zustand: 5.0.16(@types/react@19.3.0)(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1))
+      zustand: 5.1.0(@types/react@19.3.0)(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1))
     optionalDependencies:
-      '@globus/i18n': 0.1.0(react-intl@12.1.6(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)
+      '@globus/i18n': 0.1.0(react-intl@12.1.8(@types/react@19.3.0)(react@19.3.1))(react@19.3.1)
       '@globus/react-auth-context': 0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      '@globus/react-query': 1.9.1(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@tanstack/react-query@5.103.2(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+      '@globus/react-query': 1.11.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@tanstack/react-query@5.103.2(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       dayjs: 1.11.23
-      react-intl: 12.1.6(@types/react@19.3.0)(react@19.3.1)
+      react-intl: 12.1.8(@types/react@19.3.0)(react@19.3.1)
     transitivePeerDependencies:
       - '@babel/runtime'
       - '@codemirror/autocomplete'
@@ -2795,7 +2795,7 @@ snapshots:
       - use-sync-external-store
       - vue
 
-  '@globus/react-query@1.9.1(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@tanstack/react-query@5.103.2(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@globus/react-query@1.11.0(@globus/react-auth-context@0.4.0(@globus/sdk@6.5.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@globus/sdk@6.5.0)(@tanstack/react-query@5.103.2(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
       '@globus/sdk': 6.5.0
       '@tanstack/react-query': 5.103.2(react@19.3.1)
@@ -3791,10 +3791,10 @@ snapshots:
 
   imurmurhash@0.1.4: {}
 
-  intl-messageformat@12.1.4:
+  intl-messageformat@12.2.0:
     dependencies:
       '@formatjs/fast-memoize': 3.1.7
-      '@formatjs/icu-messageformat-parser': 3.5.22
+      '@formatjs/icu-messageformat-parser': 3.5.23
 
   is-extglob@2.1.1: {}
 
@@ -4046,12 +4046,12 @@ snapshots:
     dependencies:
       react: 19.3.1
 
-  react-intl@12.1.6(@types/react@19.3.0)(react@19.3.1):
+  react-intl@12.1.8(@types/react@19.3.0)(react@19.3.1):
     dependencies:
-      '@formatjs/icu-messageformat-parser': 3.5.22
-      '@formatjs/intl': 6.1.4
+      '@formatjs/icu-messageformat-parser': 3.5.23
+      '@formatjs/intl': 6.1.6
       '@types/react': 19.3.0
-      intl-messageformat: 12.1.4
+      intl-messageformat: 12.2.0
       react: 19.3.1
 
   react-is@16.13.1: {}
@@ -4350,7 +4350,7 @@ snapshots:
       '@types/react': 19.3.0
       react: 19.3.1
 
-  zustand@5.0.16(@types/react@19.3.0)(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1)):
+  zustand@5.1.0(@types/react@19.3.0)(react@19.3.1)(use-sync-external-store@1.7.0(react@19.3.1)):
     optionalDependencies:
       '@types/react': 19.3.0
       react: 19.3.1
